@@ -21,6 +21,7 @@ export function CasinoChip({
 }: CasinoChipProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled}
       className={cn(
@@ -42,7 +43,7 @@ export function CasinoChip({
           {Array.from({ length: 8 }).map((_, i) => (
             <div
               key={i}
-              className="absolute w-1.5 h-1.5 bg-white rounded-full"
+              className="absolute w-1.5 h-1.5 bg-white"
               style={{
                 top: "50%",
                 left: "50%",
@@ -75,6 +76,5 @@ export const CHIP_VALUES = [
   { value: 5, color: "#DC2626", accentColor: "#991B1B" }, // Red
   { value: 10, color: "#2563EB", accentColor: "#1E40AF" }, // Blue
   { value: 25, color: "#16A34A", accentColor: "#15803D" }, // Green
-  { value: 50, color: "#1F2937", accentColor: "#111827" }, // Black
-  { value: 100, color: "#7C3AED", accentColor: "#5B21B6" }, // Purple
+  { value: 100, color: "#1F2937", accentColor: "#111827" }, // Black
 ];

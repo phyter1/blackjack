@@ -220,8 +220,8 @@ export function CasinoTable({
           }}
         />
         {/* Table edge - wood grain */}
-        <div className="absolute top-0 left-0 right-0 h-12 bg-gradient-to-b from-amber-900 to-amber-950 border-b-4 border-amber-700" />
-        <div className="absolute bottom-0 left-0 right-0 h-12 bg-gradient-to-t from-amber-900 to-amber-950 border-t-4 border-amber-700" />
+        <div className="absolute top-0 left-0 right-0 h-22 bg-linear-to-b from-amber-900 to-amber-950 border-b-4 border-amber-700" />
+        <div className="absolute bottom-0 left-0 right-0 h-22 bg-linear-to-t from-amber-900 to-amber-950 border-t-4 border-amber-700" />
       </div>
 
       {/* Header */}
@@ -230,14 +230,14 @@ export function CasinoTable({
           <h1 className="text-2xl font-serif font-bold text-amber-200">
             ♠ BLACKJACK ♠
           </h1>
-          <Button
+          {/* <Button
             onClick={() => setShowStats(!showStats)}
             variant="outline"
             size="sm"
             className="border-amber-700 bg-amber-950/50 text-amber-200 hover:bg-amber-900"
           >
             {showStats ? "Hide Stats" : "Show Stats"}
-          </Button>
+          </Button> */}
         </div>
         <div className="flex items-center gap-4">
           <div className="text-right">
@@ -399,7 +399,7 @@ export function CasinoTable({
       </div>
 
       {/* Action area */}
-      <div className="relative z-10 p-6 bg-gradient-to-t from-amber-950/80 to-transparent backdrop-blur-sm">
+      <div className="relative z-10 p-6 bg-linear-to-t from-amber-950/80 to-transparent backdrop-blur-sm">
         {phase === "betting" && (
           <div className="flex flex-col items-center gap-4">
             <div className="text-amber-200 font-serif text-lg">
