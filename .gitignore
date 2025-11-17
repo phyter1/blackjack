@@ -42,3 +42,8 @@ next-env.d.ts
 
 .playwright-mcp/
 audit-logs/
+# playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
