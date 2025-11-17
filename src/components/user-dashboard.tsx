@@ -13,6 +13,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import { SessionReplay } from "./session-replay";
+import { LifetimeStatsCharts } from "./lifetime-stats-charts";
 import type { UserProfile, UserBank, UserStats, GameSession } from "@/types/user";
 
 interface UserDashboardProps {
@@ -32,6 +33,7 @@ export function UserDashboard({
 }: UserDashboardProps) {
   const [stats, setStats] = useState<UserStats | null>(null);
   const [sessions, setSessions] = useState<GameSession[]>([]);
+  const [allSessions, setAllSessions] = useState<GameSession[]>([]);
   const [showDeposit, setShowDeposit] = useState(false);
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [amount, setAmount] = useState("");
@@ -41,7 +43,9 @@ export function UserDashboard({
   useEffect(() => {
     // Load user stats and sessions
     setStats(UserService.getUserStats(user.id));
-    setSessions(UserService.getSessions(user.id).slice(0, 5)); // Show last 5 sessions
+    const userSessions = UserService.getSessions(user.id);
+    setAllSessions(userSessions); // All sessions for charts
+    setSessions(userSessions.slice(0, 5)); // Show last 5 sessions
   }, [user.id]);
 
   const handleDeposit = () => {
@@ -285,6 +289,13 @@ export function UserDashboard({
                 <p className="text-xs text-gray-500">Time at the tables</p>
               </CardContent>
             </Card>
+          </div>
+        )}
+
+        {/* Lifetime Stats Charts */}
+        {allSessions.length > 0 && (
+          <div className="mb-6">
+            <LifetimeStatsCharts sessions={allSessions} />
           </div>
         )}
 
