@@ -213,6 +213,8 @@ export class UserService {
       accuracy: number;
       totalDecisions: number;
       correctDecisions: number;
+      decisions: unknown[]; // PlayerDecision[] but avoiding circular import
+      hasCountData: boolean;
     } | null
   ): GameSession {
     const session = SessionStorage.getById(sessionId);
@@ -234,6 +236,10 @@ export class UserService {
       session.strategyAccuracy = strategyAnalysis.accuracy;
       session.totalDecisions = strategyAnalysis.totalDecisions;
       session.correctDecisions = strategyAnalysis.correctDecisions;
+      session.hasCountData = strategyAnalysis.hasCountData;
+
+      // Serialize decision data for replay
+      session.decisionsData = JSON.stringify(strategyAnalysis.decisions);
     }
 
     SessionStorage.save(session);

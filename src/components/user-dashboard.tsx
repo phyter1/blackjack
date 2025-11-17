@@ -12,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { SessionReplay } from "./session-replay";
 import type { UserProfile, UserBank, UserStats, GameSession } from "@/types/user";
 
 interface UserDashboardProps {
@@ -35,6 +36,7 @@ export function UserDashboard({
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
+  const [selectedSession, setSelectedSession] = useState<GameSession | null>(null);
 
   useEffect(() => {
     // Load user stats and sessions
@@ -302,7 +304,16 @@ export function UserDashboard({
                 {sessions.map((session) => (
                   <div
                     key={session.id}
-                    className="flex justify-between items-center p-3 bg-black rounded border border-gray-800"
+                    onClick={() => {
+                      if (session.decisionsData) {
+                        setSelectedSession(session);
+                      }
+                    }}
+                    className={`flex justify-between items-center p-3 bg-black rounded border border-gray-800 ${
+                      session.decisionsData
+                        ? "cursor-pointer hover:border-green-600 hover:bg-gray-900 transition-colors"
+                        : ""
+                    }`}
                   >
                     <div>
                       <p className="text-white font-semibold">
@@ -316,6 +327,11 @@ export function UserDashboard({
                             new Date(session.endTime).getTime() -
                               new Date(session.startTime).getTime()
                           )}`}
+                        {session.decisionsData && (
+                          <span className="ml-2 text-green-500">
+                            • Click to replay
+                          </span>
+                        )}
                       </p>
                     </div>
                     <div className="text-right">
@@ -338,6 +354,11 @@ export function UserDashboard({
                           Strategy: {session.strategyGrade} ({session.strategyAccuracy?.toFixed(1)}%)
                         </p>
                       )}
+                      {session.hasCountData && (
+                        <p className="text-xs text-purple-400 mt-1">
+                          📊 Count data available
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -346,6 +367,14 @@ export function UserDashboard({
           </CardContent>
         </Card>
       </div>
+
+      {/* Session Replay Modal */}
+      {selectedSession && (
+        <SessionReplay
+          session={selectedSession}
+          onClose={() => setSelectedSession(null)}
+        />
+      )}
     </div>
   );
 }

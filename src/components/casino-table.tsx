@@ -13,6 +13,7 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
+import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -45,7 +46,11 @@ export function CasinoTable({
   const [showStats, setShowStats] = useState(false);
   const [, forceUpdate] = useState({});
   const [currentBet, setCurrentBet] = useState(0);
+  const [countingEnabled, setCountingEnabled] = useState(true); // Enable counting by default
+  const [practiceMode, setPracticeMode] = useState(false); // Practice mode for testing count
+  const [showCount, setShowCount] = useState(true); // Show/hide count display
   const decisionTracker = useRef<DecisionTracker | null>(null);
+  const cardCounter = useRef<HiLoCounter | null>(null);
 
   useEffect(() => {
     // Initialize game
@@ -59,6 +64,9 @@ export function CasinoTable({
 
     // Initialize decision tracker for this session
     decisionTracker.current = new DecisionTracker(session.id);
+
+    // Initialize card counter (6 decks)
+    cardCounter.current = new HiLoCounter(6, false);
   }, [user.name, bank.balance, user.id]);
 
   const handleBet = (amount: number) => {
@@ -68,6 +76,21 @@ export function CasinoTable({
       game.startRound([{ playerId: player.id, amount }]);
       setRoundsPlayed((prev) => prev + 1);
       setPhase("dealing");
+
+      // Track dealt cards in the counter
+      if (cardCounter.current && countingEnabled) {
+        const round = game.getCurrentRound();
+        if (round) {
+          // Add all player cards
+          for (const hand of round.playerHands) {
+            cardCounter.current.addCards(hand.cards);
+          }
+          // Add dealer's up card
+          if (round.dealerHand.upCard) {
+            cardCounter.current.addCard(round.dealerHand.upCard);
+          }
+        }
+      }
 
       // After dealing animation, check for insurance or proceed to playing
       setTimeout(() => {
@@ -113,6 +136,11 @@ export function CasinoTable({
             canSurrender,
           );
 
+          // Get count snapshot if counting is enabled
+          const countSnapshot = countingEnabled && cardCounter.current
+            ? cardCounter.current.getSnapshot()
+            : undefined;
+
           // Record the decision
           decisionTracker.current.recordDecision(
             currentHand.cards,
@@ -125,11 +153,32 @@ export function CasinoTable({
             canSurrender,
             action,
             optimalDecision,
+            countSnapshot,
           );
         }
       }
 
+      // Track cards before action
+      const currentRound = game.getCurrentRound();
+      const cardsBefore = currentRound
+        ? currentRound.playerHands.reduce((sum, h) => sum + h.cards.length, 0)
+        : 0;
+
       game.playAction(action);
+
+      // Track any new cards dealt (from hit, split, double)
+      if (cardCounter.current && countingEnabled) {
+        const round = game.getCurrentRound();
+        if (round) {
+          const cardsAfter = round.playerHands.reduce((sum, h) => sum + h.cards.length, 0);
+          if (cardsAfter > cardsBefore) {
+            // New cards were dealt, collect all cards and add the new ones
+            const allCurrentCards = round.playerHands.flatMap(h => h.cards);
+            const newCards = allCurrentCards.slice(cardsBefore);
+            cardCounter.current.addCards(newCards);
+          }
+        }
+      }
       const newRound = game.getCurrentRound();
       const newActions = game.getAvailableActions() ?? [];
 
@@ -144,6 +193,23 @@ export function CasinoTable({
 
       // No more actions, move to dealer turn
       setPhase("dealer_turn");
+
+      // Track dealer's hole card and any dealer hits
+      if (cardCounter.current && countingEnabled) {
+        const round = game.getCurrentRound();
+        if (round) {
+          const dealerCards = round.dealerHand.cards;
+          // Add hole card (second card, index 1) if it exists
+          if (dealerCards.length >= 2 && dealerCards[1]) {
+            cardCounter.current.addCard(dealerCards[1]);
+          }
+          // Add any additional dealer cards beyond the initial 2
+          if (dealerCards.length > 2) {
+            cardCounter.current.addCards(dealerCards.slice(2));
+          }
+        }
+      }
+
       setTimeout(() => {
         setPhase("settling");
       }, 1500);
@@ -175,6 +241,8 @@ export function CasinoTable({
       accuracy: number;
       totalDecisions: number;
       correctDecisions: number;
+      decisions: unknown[];
+      hasCountData: boolean;
     } | null = null;
     if (decisionTracker.current) {
       const analysis = decisionTracker.current.calculateAnalysis();
@@ -183,6 +251,8 @@ export function CasinoTable({
         accuracy: analysis.accuracyPercentage,
         totalDecisions: analysis.totalDecisions,
         correctDecisions: analysis.correctDecisions,
+        decisions: analysis.decisions,
+        hasCountData: analysis.hasCountData,
       };
     }
 
@@ -245,12 +315,55 @@ export function CasinoTable({
           </Button> */}
         </div>
         <div className="flex items-center gap-4">
+          {/* Card Count Display */}
+          {countingEnabled && cardCounter.current && showCount && (
+            <div className="px-4 py-2 bg-black/60 border border-purple-700 rounded-lg">
+              <div className="text-xs text-purple-400">Card Count</div>
+              <div className="flex gap-3 items-center">
+                <div>
+                  <div className="text-xs text-gray-400">Running</div>
+                  <div className="text-lg font-bold text-white">
+                    {cardCounter.current.getRunningCount() > 0 && "+"}
+                    {cardCounter.current.getRunningCount()}
+                  </div>
+                </div>
+                <div className="h-8 w-px bg-gray-600" />
+                <div>
+                  <div className="text-xs text-gray-400">True</div>
+                  <div
+                    className={cn(
+                      "text-lg font-bold",
+                      cardCounter.current.getTrueCount() >= 2
+                        ? "text-green-400"
+                        : cardCounter.current.getTrueCount() <= -2
+                        ? "text-red-400"
+                        : "text-yellow-400"
+                    )}
+                  >
+                    {cardCounter.current.getTrueCount() > 0 && "+"}
+                    {cardCounter.current.getTrueCount()}
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="text-right">
             <div className="text-sm text-amber-400">Balance</div>
             <div className="text-xl font-bold text-green-400">
               ${player?.bank.balance.toFixed(2)}
             </div>
           </div>
+
+          <Button
+            onClick={() => setShowCount(!showCount)}
+            variant="outline"
+            size="sm"
+            className="border-purple-700 bg-purple-950/50 text-purple-200 hover:bg-purple-900"
+          >
+            {showCount ? "Hide Count" : "Show Count"}
+          </Button>
+
           <Button
             onClick={handleEndGame}
             variant="outline"

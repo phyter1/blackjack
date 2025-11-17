@@ -29,6 +29,8 @@ export interface GameSession {
   strategyAccuracy?: number; // Percentage 0-100
   totalDecisions?: number;
   correctDecisions?: number;
+  decisionsData?: string; // JSON serialized PlayerDecision[] for replay
+  hasCountData?: boolean; // Whether this session tracked card counting
 }
 
 export interface Transaction {
@@ -49,4 +51,17 @@ export interface UserStats {
   biggestLoss: number;
   averageSessionProfit: number;
   totalTimePlayedMs: number;
+}
+
+/**
+ * User's card counting proficiency and progress
+ */
+export interface CountingProgress {
+  userId: string;
+  proficiencyLevel: "beginner" | "running_count" | "true_count";
+  totalCountGuesses: number;
+  runningCountAccuracy: number;
+  trueCountAccuracy: number;
+  overallAccuracy: number;
+  lastUpdated: string;
 }

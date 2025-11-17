@@ -1,6 +1,7 @@
 import type { ActionType } from "../game/action";
 import type { Card } from "../game/cards";
 import type { BasicStrategyDecision } from "./basic-strategy";
+import type { CountSnapshot } from "./hi-lo-counter";
 
 /**
  * A single decision made during gameplay
@@ -28,6 +29,9 @@ export interface PlayerDecision {
 
   // Was the decision correct?
   isCorrect: boolean;
+
+  // Card counting data (if tracking)
+  countSnapshot?: CountSnapshot;
 }
 
 /**
@@ -41,6 +45,7 @@ export interface StrategyAnalysis {
   accuracyPercentage: number;
   grade: StrategyGrade;
   gradePoints: number; // GPA-style: 4.0 = A+, 0.0 = F
+  hasCountData: boolean; // Whether this session tracked card counting
 }
 
 /**
@@ -123,7 +128,8 @@ export class DecisionTracker {
     canSplit: boolean,
     canSurrender: boolean,
     actualAction: ActionType,
-    optimalDecision: BasicStrategyDecision
+    optimalDecision: BasicStrategyDecision,
+    countSnapshot?: CountSnapshot
   ): void {
     const decision: PlayerDecision = {
       playerCards,
@@ -139,6 +145,7 @@ export class DecisionTracker {
       optimalAction: optimalDecision.action,
       optimalReason: optimalDecision.reason,
       isCorrect: actualAction === optimalDecision.action,
+      countSnapshot,
     };
 
     this.decisions.push(decision);
@@ -161,6 +168,7 @@ export class DecisionTracker {
       totalDecisions > 0 ? (correctDecisions / totalDecisions) * 100 : 0;
     const grade = calculateGrade(accuracyPercentage);
     const gradePoints = getGradePoints(grade);
+    const hasCountData = this.decisions.some((d) => d.countSnapshot !== undefined);
 
     return {
       sessionId: this.sessionId,
@@ -170,6 +178,7 @@ export class DecisionTracker {
       accuracyPercentage,
       grade,
       gradePoints,
+      hasCountData,
     };
   }
 
