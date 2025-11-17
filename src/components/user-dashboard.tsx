@@ -46,6 +46,10 @@ export function UserDashboard({
   const [selectedSession, setSelectedSession] = useState<GameSession | null>(
     null,
   );
+  // Pagination and view mode state
+  const [viewMode, setViewMode] = useState<"recent" | "all">("recent");
+  const [currentPage, setCurrentPage] = useState(1);
+  const sessionsPerPage = 10;
 
   useEffect(() => {
     // Load user stats and sessions
@@ -54,6 +58,19 @@ export function UserDashboard({
     setAllSessions(userSessions); // All sessions for charts
     setSessions(userSessions.slice(0, 5)); // Show last 5 sessions
   }, [user.id]);
+
+  // Update displayed sessions when view mode or page changes
+  useEffect(() => {
+    if (viewMode === "recent") {
+      setSessions(allSessions.slice(0, 5));
+      setCurrentPage(1);
+    } else {
+      // Calculate pagination for "all" view
+      const startIndex = (currentPage - 1) * sessionsPerPage;
+      const endIndex = startIndex + sessionsPerPage;
+      setSessions(allSessions.slice(startIndex, endIndex));
+    }
+  }, [viewMode, currentPage, allSessions, sessionsPerPage]);
 
   const handleDeposit = () => {
     setError("");
@@ -307,8 +324,44 @@ export function UserDashboard({
         {/* Recent Sessions */}
         <Card className="bg-gray-900 border-gray-700">
           <CardHeader>
-            <CardTitle className="text-white">Recent Sessions</CardTitle>
-            <CardDescription>Your last 5 game sessions</CardDescription>
+            <div className="flex justify-between items-start">
+              <div>
+                <CardTitle className="text-white">
+                  {viewMode === "recent" ? "Recent Sessions" : "All Sessions"}
+                </CardTitle>
+                <CardDescription>
+                  {viewMode === "recent"
+                    ? "Your last 5 game sessions"
+                    : `All sessions (${allSessions.length} total)`}
+                </CardDescription>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setViewMode("recent")}
+                  variant={viewMode === "recent" ? "default" : "outline"}
+                  className={
+                    viewMode === "recent"
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "border-gray-700 text-gray-400 hover:text-white"
+                  }
+                  size="sm"
+                >
+                  Recent
+                </Button>
+                <Button
+                  onClick={() => setViewMode("all")}
+                  variant={viewMode === "all" ? "default" : "outline"}
+                  className={
+                    viewMode === "all"
+                      ? "bg-green-600 hover:bg-green-700"
+                      : "border-gray-700 text-gray-400 hover:text-white"
+                  }
+                  size="sm"
+                >
+                  All
+                </Button>
+              </div>
+            </div>
           </CardHeader>
           <CardContent>
             {sessions.length === 0 ? (
@@ -395,6 +448,44 @@ export function UserDashboard({
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+
+            {/* Pagination Controls */}
+            {viewMode === "all" && allSessions.length > sessionsPerPage && (
+              <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-800">
+                <Button
+                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  disabled={currentPage === 1}
+                  variant="outline"
+                  className="border-gray-700 text-gray-400 hover:text-white disabled:opacity-30"
+                  size="sm"
+                >
+                  ← Previous
+                </Button>
+                <span className="text-gray-400 text-sm">
+                  Page {currentPage} of{" "}
+                  {Math.ceil(allSessions.length / sessionsPerPage)}
+                </span>
+                <Button
+                  onClick={() =>
+                    setCurrentPage((prev) =>
+                      Math.min(
+                        Math.ceil(allSessions.length / sessionsPerPage),
+                        prev + 1,
+                      ),
+                    )
+                  }
+                  disabled={
+                    currentPage >=
+                    Math.ceil(allSessions.length / sessionsPerPage)
+                  }
+                  variant="outline"
+                  className="border-gray-700 text-gray-400 hover:text-white disabled:opacity-30"
+                  size="sm"
+                >
+                  Next →
+                </Button>
               </div>
             )}
           </CardContent>
