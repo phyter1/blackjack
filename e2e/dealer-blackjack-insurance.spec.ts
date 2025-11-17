@@ -1,4 +1,15 @@
 import { test, expect } from '@playwright/test';
+import {
+  createAndLoginUser,
+  ensureBalance,
+  goToCasinoTable,
+  placeBet,
+  isInsuranceOffered,
+  handleInsurance,
+  getGamePhase,
+  playHandBasicStrategy,
+  advanceToNextRound,
+} from './helpers/game-setup';
 
 /**
  * E2E Test: Dealer Blackjack with Insurance Declined
@@ -17,208 +28,133 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Dealer Blackjack Insurance Bug', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to the app
-    await page.goto('/');
-
-    // Create/login as a test user
-    await page.fill('input[placeholder*="name" i]', 'TestPlayer');
-    await page.click('button:has-text("Create Account"), button:has-text("Login")');
-
-    // Deposit money if needed
-    const depositButton = page.locator('button:has-text("Deposit")');
-    if (await depositButton.isVisible({ timeout: 2000 })) {
-      await depositButton.click();
-      await page.fill('input[type="number"]', '1000');
-      await page.click('button:has-text("Confirm")');
-    }
-
-    // Navigate to Casino Table
-    await page.click('button:has-text("Casino Table")');
-    await page.waitForSelector('text=Place Your Bet', { timeout: 10000 });
+    await createAndLoginUser(page, 'TestPlayer');
+    await ensureBalance(page, 1000);
   });
 
   /**
-   * Helper function to mock the deck to ensure dealer gets blackjack
-   * This injects code before the game starts to control Math.random()
+   * Test: Dealer has blackjack with deterministic test mode
+   * This test uses the test-mode URL parameter to force dealer blackjack
    */
-  async function mockDealerBlackjack(page: any) {
-    await page.evaluate(() => {
-      // Save original Math.random
-      const originalRandom = Math.random;
-      let callCount = 0;
+  test('should handle dealer blackjack when insurance is declined (deterministic)', async ({ page }) => {
+    // Navigate to casino table with test mode enabled
+    await goToCasinoTable(page, 'dealer-blackjack');
 
-      // Mock Math.random to create a specific deck order
-      // We need: Dealer gets Ace + 10-value card
-      Math.random = function() {
-        callCount++;
+    // Place a bet
+    await placeBet(page, 10);
 
-        // This is a simplified mock - in reality the shuffle is more complex
-        // We're aiming to get dealer: [Ace, 10/J/Q/K] which is blackjack
-        // The exact sequence depends on the shuffle algorithm
+    // Insurance should be offered (dealer shows Ace)
+    const insuranceOffered = await isInsuranceOffered(page);
+    expect(insuranceOffered).toBe(true);
 
-        // For shuffling, we want to position Ace and King at dealer positions
-        // Dealer gets 2nd and 4th cards typically
-        if (callCount <= 100) {
-          // During shuffle, favor certain positions
-          return callCount % 2 === 0 ? 0.01 : 0.99;
-        }
+    // Decline insurance
+    await handleInsurance(page, false);
 
-        // Fall back to original random for everything else
-        return originalRandom();
-      };
+    // Verify we're in settling phase (dealer has blackjack)
+    const phase = await getGamePhase(page);
+    expect(phase).toBe('settling');
 
-      // Store for cleanup
-      (window as any).__mockCleanup = () => {
-        Math.random = originalRandom;
-      };
-    });
-  }
+    // The key test: verify we're NOT stuck with no actions
+    // We should see either "Next Round" or "Cash Out" button
+    const nextRoundVisible = await page.locator('button:has-text("Next Round")').isVisible({ timeout: 2000 }).catch(() => false);
+    const cashOutVisible = await page.locator('button:has-text("Cash Out")').isVisible({ timeout: 2000 }).catch(() => false);
+    expect(nextRoundVisible || cashOutVisible).toBe(true);
+
+    // Success! The game correctly transitioned to settling and we can continue
+    console.log('✓ Test passed: Dealer had blackjack, insurance declined, game properly showed result with next action available');
+  });
 
   /**
-   * Test: Dealer has blackjack, player declines insurance
-   * Expected: Game transitions to settling phase, player can continue
+   * Test: Random play - may encounter dealer blackjack
+   * This test plays without test mode and may naturally encounter the scenario
    */
-  test('should handle dealer blackjack when insurance is declined', async ({ page }) => {
+  test('should handle dealer blackjack when insurance is declined (random)', async ({ page }) => {
+    await goToCasinoTable(page);
+
     // Place a bet
-    await page.click('button:has-text("$10")');
-    await page.click('button:has-text("Place Bet")');
+    await placeBet(page, 10);
 
-    // Wait for cards to be dealt
-    await page.waitForSelector('text=Insurance', { timeout: 5000 }).catch(() => {
-      // If insurance doesn't appear, dealer doesn't have Ace showing
-      // This is expected - we'll need to run the test multiple times
-      // or enhance the mocking strategy
-    });
+    const insuranceOffered = await isInsuranceOffered(page);
 
-    const insuranceVisible = await page.locator('text=Insurance').isVisible({ timeout: 1000 }).catch(() => false);
-
-    if (insuranceVisible) {
+    if (insuranceOffered) {
       // Decline insurance
-      await page.click('button:has-text("No")');
+      await handleInsurance(page, false);
 
-      // Wait a moment for the round state to update
-      await page.waitForTimeout(1000);
+      // Get current phase
+      const phase = await getGamePhase(page);
 
-      // Check if we can see "Next Round" button (settling phase)
-      // or if we're stuck with no actions
-      const nextRoundButton = page.locator('button:has-text("Next Round"), button:has-text("Cash Out")');
-      const isSettlingOrComplete = await nextRoundButton.isVisible({ timeout: 3000 }).catch(() => false);
+      // Should be either playing (dealer doesn't have blackjack) or settling (dealer has blackjack)
+      // We should NOT be in unknown phase (which would indicate a bug)
+      expect(['playing', 'settling']).toContain(phase);
 
-      // Verify we're not stuck in playing phase with no actions
-      const playingActions = page.locator('button:has-text("Hit"), button:has-text("Stand"), button:has-text("Double")');
-      const hasPlayingActions = await playingActions.first().isVisible({ timeout: 1000 }).catch(() => false);
-
-      // If dealer has blackjack, we should be in settling/complete, not playing
-      if (!hasPlayingActions && !isSettlingOrComplete) {
-        // This is the bug: no actions available and can't proceed
-        throw new Error('BUG DETECTED: No actions available after declining insurance with dealer blackjack');
-      }
-
-      // Either we have playing actions (dealer didn't have blackjack) or next round button (dealer had blackjack)
-      expect(hasPlayingActions || isSettlingOrComplete).toBe(true);
-
-      if (isSettlingOrComplete) {
-        // Success! We handled dealer blackjack correctly
+      if (phase === 'settling') {
+        // Dealer had blackjack - verify we can continue
         console.log('✓ Dealer had blackjack, game correctly transitioned to settling');
+        await advanceToNextRound(page);
 
-        // Verify we can continue playing
-        await nextRoundButton.click();
-
-        // Should be back at betting phase or game over
-        const canContinue = await page.locator('text=Place Your Bet, text=Cash Out').first().isVisible({ timeout: 3000 });
-        expect(canContinue).toBe(true);
+        const nextPhase = await getGamePhase(page);
+        expect(nextPhase).toBe('betting');
+      } else {
+        // Dealer didn't have blackjack - play out the hand
+        await playHandBasicStrategy(page);
+        await advanceToNextRound(page);
       }
     } else {
-      // Dealer doesn't show Ace, continue playing normally
-      // This test run didn't hit the specific scenario
+      // No insurance offered, skip this test run
       test.skip();
     }
   });
 
   /**
-   * Test: Repeatedly play until we encounter dealer Ace
-   * This test runs multiple rounds to increase chances of hitting the bug scenario
+   * Test: Multi-round stress test
+   * This test runs multiple rounds to verify no edge cases cause the game to get stuck
    */
   test('should not get stuck during multiple rounds with occasional insurance offers', async ({ page }) => {
+    await goToCasinoTable(page);
+
     let insuranceOfferedCount = 0;
     const maxRounds = 20;
 
     for (let round = 0; round < maxRounds; round++) {
       // Place bet
-      await page.click('button:has-text("$10")');
-      await page.click('button:has-text("Place Bet")');
+      await placeBet(page, 10);
 
       // Check if insurance is offered
-      const insuranceVisible = await page.locator('text=Insurance').isVisible({ timeout: 2000 }).catch(() => false);
+      const insuranceOffered = await isInsuranceOffered(page);
 
-      if (insuranceVisible) {
+      if (insuranceOffered) {
         insuranceOfferedCount++;
-
-        // Decline insurance
-        await page.click('button:has-text("No")');
-
-        // Wait for state transition
-        await page.waitForTimeout(1500);
+        await handleInsurance(page, false); // Decline insurance
       }
 
       // Play out the hand
-      // Keep hitting until we bust or hand is complete
-      let handInProgress = true;
-      let safetyCounter = 0;
+      await playHandBasicStrategy(page);
 
-      while (handInProgress && safetyCounter < 10) {
-        safetyCounter++;
+      // Get current phase - should be settling or betting
+      const phase = await getGamePhase(page);
 
-        const hitButton = page.locator('button:has-text("Hit")');
-        const standButton = page.locator('button:has-text("Stand")');
-        const nextButton = page.locator('button:has-text("Next Round"), button:has-text("Cash Out")');
-
-        const hitVisible = await hitButton.isVisible({ timeout: 500 }).catch(() => false);
-        const standVisible = await standButton.isVisible({ timeout: 500 }).catch(() => false);
-        const nextVisible = await nextButton.isVisible({ timeout: 500 }).catch(() => false);
-
-        if (nextVisible) {
-          // Round is complete
-          handInProgress = false;
-          await nextButton.click();
-          await page.waitForTimeout(500);
-        } else if (standVisible) {
-          // Stand to end our turn
-          await standButton.click();
-          await page.waitForTimeout(1000);
-        } else if (hitVisible) {
-          // Continue playing
-          await hitButton.click();
-          await page.waitForTimeout(500);
-        } else {
-          // No actions available - this could be the bug!
-          throw new Error(`BUG DETECTED at round ${round + 1}: No actions available and game is stuck`);
-        }
+      if (phase === 'unknown') {
+        throw new Error(`BUG DETECTED at round ${round + 1}: Game is in unknown state`);
       }
 
-      // Check if we can start a new round
-      const placeBetVisible = await page.locator('text=Place Your Bet').isVisible({ timeout: 2000 }).catch(() => false);
-      const gameOverVisible = await page.locator('text=Cash Out').isVisible({ timeout: 1000 }).catch(() => false);
+      if (phase === 'settling') {
+        await advanceToNextRound(page);
+      }
 
-      if (!placeBetVisible && !gameOverVisible) {
+      // Check if we can continue
+      const nextPhase = await getGamePhase(page);
+
+      if (nextPhase === 'betting') {
+        // Continue to next round
+        continue;
+      } else if (nextPhase === 'unknown') {
         throw new Error(`BUG DETECTED: Cannot continue after round ${round + 1}`);
-      }
-
-      // If game over, break
-      if (gameOverVisible) {
+      } else {
+        // Game over
         break;
       }
     }
 
-    console.log(`Completed ${maxRounds} rounds successfully. Insurance offered ${insuranceOfferedCount} times.`);
-  });
-
-  test.afterEach(async ({ page }) => {
-    // Cleanup any mocks
-    await page.evaluate(() => {
-      if ((window as any).__mockCleanup) {
-        (window as any).__mockCleanup();
-      }
-    });
+    console.log(`Completed rounds successfully. Insurance offered ${insuranceOfferedCount} times.`);
   });
 });

@@ -82,3 +82,6 @@ export { randomInt, weightedRandomChoice, randomWeieghtedChunks } from "./random
 
 // Re-export newShoeStack for convenience
 export { newShoeStack } from "./shoe";
+
+// Test utilities
+export { createTestDeck, parseTestScenario, createCard } from "./test-deck-builder";

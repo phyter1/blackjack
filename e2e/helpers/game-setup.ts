@@ -17,17 +17,34 @@ export async function createAndLoginUser(
   name: string = `TestUser${Date.now()}`
 ): Promise<void> {
   await page.goto('/');
+
+  // Fill in the name
   await page.fill('input[placeholder*="name" i]', name);
 
-  // Try both possible button texts
-  const createButton = page.locator('button:has-text("Create Account")');
-  const loginButton = page.locator('button:has-text("Login")');
+  // Click the "Sign up" link to go to signup page
+  const signUpLink = page.locator('text=Sign up');
+  if (await signUpLink.isVisible({ timeout: 1000 })) {
+    await signUpLink.click();
+    await page.waitForTimeout(500);
 
-  if (await createButton.isVisible({ timeout: 1000 })) {
-    await createButton.click();
-  } else if (await loginButton.isVisible({ timeout: 1000 })) {
-    await loginButton.click();
+    // On signup page, fill in name again if needed (it might clear)
+    await page.fill('input[placeholder*="name" i]', name);
+
+    // Initial balance should be pre-filled with 1000, but we can set it to be sure
+    const balanceInput = page.locator('input[type="number"]').first();
+    if (await balanceInput.isVisible({ timeout: 1000 })) {
+      await balanceInput.fill('1000');
+    }
   }
+
+  // Click the "Sign Up" button on the signup page
+  const signUpButton = page.locator('button:has-text("Sign Up")');
+  if (await signUpButton.isVisible({ timeout: 2000 })) {
+    await signUpButton.click();
+  }
+
+  // Wait for the dashboard/home page to load
+  await page.waitForTimeout(2000);
 }
 
 /**
@@ -49,10 +66,27 @@ export async function ensureBalance(
 
 /**
  * Navigates to the casino table
+ * @param testMode Optional test mode scenario (e.g., "dealer-blackjack")
  */
-export async function goToCasinoTable(page: Page): Promise<void> {
+export async function goToCasinoTable(
+  page: Page,
+  testMode?: string
+): Promise<void> {
+  // If test mode is specified, we need to inject it before clicking the button
+  if (testMode) {
+    // Set the test mode in URL before navigating
+    await page.evaluate((mode) => {
+      // Store in sessionStorage so it persists
+      sessionStorage.setItem('test-mode', mode);
+    }, testMode);
+  }
+
+  // Wait for Casino Table button to be visible
+  await page.waitForSelector('button:has-text("Casino Table"), button:has-text("🎰 Casino Table")', { timeout: 10000 });
+
   await page.click('button:has-text("Casino Table"), button:has-text("🎰 Casino Table")');
-  await page.waitForSelector('text=Place Your Bet', { timeout: 10000 });
+
+  await page.waitForSelector('text=Place Your Bet', { timeout: 15000 });
 }
 
 /**
@@ -166,28 +200,8 @@ export async function advanceToNextRound(page: Page): Promise<void> {
 
   if (await nextButton.isVisible({ timeout: 2000 })) {
     await nextButton.click();
-    await page.waitForTimeout(500);
+    // Wait longer for the betting phase to appear
+    await page.waitForTimeout(1500);
   }
 }
 
-/**
- * Sets up a test scenario with a specific deck order
- * This uses localStorage to communicate with the app
- */
-export async function setupTestScenario(
-  page: Page,
-  scenario: 'dealer-blackjack' | 'player-blackjack' | 'normal'
-): Promise<void> {
-  await page.evaluate((scenarioType) => {
-    localStorage.setItem('test-scenario', scenarioType);
-  }, scenario);
-}
-
-/**
- * Clears test scenario settings
- */
-export async function clearTestScenario(page: Page): Promise<void> {
-  await page.evaluate(() => {
-    localStorage.removeItem('test-scenario');
-  });
-}

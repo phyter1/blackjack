@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { Game } from "@/modules/game/game";
 import { RuleSet } from "@/modules/game/rules";
 import type { Player } from "@/modules/game/player";
@@ -14,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
 import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
+import { createTestDeck, parseTestScenario } from "@/modules/game";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -52,10 +54,29 @@ export function CasinoTable({
   const [showCount, setShowCount] = useState(true); // Show/hide count display
   const decisionTracker = useRef<DecisionTracker | null>(null);
   const cardCounter = useRef<HiLoCounter | null>(null);
+  const searchParams = useSearchParams();
 
   useEffect(() => {
-    // Initialize game
-    const newGame = new Game(6, 0.75, 1000000, new RuleSet());
+    // Check for test mode in URL parameters or sessionStorage
+    let testConfig = parseTestScenario(searchParams);
+
+    // If not in URL params, check sessionStorage (for E2E tests)
+    if (!testConfig.enabled) {
+      const sessionTestMode = typeof window !== 'undefined'
+        ? sessionStorage.getItem('test-mode')
+        : null;
+
+      if (sessionTestMode) {
+        testConfig = { enabled: true, scenario: sessionTestMode };
+      }
+    }
+
+    const testStack = testConfig.enabled && testConfig.scenario
+      ? createTestDeck(testConfig.scenario, 6)
+      : undefined;
+
+    // Initialize game (with optional test stack)
+    const newGame = new Game(6, 0.75, 1000000, new RuleSet(), testStack);
     const newPlayer = newGame.addPlayer(user.name, bank.balance);
     const session = UserService.startSession(user.id);
 
@@ -68,7 +89,7 @@ export function CasinoTable({
 
     // Initialize card counter (6 decks)
     cardCounter.current = new HiLoCounter(6, false);
-  }, [user.name, bank.balance, user.id]);
+  }, [user.name, bank.balance, user.id, searchParams]);
 
   // Update hand outcomes when settling phase is reached
   useEffect(() => {
@@ -649,11 +670,15 @@ export function CasinoTable({
 
                   // Check round state after insurance resolution
                   const round = game.getCurrentRound();
-                  if (round?.state === "settling") {
+                  if (round?.state === "settling" || round?.state === "complete") {
                     // Dealer has blackjack - go directly to settling
-                    setTimeout(() => setPhase("settling"), 500);
+                    setTimeout(() => {
+                      setPhase("settling");
+                      forceUpdate({});
+                    }, 500);
                   } else {
                     setPhase("playing");
+                    forceUpdate({});
                   }
                 }}
                 className="bg-green-800 hover:bg-green-700 text-white font-serif"
@@ -670,11 +695,15 @@ export function CasinoTable({
 
                   // Check round state after insurance resolution
                   const round = game.getCurrentRound();
-                  if (round?.state === "settling") {
+                  if (round?.state === "settling" || round?.state === "complete") {
                     // Dealer has blackjack - go directly to settling
-                    setTimeout(() => setPhase("settling"), 500);
+                    setTimeout(() => {
+                      setPhase("settling");
+                      forceUpdate({});
+                    }, 500);
                   } else {
                     setPhase("playing");
+                    forceUpdate({});
                   }
                 }}
                 className="bg-red-800 hover:bg-red-700 text-white font-serif"

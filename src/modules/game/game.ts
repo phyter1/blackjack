@@ -6,6 +6,7 @@ import { Round, type PlayerRoundInfo } from "./round";
 import { RuleSet } from "./rules";
 import type { SettlementResult } from "./settlement";
 import { Shoe } from "./shoe";
+import type { Stack } from "./cards";
 import { getAuditLogger, initAuditLogger } from "../audit/logger";
 import type {
   SessionStartEvent,
@@ -35,19 +36,22 @@ export class Game {
   private numDecks: number;
   private penetration: number;
   private sessionId: string;
+  private testStack?: Stack;
 
   constructor(
     numDecks: number = 6,
     penetration: number = 0.75,
     houseInitialBankroll: number = 1000000,
     rules?: RuleSet,
+    testStack?: Stack,
   ) {
     this.numDecks = numDecks;
     this.penetration = penetration;
     this.rules = rules ?? new RuleSet();
     this.playerManager = new PlayerManager();
     this.house = new House(houseInitialBankroll);
-    this.shoe = new Shoe(numDecks, penetration);
+    this.testStack = testStack;
+    this.shoe = new Shoe(numDecks, penetration, testStack);
 
     // Initialize audit logger for this session
     const logger = initAuditLogger({});
@@ -152,7 +156,7 @@ export class Game {
 
     // Check if we need a new shoe
     if (this.shoe.isComplete) {
-      this.shoe = new Shoe(this.numDecks, this.penetration);
+      this.shoe = new Shoe(this.numDecks, this.penetration, this.testStack);
     }
 
     // Start the round

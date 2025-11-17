@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { UserAuth } from "./user-auth";
 import { UserDashboard } from "./user-dashboard";
 import { TerminalGamePersistent } from "./terminal-game-persistent";
@@ -17,8 +18,16 @@ export function BlackjackApp() {
   const [bank, setBank] = useState<UserBank | null>(null);
   const [loading, setLoading] = useState(true);
   const [gameMode, setGameMode] = useState<GameMode>("graphical");
+  const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Check for test-mode URL parameter and store it in sessionStorage
+    const testMode = searchParams.get('test-mode');
+    if (testMode && typeof window !== 'undefined') {
+      sessionStorage.setItem('test-mode', testMode);
+      console.log(`Test mode enabled: ${testMode}`);
+    }
+
     // Check if user is already logged in
     const currentUser = UserService.getCurrentUser();
     if (currentUser) {
@@ -27,7 +36,7 @@ export function BlackjackApp() {
       setAppState("dashboard");
     }
     setLoading(false);
-  }, []);
+  }, [searchParams]);
 
   const handleAuthenticated = (authenticatedUser: UserProfile, authenticatedBank: UserBank) => {
     setUser(authenticatedUser);

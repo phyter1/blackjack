@@ -14,7 +14,18 @@ export type ShoeDeck = {
 export const newShoeStack = (
   numDecks: number,
   penetration: number = 1 / 10,
+  testStack?: Stack,
 ): ShoeDeck => {
+  // If a test stack is provided, use it directly (for testing)
+  if (testStack) {
+    return {
+      stack: testStack,
+      penetration,
+      cutPosition: 0,
+    };
+  }
+
+  // Normal shuffling logic
   let shoe: Stack = [];
   for (let i = 0; i < numDecks; i++) {
     shoe = shoe.concat(riffleShuffleStack(newDeck()));
@@ -38,8 +49,12 @@ export class Shoe {
   private roundCompleted: number | null = null;
   private currentRound: number;
 
-  constructor(numDecks: number, penetration: number = 0.1) {
-    this.deck = newShoeStack(numDecks, penetration);
+  constructor(
+    numDecks: number,
+    penetration: number = 0.1,
+    testStack?: Stack,
+  ) {
+    this.deck = newShoeStack(numDecks, penetration, testStack);
     this.discardPile = [];
     this.stopPosition = Math.floor(
       this.deck.stack.length * (1 - this.deck.penetration),
