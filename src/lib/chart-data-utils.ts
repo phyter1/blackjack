@@ -1,4 +1,8 @@
 import type { GameSession } from "@/types/user";
+import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
+import type { Card } from "@/modules/game/cards";
+
+type Rank = Card["rank"];
 
 export interface ProfitLossDataPoint {
   sessionNumber: number;
@@ -205,4 +209,241 @@ export function formatCurrency(value: number): string {
     currency: "USD",
     minimumFractionDigits: 2,
   }).format(value);
+}
+
+// ============================================================================
+// ADVANCED ANALYTICS
+// ============================================================================
+
+/**
+ * Bet size data point
+ */
+export interface BetSizeDataPoint {
+  sessionNumber: number;
+  date: string;
+  avgBetSize: number;
+  totalWagered: number;
+}
+
+/**
+ * Win/Loss streak information
+ */
+export interface StreakData {
+  currentStreak: number; // Positive = wins, negative = losses, 0 = no data
+  currentStreakType: "win" | "loss" | "none";
+  longestWinStreak: number;
+  longestLossStreak: number;
+  streakHistory: StreakDataPoint[];
+}
+
+export interface StreakDataPoint {
+  sessionNumber: number;
+  date: string;
+  streak: number; // Positive = win streak, negative = loss streak
+  streakType: "win" | "loss";
+}
+
+/**
+ * Dealer upcard performance
+ */
+export interface DealerUpcardStats {
+  upcard: Rank;
+  totalHands: number;
+  wins: number;
+  losses: number;
+  pushes: number;
+  winRate: number; // Percentage
+  totalProfit: number;
+  avgProfit: number;
+}
+
+/**
+ * Transform sessions into average bet size over time
+ */
+export function transformToBetSizeData(
+  sessions: GameSession[],
+): BetSizeDataPoint[] {
+  const sortedSessions = [...sessions].sort(
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+  );
+
+  return sortedSessions
+    .filter(
+      (session) =>
+        session.totalWagered !== undefined && session.roundsPlayed > 0,
+    )
+    .map((session, index) => ({
+      sessionNumber: index + 1,
+      date: new Date(session.startTime).toLocaleDateString(),
+      avgBetSize: session.totalWagered! / session.roundsPlayed,
+      totalWagered: session.totalWagered!,
+    }));
+}
+
+/**
+ * Analyze win/loss streaks across all sessions
+ */
+export function analyzeStreaks(sessions: GameSession[]): StreakData {
+  const sortedSessions = [...sessions].sort(
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+  );
+
+  if (sortedSessions.length === 0) {
+    return {
+      currentStreak: 0,
+      currentStreakType: "none",
+      longestWinStreak: 0,
+      longestLossStreak: 0,
+      streakHistory: [],
+    };
+  }
+
+  let currentStreak = 0;
+  let currentStreakType: "win" | "loss" | "none" = "none";
+  let longestWinStreak = 0;
+  let longestLossStreak = 0;
+  const streakHistory: StreakDataPoint[] = [];
+
+  let tempWinStreak = 0;
+  let tempLossStreak = 0;
+
+  for (let i = 0; i < sortedSessions.length; i++) {
+    const session = sortedSessions[i];
+    const isWin = session.netProfit > 0;
+
+    if (isWin) {
+      tempWinStreak++;
+      tempLossStreak = 0;
+      currentStreakType = "win";
+    } else {
+      tempLossStreak++;
+      tempWinStreak = 0;
+      currentStreakType = "loss";
+    }
+
+    // Update longest streaks
+    longestWinStreak = Math.max(longestWinStreak, tempWinStreak);
+    longestLossStreak = Math.max(longestLossStreak, tempLossStreak);
+
+    // Record this point in history
+    streakHistory.push({
+      sessionNumber: i + 1,
+      date: new Date(session.startTime).toLocaleDateString(),
+      streak: isWin ? tempWinStreak : -tempLossStreak,
+      streakType: isWin ? "win" : "loss",
+    });
+  }
+
+  // Current streak is the last one
+  currentStreak =
+    currentStreakType === "win" ? tempWinStreak : -tempLossStreak;
+
+  return {
+    currentStreak,
+    currentStreakType,
+    longestWinStreak,
+    longestLossStreak,
+    streakHistory,
+  };
+}
+
+/**
+ * Analyze performance against different dealer upcards
+ */
+export function analyzeDealerUpcards(
+  sessions: GameSession[],
+): DealerUpcardStats[] {
+  // Aggregate all decisions from all sessions
+  const allDecisions: PlayerDecision[] = [];
+
+  for (const session of sessions) {
+    if (session.decisionsData) {
+      try {
+        const decisions: PlayerDecision[] = JSON.parse(session.decisionsData);
+        allDecisions.push(...decisions);
+      } catch (e) {
+        // Skip sessions with invalid JSON
+        console.warn(`Failed to parse decisions for session ${session.id}`, e);
+      }
+    }
+  }
+
+  if (allDecisions.length === 0) {
+    return [];
+  }
+
+  // Group decisions by dealer upcard
+  const byUpcard = new Map<Rank, PlayerDecision[]>();
+
+  for (const decision of allDecisions) {
+    const upcard = decision.dealerUpCard.rank;
+    if (!byUpcard.has(upcard)) {
+      byUpcard.set(upcard, []);
+    }
+    byUpcard.get(upcard)!.push(decision);
+  }
+
+  // Calculate stats for each upcard
+  const stats: DealerUpcardStats[] = [];
+
+  for (const [upcard, decisions] of byUpcard.entries()) {
+    // Only count decisions where we have outcome data (one decision per hand)
+    const decisionsWithOutcome = decisions.filter((d) => d.outcome !== undefined);
+
+    if (decisionsWithOutcome.length === 0) {
+      continue;
+    }
+
+    // Group by handId to count unique hands (not individual decisions)
+    const handIds = new Set(decisionsWithOutcome.map((d) => d.handId));
+    const uniqueHands = Array.from(handIds).map((handId) => {
+      // Get the last decision for this hand (which has the outcome)
+      const handDecisions = decisionsWithOutcome.filter(
+        (d) => d.handId === handId,
+      );
+      return handDecisions[handDecisions.length - 1];
+    });
+
+    const totalHands = uniqueHands.length;
+    const wins = uniqueHands.filter(
+      (d) => d.outcome === "win" || d.outcome === "blackjack" || d.outcome === "charlie",
+    ).length;
+    const losses = uniqueHands.filter(
+      (d) => d.outcome === "lose" || (d.profit && d.profit < 0),
+    ).length;
+    const pushes = uniqueHands.filter((d) => d.outcome === "push").length;
+    const totalProfit = uniqueHands.reduce((sum, d) => sum + (d.profit || 0), 0);
+
+    stats.push({
+      upcard,
+      totalHands,
+      wins,
+      losses,
+      pushes,
+      winRate: totalHands > 0 ? (wins / totalHands) * 100 : 0,
+      totalProfit,
+      avgProfit: totalHands > 0 ? totalProfit / totalHands : 0,
+    });
+  }
+
+  // Sort by card rank order (2-10, J, Q, K, A)
+  const rankOrder: Record<Rank, number> = {
+    "2": 2,
+    "3": 3,
+    "4": 4,
+    "5": 5,
+    "6": 6,
+    "7": 7,
+    "8": 8,
+    "9": 9,
+    "10": 10,
+    J: 11,
+    Q: 12,
+    K: 13,
+    A: 14,
+  };
+
+  stats.sort((a, b) => rankOrder[a.upcard] - rankOrder[b.upcard]);
+
+  return stats;
 }
