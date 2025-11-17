@@ -31,6 +31,7 @@ export function BettingControls({
   const [numHands, setNumHands] = useState(1);
   const [currentHandIndex, setCurrentHandIndex] = useState(0);
   const [handBets, setHandBets] = useState<number[]>([10]); // Array of bet amounts
+  const [previousBets, setPreviousBets] = useState<number[] | null>(null); // Track previous bet for re-bet feature
 
   // Update handBets array when numHands changes
   const handleNumHandsChange = (newNumHands: number) => {
@@ -79,8 +80,22 @@ export function BettingControls({
     const allBetsValid = handBets.every((bet) => bet > 0);
 
     if (allBetsValid && totalBet > 0 && totalBet <= balance) {
+      // Save current bets for re-bet feature
+      setPreviousBets([...handBets]);
       onPlaceBet(handBets);
       setHandBets(new Array(numHands).fill(10)); // Reset to defaults
+    }
+  };
+
+  const handleReBet = () => {
+    if (!previousBets) return;
+
+    const totalPreviousBet = previousBets.reduce((sum, bet) => sum + bet, 0);
+    if (totalPreviousBet <= balance) {
+      // Set the number of hands to match previous bet
+      setNumHands(previousBets.length);
+      setHandBets([...previousBets]);
+      setCurrentHandIndex(0);
     }
   };
 
@@ -201,7 +216,7 @@ export function BettingControls({
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-2">
+      <div className="flex gap-2 flex-wrap">
         <Button
           onClick={handleClearBet}
           variant="outline"
@@ -220,6 +235,18 @@ export function BettingControls({
             Clear All
           </Button>
         )}
+        <Button
+          onClick={handleReBet}
+          variant="outline"
+          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white border-blue-600"
+          disabled={
+            disabled ||
+            !previousBets ||
+            previousBets.reduce((sum, bet) => sum + bet, 0) > balance
+          }
+        >
+          Re-bet
+        </Button>
         <Button
           onClick={handlePlaceBet}
           className="flex-1 bg-green-600 hover:bg-green-700"
