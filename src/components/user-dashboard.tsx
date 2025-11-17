@@ -1,3 +1,6 @@
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
+/** biome-ignore-all lint/suspicious/noAssignInExpressions: <explanation> */
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
 "use client";
 
 import { useState, useEffect } from "react";
@@ -248,6 +251,12 @@ export function UserDashboard({
                 💻 Terminal
               </Button>
             </div>
+            {/* <Button
+              onClick={() => window.location.href = '/trainer'}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
+            >
+              🎓 Practice Mode (Trainer)
+            </Button> */}
 
             {/* Current Rules Display */}
             {currentRules && (

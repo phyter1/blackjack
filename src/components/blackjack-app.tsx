@@ -6,6 +6,7 @@ import { UserAuth } from "./user-auth";
 import { UserDashboard } from "./user-dashboard";
 import { TerminalGamePersistent } from "./terminal-game-persistent";
 import { CasinoTable } from "./casino-table";
+import { TrainerModeProvider } from "@/hooks/use-trainer-mode";
 import type { UserProfile, UserBank, TableRules } from "@/types/user";
 import { UserService } from "@/services/user-service";
 
@@ -119,13 +120,15 @@ export function BlackjackApp() {
       );
     } else {
       return (
-        <CasinoTable
-          user={user}
-          bank={bank}
-          rules={currentRules}
-          onGameEnd={handleGameEnd}
-          onBackToDashboard={handleBackToDashboard}
-        />
+        <TrainerModeProvider>
+          <CasinoTable
+            user={user}
+            bank={bank}
+            rules={currentRules}
+            onGameEnd={handleGameEnd}
+            onBackToDashboard={handleBackToDashboard}
+          />
+        </TrainerModeProvider>
       );
     }
   }

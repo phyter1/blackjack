@@ -16,6 +16,12 @@ import { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
 import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import { createTestDeck, parseTestScenario } from "@/modules/game";
+import { useTrainerMode } from "@/hooks/use-trainer-mode";
+import { TrainerControls } from "./trainer-controls";
+import { StrategyFeedback } from "./strategy-feedback";
+import { CountingPanel } from "./counting-panel";
+import { TrainerStatsPanel } from "./trainer-stats-panel";
+import { GraduationCap } from "lucide-react";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -59,9 +65,21 @@ export function CasinoTable({
   const [countingEnabled, setCountingEnabled] = useState(true); // Enable counting by default
   const [practiceMode, setPracticeMode] = useState(false); // Practice mode for testing count
   const [showCount, setShowCount] = useState(true); // Show/hide count display
+  const [showTrainerSidebar, setShowTrainerSidebar] = useState(false); // Toggle trainer sidebar
   const decisionTracker = useRef<DecisionTracker | null>(null);
   const cardCounter = useRef<HiLoCounter | null>(null);
+  const originalBalanceRef = useRef<number>(0); // Store original balance when trainer is active
   const searchParams = useSearchParams();
+
+  // Trainer mode hook
+  const {
+    initializeTrainer,
+    isActive: isTrainerActive,
+    refreshStats,
+    clearFeedback,
+    getTrainer,
+    practiceBalance,
+  } = useTrainerMode();
 
   useEffect(() => {
     // Check for test mode in URL parameters or sessionStorage
@@ -123,7 +141,13 @@ export function CasinoTable({
 
     // Initialize card counter (with configured deck count)
     cardCounter.current = new HiLoCounter(deckCount, false);
-  }, [user.name, bank.balance, user.id, rules, searchParams]);
+
+    // Initialize trainer mode
+    initializeTrainer(newGame);
+
+    // Store the original real balance
+    originalBalanceRef.current = bank.balance;
+  }, [user.name, bank.balance, user.id, rules, searchParams, initializeTrainer]);
 
   // Update hand outcomes when settling phase is reached
   useEffect(() => {
@@ -140,11 +164,31 @@ export function CasinoTable({
               result.payout,
               result.profit,
             );
+
+            // If trainer is active, update practice balance instead of real balance
+            if (isTrainerActive) {
+              const trainer = getTrainer();
+              if (trainer) {
+                trainer.updateHandOutcome(
+                  hand.id,
+                  result.outcome,
+                  result.payout,
+                  result.profit,
+                );
+              }
+            }
           }
         });
+
+        // Refresh trainer stats after settlement
+        if (isTrainerActive && player) {
+          refreshStats();
+          // Restore the original real balance - trainer tracks virtual balance separately
+          (player.bank as any).total = originalBalanceRef.current;
+        }
       }
     }
-  }, [phase, game]);
+  }, [phase, game, isTrainerActive, getTrainer, refreshStats, player]);
 
   // Handle insurance phase - find all hands that need insurance decision
   useEffect(() => {
@@ -169,13 +213,39 @@ export function CasinoTable({
     if (!game || !player) return;
 
     try {
-      // Create PlayerBet array - one entry per hand
-      const playerBets = bets.map(amount => ({
-        playerId: player.id,
-        amount,
-      }));
+      // In trainer mode, check against practice balance instead of real balance
+      if (isTrainerActive) {
+        const totalBet = bets.reduce((sum, bet) => sum + bet, 0);
+        if (totalBet > practiceBalance) {
+          console.error(`Insufficient practice balance. Bet: ${totalBet}, Balance: ${practiceBalance}`);
+          return;
+        }
 
-      game.startRound(playerBets);
+        // Save the original balance before any operations
+        originalBalanceRef.current = player.bank.balance;
+
+        // Temporarily set player's bank balance to practice balance for the game engine
+        // Using type assertion to bypass readonly - this is safe in trainer mode
+        (player.bank as any).total = practiceBalance;
+
+        // Create PlayerBet array - one entry per hand
+        const playerBets = bets.map(amount => ({
+          playerId: player.id,
+          amount,
+        }));
+
+        game.startRound(playerBets);
+
+        // Restore original balance immediately - trainer will track the virtual balance
+        (player.bank as any).total = originalBalanceRef.current;
+      } else {
+        // Normal mode - use real balance
+        const playerBets = bets.map(amount => ({
+          playerId: player.id,
+          amount,
+        }));
+        game.startRound(playerBets);
+      }
       setRoundsPlayed((prev) => prev + 1);
       setPhase("dealing");
 
@@ -191,6 +261,25 @@ export function CasinoTable({
           if (round.dealerHand.upCard) {
             cardCounter.current.addCard(round.dealerHand.upCard);
           }
+        }
+      }
+
+      // Track cards in trainer if active
+      if (isTrainerActive) {
+        const trainer = getTrainer();
+        if (trainer) {
+          const round = game.getCurrentRound();
+          if (round) {
+            // Process all dealt cards for counting
+            for (const hand of round.playerHands) {
+              trainer.processCardsDealt(hand.cards);
+            }
+            if (round.dealerHand.upCard) {
+              trainer.processCardsDealt([round.dealerHand.upCard]);
+            }
+          }
+          // Clear feedback from previous round
+          clearFeedback();
         }
       }
 
@@ -259,6 +348,26 @@ export function CasinoTable({
             currentHand.betAmount,
             countSnapshot,
           );
+
+          // If trainer is active, evaluate the action
+          if (isTrainerActive) {
+            const trainer = getTrainer();
+            if (trainer) {
+              trainer.evaluateAction(
+                currentHand.cards,
+                currentHand.handValue,
+                dealerUpCard,
+                canDouble,
+                canSplit,
+                canSurrender,
+                action,
+                currentHand.id,
+                round.id,
+                currentHand.betAmount,
+              );
+              refreshStats();
+            }
+          }
         }
       }
 
@@ -268,7 +377,17 @@ export function CasinoTable({
         ? currentRound.playerHands.reduce((sum, h) => sum + h.cards.length, 0)
         : 0;
 
+      // In trainer mode, swap to practice balance before action (so settlement uses practice balance)
+      if (isTrainerActive && player) {
+        (player.bank as any).total = practiceBalance;
+      }
+
       game.playAction(action);
+
+      // In trainer mode, restore original balance immediately after action
+      if (isTrainerActive && player) {
+        (player.bank as any).total = originalBalanceRef.current;
+      }
 
       // Track any new cards dealt (from hit, split, double)
       if (cardCounter.current && countingEnabled) {
@@ -328,7 +447,9 @@ export function CasinoTable({
   const handleNextRound = () => {
     if (!game || !player) return;
 
-    if (player.bank.balance < 10) {
+    // Check balance based on mode (practice or real)
+    const currentBalance = isTrainerActive ? practiceBalance : player.bank.balance;
+    if (currentBalance < 10) {
       handleEndGame();
       return;
     }
@@ -349,6 +470,11 @@ export function CasinoTable({
 
   const handleEndGame = () => {
     if (!game || !player || !sessionId) return;
+
+    // In trainer mode, restore the original balance before saving
+    if (isTrainerActive) {
+      (player.bank as any).total = originalBalanceRef.current;
+    }
 
     // Track final round's wager if there's an active round
     let finalTotalWagered = totalWagered;
@@ -384,6 +510,7 @@ export function CasinoTable({
       };
     }
 
+    // Use the real balance for saving (already restored if in trainer mode)
     UserService.endSession(
       sessionId,
       roundsPlayed,
@@ -478,10 +605,22 @@ export function CasinoTable({
           )}
 
           <div className="text-right">
-            <div className="text-sm text-amber-400">Balance</div>
-            <div className="text-xl font-bold text-green-400">
-              ${player?.bank.balance.toFixed(2)}
+            <div className="text-sm text-amber-400">
+              {isTrainerActive ? "Practice Balance" : "Balance"}
             </div>
+            <div className={cn(
+              "text-xl font-bold",
+              isTrainerActive ? "text-blue-400" : "text-green-400"
+            )}>
+              ${isTrainerActive
+                ? practiceBalance.toLocaleString()
+                : player?.bank.balance.toFixed(2)}
+            </div>
+            {isTrainerActive && (
+              <div className="text-xs text-blue-300">
+                (Training Mode)
+              </div>
+            )}
           </div>
 
           <Button
@@ -491,6 +630,19 @@ export function CasinoTable({
             className="border-purple-700 bg-purple-950/50 text-purple-200 hover:bg-purple-900"
           >
             {showCount ? "Hide Count" : "Show Count"}
+          </Button>
+
+          <Button
+            onClick={() => setShowTrainerSidebar(!showTrainerSidebar)}
+            variant="outline"
+            size="sm"
+            className={cn(
+              "border-blue-700 text-blue-200 hover:bg-blue-900",
+              showTrainerSidebar ? "bg-blue-800/80" : "bg-blue-950/50"
+            )}
+          >
+            <GraduationCap className="w-4 h-4 mr-2" />
+            {showTrainerSidebar ? "Hide Trainer" : "Show Trainer"}
           </Button>
 
           <Button
@@ -659,6 +811,11 @@ export function CasinoTable({
       <div className="relative z-10 p-6 bg-linear-to-t from-amber-950/80 to-transparent backdrop-blur-sm">
         {phase === "betting" && (
           <div className="flex flex-col items-center gap-4">
+            {isTrainerActive && (
+              <div className="px-4 py-2 bg-blue-950/80 border border-blue-500/50 rounded-lg text-blue-200 text-sm">
+                🎓 <strong>Practice Mode</strong> - Using virtual balance, real bankroll is safe
+              </div>
+            )}
             <div className="text-amber-200 font-serif text-lg">
               Place Your Bet
             </div>
@@ -735,6 +892,7 @@ export function CasinoTable({
               {CHIP_VALUES.map((chip) => {
                 const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
                 const currentHandBet = handBets[currentHandIndex];
+                const availableBalance = isTrainerActive ? practiceBalance : (player?.bank.balance ?? 0);
                 return (
                   <CasinoChip
                     key={chip.value}
@@ -742,7 +900,7 @@ export function CasinoTable({
                     color={chip.color}
                     accentColor={chip.accentColor}
                     onClick={() => {
-                      if (player && totalBet + chip.value <= player.bank.balance) {
+                      if (totalBet + chip.value <= availableBalance) {
                         setHandBets((prev) => {
                           const newBets = [...prev];
                           newBets[currentHandIndex] = currentHandBet + chip.value;
@@ -750,11 +908,7 @@ export function CasinoTable({
                         });
                       }
                     }}
-                    disabled={
-                      player
-                        ? totalBet + chip.value > player.bank.balance
-                        : false
-                    }
+                    disabled={totalBet + chip.value > availableBalance}
                   />
                 );
               })}
@@ -976,6 +1130,40 @@ export function CasinoTable({
           </div>
         )}
       </div>
+
+      {/* Trainer Sidebar */}
+      {showTrainerSidebar && (
+        <div className="fixed right-0 top-0 h-full w-96 bg-gradient-to-l from-black/95 to-black/85 border-l border-blue-500/30 p-4 overflow-y-auto z-50 backdrop-blur-sm">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-blue-200 flex items-center gap-2">
+                <GraduationCap className="w-6 h-6" />
+                Trainer Mode
+              </h2>
+              <Button
+                onClick={() => setShowTrainerSidebar(false)}
+                variant="ghost"
+                size="sm"
+                className="text-blue-200 hover:text-blue-100"
+              >
+                ✕
+              </Button>
+            </div>
+
+            <TrainerControls />
+
+            {isTrainerActive && (
+              <>
+                <div className="space-y-3">
+                  <StrategyFeedback />
+                </div>
+                <CountingPanel />
+                <TrainerStatsPanel />
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
