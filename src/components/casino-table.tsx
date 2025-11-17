@@ -49,6 +49,11 @@ export function CasinoTable({
   const [showStats, setShowStats] = useState(false);
   const [, forceUpdate] = useState({});
   const [currentBet, setCurrentBet] = useState(0);
+  const [numHands, setNumHands] = useState(1);
+  const [currentHandIndex, setCurrentHandIndex] = useState(0);
+  const [handBets, setHandBets] = useState<number[]>([0]);
+  const [handsPendingInsurance, setHandsPendingInsurance] = useState<number[]>([]);
+  const [insuranceHandIndex, setInsuranceHandIndex] = useState(0);
   const [countingEnabled, setCountingEnabled] = useState(true); // Enable counting by default
   const [practiceMode, setPracticeMode] = useState(false); // Practice mode for testing count
   const [showCount, setShowCount] = useState(true); // Show/hide count display
@@ -114,11 +119,36 @@ export function CasinoTable({
     }
   }, [phase, game]);
 
-  const handleBet = (amount: number) => {
+  // Handle insurance phase - find all hands that need insurance decision
+  useEffect(() => {
+    if (phase === "insurance" && game) {
+      const round = game.getCurrentRound();
+      if (round) {
+        const pendingHands = round.playerHands
+          .map((hand, index) => ({ hand, index }))
+          .filter(({ hand }) => hand.insuranceOffered && !hand.hasInsurance)
+          .map(({ index }) => index);
+
+        setHandsPendingInsurance(pendingHands);
+
+        if (pendingHands.length > 0) {
+          setInsuranceHandIndex(pendingHands[0]);
+        }
+      }
+    }
+  }, [phase, game]);
+
+  const handleBet = (bets: number[]) => {
     if (!game || !player) return;
 
     try {
-      game.startRound([{ playerId: player.id, amount }]);
+      // Create PlayerBet array - one entry per hand
+      const playerBets = bets.map(amount => ({
+        playerId: player.id,
+        amount,
+      }));
+
+      game.startRound(playerBets);
       setRoundsPlayed((prev) => prev + 1);
       setPhase("dealing");
 
@@ -546,6 +576,12 @@ export function CasinoTable({
                       "ring-2 ring-amber-400 bg-amber-950/30",
                   )}
                 >
+                  {/* Hand label (if multiple hands) */}
+                  {round.playerHands.length > 1 && (
+                    <div className="text-amber-300 text-xs font-serif font-bold uppercase tracking-wide">
+                      Hand {handIdx + 1}
+                    </div>
+                  )}
                   <div className="relative flex" style={{ minHeight: "146px" }}>
                     {hand.cards.map((card, cardIdx) => (
                       <div
@@ -600,69 +636,151 @@ export function CasinoTable({
               Place Your Bet
             </div>
 
-            {/* Current bet display */}
+            {/* Number of hands selector */}
+            <div className="flex gap-2">
+              {[1, 2, 3, 4, 5].map((num) => (
+                <button
+                  key={num}
+                  onClick={() => {
+                    setNumHands(num);
+                    setHandBets(new Array(num).fill(0));
+                    setCurrentHandIndex(0);
+                  }}
+                  className={cn(
+                    "px-4 py-2 rounded font-serif font-bold transition-all",
+                    numHands === num
+                      ? "bg-amber-600 text-white"
+                      : "bg-amber-950/50 text-amber-300 hover:bg-amber-900/50 border border-amber-700",
+                  )}
+                >
+                  {num} Hand{num > 1 ? "s" : ""}
+                </button>
+              ))}
+            </div>
+
+            {/* Hand selection tabs (if multiple hands) */}
+            {numHands > 1 && (
+              <div className="flex gap-2">
+                {handBets.map((bet, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentHandIndex(index)}
+                    className={cn(
+                      "px-3 py-2 rounded text-sm font-serif transition-all",
+                      currentHandIndex === index
+                        ? "bg-green-800 text-white font-bold"
+                        : "bg-amber-950/50 text-amber-300 hover:bg-amber-900/50 border border-amber-700",
+                    )}
+                  >
+                    <div>Hand {index + 1}</div>
+                    <div className="text-xs">${bet.toFixed(0)}</div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Current hand bet display */}
             <div className="bg-black/50 px-8 py-3 rounded-lg border-2 border-amber-600">
               <div className="text-center">
                 <div className="text-xs text-amber-400 uppercase tracking-wide">
-                  Current Bet
+                  {numHands > 1 ? `Hand ${currentHandIndex + 1}` : "Current Bet"}
                 </div>
                 <div className="text-3xl font-bold text-green-400 font-serif">
-                  ${currentBet.toFixed(2)}
+                  ${handBets[currentHandIndex].toFixed(2)}
                 </div>
               </div>
             </div>
 
+            {/* Total bet display (if multiple hands) */}
+            {numHands > 1 && (
+              <div className="bg-amber-950/30 px-6 py-2 rounded border border-amber-700">
+                <div className="text-center">
+                  <div className="text-xs text-amber-400">Total Bet</div>
+                  <div className="text-xl font-bold text-yellow-400 font-serif">
+                    ${handBets.reduce((sum, bet) => sum + bet, 0).toFixed(2)}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Chips */}
             <div className="flex gap-3 items-center">
-              {CHIP_VALUES.map((chip) => (
-                <CasinoChip
-                  key={chip.value}
-                  value={chip.value}
-                  color={chip.color}
-                  accentColor={chip.accentColor}
-                  onClick={() => {
-                    if (
-                      player &&
-                      currentBet + chip.value <= player.bank.balance
-                    ) {
-                      setCurrentBet((prev) => prev + chip.value);
+              {CHIP_VALUES.map((chip) => {
+                const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
+                const currentHandBet = handBets[currentHandIndex];
+                return (
+                  <CasinoChip
+                    key={chip.value}
+                    value={chip.value}
+                    color={chip.color}
+                    accentColor={chip.accentColor}
+                    onClick={() => {
+                      if (player && totalBet + chip.value <= player.bank.balance) {
+                        setHandBets((prev) => {
+                          const newBets = [...prev];
+                          newBets[currentHandIndex] = currentHandBet + chip.value;
+                          return newBets;
+                        });
+                      }
+                    }}
+                    disabled={
+                      player
+                        ? totalBet + chip.value > player.bank.balance
+                        : false
                     }
-                  }}
-                  disabled={
-                    player
-                      ? currentBet + chip.value > player.bank.balance
-                      : false
-                  }
-                />
-              ))}
+                  />
+                );
+              })}
             </div>
 
             {/* Action buttons */}
             <div className="flex gap-3">
               <Button
-                onClick={() => setCurrentBet(0)}
+                onClick={() => {
+                  setHandBets((prev) => {
+                    const newBets = [...prev];
+                    newBets[currentHandIndex] = 0;
+                    return newBets;
+                  });
+                }}
                 variant="outline"
                 className="border-red-700 bg-red-950/50 text-red-200 hover:bg-red-900 font-serif"
-                disabled={currentBet === 0}
+                disabled={handBets[currentHandIndex] === 0}
               >
-                Clear Bet
+                Clear {numHands > 1 ? "Hand" : "Bet"}
               </Button>
+              {numHands > 1 && (
+                <Button
+                  onClick={() => setHandBets(new Array(numHands).fill(0))}
+                  variant="outline"
+                  className="border-red-700 bg-red-950/50 text-red-200 hover:bg-red-900 font-serif"
+                  disabled={handBets.every((bet) => bet === 0)}
+                >
+                  Clear All
+                </Button>
+              )}
               <Button
                 onClick={() => {
-                  if (currentBet >= 10) {
-                    handleBet(currentBet);
-                    setCurrentBet(0);
+                  const allBetsValid = handBets.every((bet) => bet >= 10);
+                  const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
+                  if (allBetsValid && totalBet > 0) {
+                    handleBet(handBets);
+                    setHandBets(new Array(numHands).fill(0));
                   }
                 }}
                 className="bg-green-800 hover:bg-green-700 text-white font-serif px-8"
-                disabled={currentBet < 10}
+                disabled={
+                  !handBets.every((bet) => bet >= 10) ||
+                  handBets.reduce((sum, bet) => sum + bet, 0) === 0
+                }
               >
-                Place Bet ${currentBet > 0 ? currentBet.toFixed(2) : ""}
+                Place Bet{numHands > 1 ? "s" : ""} $
+                {handBets.reduce((sum, bet) => sum + bet, 0).toFixed(0)}
               </Button>
             </div>
 
-            {currentBet < 10 && currentBet > 0 && (
-              <div className="text-amber-400 text-sm">Minimum bet is $10</div>
+            {handBets.some((bet) => bet > 0 && bet < 10) && (
+              <div className="text-amber-400 text-sm">Minimum bet is $10 per hand</div>
             )}
           </div>
         )}
@@ -671,58 +789,85 @@ export function CasinoTable({
           <div className="flex flex-col items-center gap-4">
             <div className="text-amber-200 font-serif text-lg">
               Dealer shows Ace - Take Insurance?
+              {round && round.playerHands.length > 1 && (
+                <span className="text-amber-400 ml-2">
+                  (Hand {insuranceHandIndex + 1})
+                </span>
+              )}
             </div>
             <div className="flex gap-4">
               <Button
                 onClick={() => {
                   if (!game) return;
-                  game.takeInsurance(0);
-                  game.resolveInsurance();
+                  game.takeInsurance(insuranceHandIndex);
 
-                  // Check round state after insurance resolution
-                  const round = game.getCurrentRound();
-                  if (
-                    round?.state === "settling" ||
-                    round?.state === "complete"
-                  ) {
-                    // Dealer has blackjack - go directly to settling
-                    setTimeout(() => {
-                      setPhase("settling");
-                      forceUpdate({});
-                    }, 500);
+                  // Check if there are more hands needing insurance
+                  const remainingHands = handsPendingInsurance.filter(
+                    (i) => i !== insuranceHandIndex,
+                  );
+                  if (remainingHands.length > 0) {
+                    setInsuranceHandIndex(remainingHands[0]);
+                    setHandsPendingInsurance(remainingHands);
                   } else {
-                    setPhase("playing");
-                    forceUpdate({});
+                    // All hands processed, resolve insurance
+                    game.resolveInsurance();
+
+                    // Check round state after insurance resolution
+                    const round = game.getCurrentRound();
+                    if (
+                      round?.state === "settling" ||
+                      round?.state === "complete"
+                    ) {
+                      // Dealer has blackjack - go directly to settling
+                      setTimeout(() => {
+                        setPhase("settling");
+                        forceUpdate({});
+                      }, 500);
+                    } else {
+                      setPhase("playing");
+                      forceUpdate({});
+                    }
                   }
                 }}
                 className="bg-green-800 hover:bg-green-700 text-white font-serif"
               >
                 Yes (costs $
-                {round?.playerHands[0]?.betAmount
-                  ? (round.playerHands[0].betAmount / 2).toFixed(2)
+                {round?.playerHands[insuranceHandIndex]?.betAmount
+                  ? (round.playerHands[insuranceHandIndex].betAmount / 2).toFixed(2)
                   : "0"}
                 )
               </Button>
               <Button
                 onClick={() => {
                   if (!game) return;
-                  game.declineInsurance(0);
-                  game.resolveInsurance();
+                  game.declineInsurance(insuranceHandIndex);
 
-                  // Check round state after insurance resolution
-                  const round = game.getCurrentRound();
-                  if (
-                    round?.state === "settling" ||
-                    round?.state === "complete"
-                  ) {
-                    // Dealer has blackjack - go directly to settling
-                    setTimeout(() => {
-                      setPhase("settling");
-                      forceUpdate({});
-                    }, 500);
+                  // Check if there are more hands needing insurance
+                  const remainingHands = handsPendingInsurance.filter(
+                    (i) => i !== insuranceHandIndex,
+                  );
+                  if (remainingHands.length > 0) {
+                    setInsuranceHandIndex(remainingHands[0]);
+                    setHandsPendingInsurance(remainingHands);
                   } else {
-                    setPhase("playing");
-                    forceUpdate({});
+                    // All hands processed, resolve insurance
+                    game.resolveInsurance();
+
+                    // Check round state after insurance resolution
+                    const round = game.getCurrentRound();
+                    if (
+                      round?.state === "settling" ||
+                      round?.state === "complete"
+                    ) {
+                      // Dealer has blackjack - go directly to settling
+                      setTimeout(() => {
+                        setPhase("settling");
+                        forceUpdate({});
+                      }, 500);
+                    } else {
+                      setPhase("playing");
+                      forceUpdate({});
+                    }
                   }
                 }}
                 className="bg-red-800 hover:bg-red-700 text-white font-serif"
