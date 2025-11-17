@@ -70,6 +70,27 @@ export function CasinoTable({
     cardCounter.current = new HiLoCounter(6, false);
   }, [user.name, bank.balance, user.id]);
 
+  // Update hand outcomes when settling phase is reached
+  useEffect(() => {
+    if (phase === "settling" && game && decisionTracker.current) {
+      const round = game.getCurrentRound();
+      if (round?.settlementResults) {
+        // Update each hand's outcome in the decision tracker
+        round.settlementResults.forEach((result, handIndex) => {
+          const hand = round.playerHands[handIndex];
+          if (hand) {
+            decisionTracker.current?.updateHandOutcome(
+              hand.id,
+              result.outcome,
+              result.payout,
+              result.profit
+            );
+          }
+        });
+      }
+    }
+  }, [phase, game]);
+
   const handleBet = (amount: number) => {
     if (!game || !player) return;
 
@@ -154,6 +175,7 @@ export function CasinoTable({
             canSurrender,
             action,
             optimalDecision,
+            currentHand.betAmount,
             countSnapshot,
           );
         }

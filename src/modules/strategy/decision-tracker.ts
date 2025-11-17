@@ -2,6 +2,7 @@ import type { ActionType } from "../game/action";
 import type { Card } from "../game/cards";
 import type { BasicStrategyDecision } from "./basic-strategy";
 import type { CountSnapshot } from "./hi-lo-counter";
+import type { HandOutcome } from "../game/settlement";
 
 /**
  * A single decision made during gameplay
@@ -32,6 +33,12 @@ export interface PlayerDecision {
 
   // Card counting data (if tracking)
   countSnapshot?: CountSnapshot;
+
+  // Financial data (added after hand is resolved)
+  betAmount: number;
+  outcome?: HandOutcome;
+  payout?: number;
+  profit?: number;
 }
 
 /**
@@ -129,6 +136,7 @@ export class DecisionTracker {
     canSurrender: boolean,
     actualAction: ActionType,
     optimalDecision: BasicStrategyDecision,
+    betAmount: number,
     countSnapshot?: CountSnapshot
   ): void {
     const decision: PlayerDecision = {
@@ -146,9 +154,29 @@ export class DecisionTracker {
       optimalReason: optimalDecision.reason,
       isCorrect: actualAction === optimalDecision.action,
       countSnapshot,
+      betAmount,
     };
 
     this.decisions.push(decision);
+  }
+
+  /**
+   * Update outcome data for a specific hand after settlement
+   */
+  updateHandOutcome(
+    handId: string,
+    outcome: HandOutcome,
+    payout: number,
+    profit: number
+  ): void {
+    // Update all decisions for this hand with outcome data
+    for (const decision of this.decisions) {
+      if (decision.handId === handId && !decision.outcome) {
+        decision.outcome = outcome;
+        decision.payout = payout;
+        decision.profit = profit;
+      }
+    }
   }
 
   /**
