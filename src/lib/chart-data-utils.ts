@@ -94,7 +94,7 @@ export function transformToWinRateData(
 }
 
 /**
- * Transform sessions into EV/AV chart data
+ * Transform sessions into EV/AV chart data (per-session)
  */
 export function transformToEVData(sessions: GameSession[]): EVDataPoint[] {
   const sortedSessions = [...sessions].sort(
@@ -116,6 +116,41 @@ export function transformToEVData(sessions: GameSession[]): EVDataPoint[] {
       variance: session.variance!,
       totalWagered: session.totalWagered!,
     }));
+}
+
+/**
+ * Transform sessions into cumulative EV/AV chart data
+ */
+export function transformToCumulativeEVData(sessions: GameSession[]): EVDataPoint[] {
+  const sortedSessions = [...sessions].sort(
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
+  );
+
+  let cumulativeEV = 0;
+  let cumulativeAV = 0;
+  let cumulativeWagered = 0;
+
+  return sortedSessions
+    .filter(
+      (session) =>
+        session.expectedValue !== undefined &&
+        session.variance !== undefined &&
+        session.totalWagered !== undefined,
+    )
+    .map((session, index) => {
+      cumulativeEV += session.expectedValue!;
+      cumulativeAV += session.netProfit;
+      cumulativeWagered += session.totalWagered!;
+
+      return {
+        sessionNumber: index + 1,
+        date: new Date(session.startTime).toLocaleDateString(),
+        expectedValue: cumulativeEV,
+        actualValue: cumulativeAV,
+        variance: cumulativeAV - cumulativeEV,
+        totalWagered: cumulativeWagered,
+      };
+    });
 }
 
 /**

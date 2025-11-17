@@ -11,6 +11,7 @@ import {
   transformToProfitLossData,
   transformToWinRateData,
   transformToEVData,
+  transformToCumulativeEVData,
   transformToTimePlayedData,
 } from "@/lib/chart-data-utils";
 import {
@@ -37,6 +38,11 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
   );
 
   const evData = useMemo(() => transformToEVData(sessions), [sessions]);
+
+  const cumulativeEvData = useMemo(
+    () => transformToCumulativeEVData(sessions),
+    [sessions],
+  );
 
   const timePlayedData = useMemo(
     () => transformToTimePlayedData(sessions),
@@ -91,7 +97,10 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
 
         <TabsContent value="ev-av" className="space-y-4">
           {evData.length > 0 ? (
-            <EVVarianceChart data={evData} />
+            <EVVarianceChart
+              perSessionData={evData}
+              cumulativeData={cumulativeEvData}
+            />
           ) : (
             <Card className="bg-gray-900 border-gray-700">
               <CardHeader>

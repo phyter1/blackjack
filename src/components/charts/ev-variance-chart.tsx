@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   LineChart,
   Line,
@@ -18,14 +19,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import type { EVDataPoint } from "@/lib/chart-data-utils";
 import { formatCurrency } from "@/lib/chart-data-utils";
 
 interface EVVarianceChartProps {
-  data: EVDataPoint[];
+  perSessionData: EVDataPoint[];
+  cumulativeData: EVDataPoint[];
 }
 
-export function EVVarianceChart({ data }: EVVarianceChartProps) {
+export function EVVarianceChart({ perSessionData, cumulativeData }: EVVarianceChartProps) {
+  const [mode, setMode] = useState<"per-session" | "cumulative">("cumulative");
+  const data = mode === "cumulative" ? cumulativeData : perSessionData;
   if (data.length === 0) {
     return (
       <Card className="bg-gray-900 border-gray-700">
@@ -44,23 +49,45 @@ export function EVVarianceChart({ data }: EVVarianceChartProps) {
   return (
     <Card className="bg-gray-900 border-gray-700">
       <CardHeader>
-        <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
-        <CardDescription>
-          Variance:
-          <span
-            className={
-              variance >= 0
-                ? "text-green-500 ml-2 font-semibold"
-                : "text-red-500 ml-2 font-semibold"
-            }
-          >
-            {formatCurrency(variance)}
-          </span>
-          <span className="text-gray-400 ml-2">
-            ({variance >= 0 ? "+" : ""}
-            {((variance / Math.abs(totalEV)) * 100).toFixed(1)}% vs EV)
-          </span>
-        </CardDescription>
+        <div className="flex items-center justify-between">
+          <div>
+            <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
+            <CardDescription>
+              Variance:
+              <span
+                className={
+                  variance >= 0
+                    ? "text-green-500 ml-2 font-semibold"
+                    : "text-red-500 ml-2 font-semibold"
+                }
+              >
+                {formatCurrency(variance)}
+              </span>
+              <span className="text-gray-400 ml-2">
+                ({variance >= 0 ? "+" : ""}
+                {((variance / Math.abs(totalEV)) * 100).toFixed(1)}% vs EV)
+              </span>
+            </CardDescription>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setMode("per-session")}
+              variant={mode === "per-session" ? "default" : "outline"}
+              size="sm"
+              className={mode === "per-session" ? "" : "text-gray-400"}
+            >
+              Per Session
+            </Button>
+            <Button
+              onClick={() => setMode("cumulative")}
+              variant={mode === "cumulative" ? "default" : "outline"}
+              size="sm"
+              className={mode === "cumulative" ? "" : "text-gray-400"}
+            >
+              Cumulative
+            </Button>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
