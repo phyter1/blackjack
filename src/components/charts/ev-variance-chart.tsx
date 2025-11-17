@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   LineChart,
   Line,
@@ -20,17 +20,61 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import type { EVDataPoint } from "@/lib/chart-data-utils";
-import { formatCurrency } from "@/lib/chart-data-utils";
+import { formatCurrency, transformToAdvantagePlayEVData } from "@/lib/chart-data-utils";
+import type { GameSession } from "@/types/user";
+import type { AdvantagePlayLevel } from "@/modules/strategy/ev-calculator";
+import { getAdvantagePlayDescription } from "@/modules/strategy/ev-calculator";
 
 interface EVVarianceChartProps {
   perSessionData: EVDataPoint[];
   cumulativeData: EVDataPoint[];
+  sessions: GameSession[];
 }
 
-export function EVVarianceChart({ perSessionData, cumulativeData }: EVVarianceChartProps) {
+export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EVVarianceChartProps) {
   const [mode, setMode] = useState<"per-session" | "cumulative">("cumulative");
-  const data = mode === "cumulative" ? cumulativeData : perSessionData;
+  const [advantageLevel, setAdvantageLevel] = useState<AdvantagePlayLevel>("basic-strategy");
+
+  // Calculate data for all advantage play levels
+  const advantagePlayData = useMemo(() => {
+    const levels: AdvantagePlayLevel[] = [
+      "house-edge",
+      "basic-strategy",
+      "card-counting-conservative",
+      "card-counting-aggressive",
+      "perfect-play",
+    ];
+
+    const dataByLevel: Record<AdvantagePlayLevel, {
+      perSession: EVDataPoint[];
+      cumulative: EVDataPoint[];
+    }> = {} as any;
+
+    for (const level of levels) {
+      dataByLevel[level] = {
+        perSession: transformToAdvantagePlayEVData(sessions, level, false),
+        cumulative: transformToAdvantagePlayEVData(sessions, level, true),
+      };
+    }
+
+    return dataByLevel;
+  }, [sessions]);
+
+  // Use appropriate data based on selected level
+  const data = advantageLevel === "basic-strategy"
+    ? (mode === "cumulative" ? cumulativeData : perSessionData)
+    : (mode === "cumulative"
+        ? advantagePlayData[advantageLevel]?.cumulative || []
+        : advantagePlayData[advantageLevel]?.perSession || []);
+
   if (data.length === 0) {
     return (
       <Card className="bg-gray-900 border-gray-700">
@@ -42,50 +86,120 @@ export function EVVarianceChart({ perSessionData, cumulativeData }: EVVarianceCh
     );
   }
 
-  const totalEV = data.reduce((sum, d) => sum + d.expectedValue, 0);
-  const totalAV = data.reduce((sum, d) => sum + d.actualValue, 0);
+  const totalEV = data[data.length - 1]?.expectedValue || 0;
+  const totalAV = data[data.length - 1]?.actualValue || 0;
   const variance = totalAV - totalEV;
+
+  // Determine line color based on advantage level
+  const getEVLineColor = () => {
+    switch (advantageLevel) {
+      case "house-edge":
+        return "#EF4444"; // Red - house advantage
+      case "basic-strategy":
+        return "#F59E0B"; // Amber - slight house advantage
+      case "card-counting-conservative":
+        return "#3B82F6"; // Blue - small player advantage
+      case "card-counting-aggressive":
+        return "#8B5CF6"; // Purple - moderate player advantage
+      case "perfect-play":
+        return "#EC4899"; // Pink - theoretical maximum
+      default:
+        return "#F59E0B";
+    }
+  };
 
   return (
     <Card className="bg-gray-900 border-gray-700">
       <CardHeader>
-        <div className="flex items-center justify-between">
-          <div>
-            <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
-            <CardDescription>
-              Variance:
-              <span
-                className={
-                  variance >= 0
-                    ? "text-green-500 ml-2 font-semibold"
-                    : "text-red-500 ml-2 font-semibold"
-                }
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
+              <CardDescription>
+                Variance:
+                <span
+                  className={
+                    variance >= 0
+                      ? "text-green-500 ml-2 font-semibold"
+                      : "text-red-500 ml-2 font-semibold"
+                  }
+                >
+                  {formatCurrency(variance)}
+                </span>
+                <span className="text-gray-400 ml-2">
+                  ({variance >= 0 ? "+" : ""}
+                  {totalEV !== 0 ? ((variance / Math.abs(totalEV)) * 100).toFixed(1) : "0.0"}% vs EV)
+                </span>
+              </CardDescription>
+            </div>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setMode("per-session")}
+                variant={mode === "per-session" ? "default" : "outline"}
+                size="sm"
+                className={mode === "per-session" ? "" : "text-gray-400"}
               >
-                {formatCurrency(variance)}
-              </span>
-              <span className="text-gray-400 ml-2">
-                ({variance >= 0 ? "+" : ""}
-                {((variance / Math.abs(totalEV)) * 100).toFixed(1)}% vs EV)
-              </span>
-            </CardDescription>
+                Per Session
+              </Button>
+              <Button
+                onClick={() => setMode("cumulative")}
+                variant={mode === "cumulative" ? "default" : "outline"}
+                size="sm"
+                className={mode === "cumulative" ? "" : "text-gray-400"}
+              >
+                Cumulative
+              </Button>
+            </div>
           </div>
-          <div className="flex gap-2">
-            <Button
-              onClick={() => setMode("per-session")}
-              variant={mode === "per-session" ? "default" : "outline"}
-              size="sm"
-              className={mode === "per-session" ? "" : "text-gray-400"}
+
+          {/* Advantage Play Level Selector */}
+          <div className="flex items-center gap-3">
+            <span className="text-gray-400 text-sm">Advantage Play:</span>
+            <Select
+              value={advantageLevel}
+              onValueChange={(value) => setAdvantageLevel(value as AdvantagePlayLevel)}
             >
-              Per Session
-            </Button>
-            <Button
-              onClick={() => setMode("cumulative")}
-              variant={mode === "cumulative" ? "default" : "outline"}
-              size="sm"
-              className={mode === "cumulative" ? "" : "text-gray-400"}
-            >
-              Cumulative
-            </Button>
+              <SelectTrigger className="w-64">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="house-edge">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500" />
+                    House Edge (Typical Player)
+                  </div>
+                </SelectItem>
+                <SelectItem value="basic-strategy">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-amber-500" />
+                    Basic Strategy
+                  </div>
+                </SelectItem>
+                <SelectItem value="card-counting-conservative">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-blue-500" />
+                    Card Counting (1-4 spread)
+                  </div>
+                </SelectItem>
+                <SelectItem value="card-counting-aggressive">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-purple-500" />
+                    Card Counting (1-8 spread)
+                  </div>
+                </SelectItem>
+                <SelectItem value="perfect-play">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-pink-500" />
+                    Perfect Play (Theoretical)
+                  </div>
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          {/* Description of selected advantage play level */}
+          <div className="text-sm text-gray-400 italic">
+            {getAdvantagePlayDescription(advantageLevel)}
           </div>
         </div>
       </CardHeader>
@@ -131,7 +245,7 @@ export function EVVarianceChart({ perSessionData, cumulativeData }: EVVarianceCh
                 if (typeof value === "number") {
                   const label =
                     name === "expectedValue"
-                      ? "Expected Value (EV)"
+                      ? `EV (${advantageLevel.replace(/-/g, " ")})`
                       : "Actual Value (AV)";
                   return [formatCurrency(value), label];
                 }
@@ -145,17 +259,17 @@ export function EVVarianceChart({ perSessionData, cumulativeData }: EVVarianceCh
               wrapperStyle={{ color: "#9CA3AF" }}
               formatter={(value) => {
                 return value === "expectedValue"
-                  ? "Expected Value (EV)"
+                  ? `EV (${advantageLevel.replace(/-/g, " ")})`
                   : "Actual Value (AV)";
               }}
             />
             <Line
               type="monotone"
               dataKey="expectedValue"
-              stroke="#F59E0B"
+              stroke={getEVLineColor()}
               strokeWidth={3}
               strokeDasharray="5 5"
-              dot={{ fill: "#F59E0B", r: 4 }}
+              dot={{ fill: getEVLineColor(), r: 4 }}
               activeDot={{ r: 6 }}
             />
             <Line

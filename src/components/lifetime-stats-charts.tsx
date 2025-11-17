@@ -119,6 +119,7 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
             <EVVarianceChart
               perSessionData={evData}
               cumulativeData={cumulativeEvData}
+              sessions={sessions}
             />
           ) : (
             <Card className="bg-gray-900 border-gray-700">

@@ -29,9 +29,15 @@ export {
   calculateSessionEV,
   calculateHandEV,
   calculateBaseHouseEdge,
+  calculateAdvantagePlayEV,
+  getAdvantagePlayDescription,
   type EVCalculation,
   type HandEVCalculation,
   type GameRules,
+  type AdvantagePlayLevel,
+  type BettingSpread,
+  CONSERVATIVE_SPREAD,
+  AGGRESSIVE_SPREAD,
 } from "./ev-calculator";
 
 // Trainer Mode

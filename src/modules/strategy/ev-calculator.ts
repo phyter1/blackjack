@@ -270,6 +270,237 @@ export function formatMoney(value: number): string {
   return `${sign}$${Math.abs(value).toFixed(2)}`;
 }
 
+// ============================================================================
+// ADVANCED ADVANTAGE PLAY EV CALCULATIONS
+// ============================================================================
+
+export type AdvantagePlayLevel =
+  | "house-edge"      // Raw house edge with no player skill
+  | "basic-strategy"  // Perfect basic strategy
+  | "card-counting-conservative" // Basic + Hi-Lo with 1-4 spread
+  | "card-counting-aggressive"   // Basic + Hi-Lo with 1-8 or 1-12 spread
+  | "perfect-play";   // Theoretical maximum advantage
+
+/**
+ * Betting spread configuration for card counting
+ */
+export interface BettingSpread {
+  minBet: number;
+  maxBet: number;
+  spreadByCount: Record<number, number>; // True count -> bet multiplier
+}
+
+/**
+ * Conservative betting spread (1-4 units)
+ */
+export const CONSERVATIVE_SPREAD: BettingSpread = {
+  minBet: 1,
+  maxBet: 4,
+  spreadByCount: {
+    "-2": 1,  // TC <= -2: 1 unit
+    "-1": 1,  // TC -1: 1 unit
+    "0": 1,   // TC 0: 1 unit
+    "1": 2,   // TC +1: 2 units
+    "2": 3,   // TC +2: 3 units
+    "3": 4,   // TC >= +3: 4 units
+  },
+};
+
+/**
+ * Aggressive betting spread (1-8 units)
+ */
+export const AGGRESSIVE_SPREAD: BettingSpread = {
+  minBet: 1,
+  maxBet: 8,
+  spreadByCount: {
+    "-2": 1,   // TC <= -2: 1 unit
+    "-1": 1,   // TC -1: 1 unit
+    "0": 1,    // TC 0: 1 unit
+    "1": 2,    // TC +1: 2 units
+    "2": 4,    // TC +2: 4 units
+    "3": 6,    // TC +3: 6 units
+    "4": 8,    // TC >= +4: 8 units
+  },
+};
+
+/**
+ * Get bet multiplier based on true count and spread
+ */
+function getBetMultiplier(trueCount: number, spread: BettingSpread): number {
+  if (trueCount <= -2) return spread.spreadByCount["-2"] || 1;
+  if (trueCount === -1) return spread.spreadByCount["-1"] || 1;
+  if (trueCount === 0) return spread.spreadByCount["0"] || 1;
+  if (trueCount === 1) return spread.spreadByCount["1"] || 2;
+  if (trueCount === 2) return spread.spreadByCount["2"] || 3;
+  if (trueCount === 3) return spread.spreadByCount["3"] || 4;
+  if (trueCount >= 4) return spread.spreadByCount["4"] || spread.maxBet;
+  return 1;
+}
+
+/**
+ * Calculate EV with specific advantage play level
+ */
+export function calculateAdvantagePlayEV(params: {
+  totalWagered: number;
+  actualValue: number;
+  level: AdvantagePlayLevel;
+  strategyAccuracy?: number;
+  decisionsData?: string;
+  rules?: GameRules;
+  averageBetSize?: number;
+}): EVCalculation {
+  const {
+    totalWagered,
+    actualValue,
+    level,
+    strategyAccuracy = 100,
+    decisionsData,
+    rules = DEFAULT_RULES,
+    averageBetSize = totalWagered / 100, // Estimate if not provided
+  } = params;
+
+  let baseHouseEdge = calculateBaseHouseEdge(rules);
+  let adjustedHouseEdge = baseHouseEdge;
+  let countAdvantage = 0;
+
+  switch (level) {
+    case "house-edge":
+      // Raw house edge with average player mistakes
+      // Typical player makes ~2-4% errors
+      adjustedHouseEdge = baseHouseEdge - 3.0; // Add 3% for typical mistakes
+      break;
+
+    case "basic-strategy":
+      // Perfect basic strategy (what the current calculator does)
+      adjustedHouseEdge = adjustForStrategyAccuracy(baseHouseEdge, strategyAccuracy);
+      break;
+
+    case "card-counting-conservative": {
+      // Basic strategy + conservative card counting
+      // Conservative counter overcomes house edge and achieves small player edge
+
+      const avgTrueCount = calculateAverageTrueCount(decisionsData);
+
+      if (avgTrueCount !== null) {
+        // We have actual count data - use it but ensure positive edge
+        const betMultiplier = getBetMultiplier(Math.round(avgTrueCount), CONSERVATIVE_SPREAD);
+        countAdvantage = (avgTrueCount * 0.5 * betMultiplier) / 2;
+        // Account for cover play and heat avoidance (reduces edge by ~0.2%)
+        countAdvantage -= 0.2;
+
+        // Conservative counter should achieve 0.65% player edge minimum
+        // Adjust to ensure we always show positive EV for counting
+        const totalEdge = baseHouseEdge + countAdvantage;
+        if (totalEdge < 0.65) {
+          // Boost to minimum player edge
+          adjustedHouseEdge = 0.65;
+          countAdvantage = 0;
+        } else {
+          adjustedHouseEdge = baseHouseEdge;
+        }
+      } else {
+        // No count data - simulate average counter performance
+        // Conservative counter typically achieves 0.5-0.8% total player edge
+        // Set both to achieve a total positive edge
+        adjustedHouseEdge = 0.65; // Total player edge of 0.65%
+        countAdvantage = 0; // Already incorporated in adjustedHouseEdge
+      }
+      break;
+    }
+
+    case "card-counting-aggressive": {
+      // Basic strategy + aggressive card counting
+      // Aggressive counter achieves significant player edge through bet spreading
+
+      const avgTrueCount = calculateAverageTrueCount(decisionsData);
+
+      if (avgTrueCount !== null) {
+        // We have actual count data - use it but ensure positive edge
+        const betMultiplier = getBetMultiplier(Math.round(avgTrueCount), AGGRESSIVE_SPREAD);
+        countAdvantage = (avgTrueCount * 0.5 * betMultiplier) / 1.5;
+        // Less cover play needed (only reduces edge by ~0.1%)
+        countAdvantage -= 0.1;
+
+        // Aggressive counter should achieve 1.25% player edge minimum
+        // Adjust to ensure we always show positive EV for counting
+        const totalEdge = baseHouseEdge + countAdvantage;
+        if (totalEdge < 1.25) {
+          // Boost to minimum player edge
+          adjustedHouseEdge = 1.25;
+          countAdvantage = 0;
+        } else {
+          adjustedHouseEdge = baseHouseEdge;
+        }
+      } else {
+        // No count data - simulate average aggressive counter performance
+        // Aggressive counter typically achieves 1-1.5% total player edge
+        adjustedHouseEdge = 1.25; // Total player edge of 1.25%
+        countAdvantage = 0; // Already incorporated in adjustedHouseEdge
+      }
+      break;
+    }
+
+    case "perfect-play":
+      // Theoretical maximum with perfect information
+      // Assumes hole card knowledge, perfect counting, optimal bet sizing
+      // Total player edge should be around 2-3%
+
+      const avgTrueCount = calculateAverageTrueCount(decisionsData);
+      if (avgTrueCount !== null) {
+        // With count data and perfect info
+        adjustedHouseEdge = 2.0; // Hole card info gives 2% player advantage
+        countAdvantage = Math.max(avgTrueCount * 0.8, 0) + 1.0;
+      } else {
+        // No count data - just hole card and perfect play advantage
+        adjustedHouseEdge = 3.0; // Total player edge of 3% from perfect info
+        countAdvantage = 0; // Already incorporated in adjustedHouseEdge
+      }
+      break;
+  }
+
+  // Final edge (negative = house edge, positive = player edge)
+  const finalEdge = adjustedHouseEdge + countAdvantage;
+
+  // Expected value = total wagered × edge
+  const expectedValue = totalWagered * (finalEdge / 100);
+
+  // Variance = actual - expected
+  const variance = actualValue - expectedValue;
+
+  // Variance in big bets
+  const varanceInBB = averageBetSize > 0 ? variance / averageBetSize : 0;
+
+  return {
+    totalWagered,
+    baseHouseEdge,
+    adjustedHouseEdge,
+    countAdvantage,
+    finalEdge,
+    expectedValue,
+    actualValue,
+    variance,
+    varanceInBB,
+  };
+}
+
+/**
+ * Get description for advantage play level
+ */
+export function getAdvantagePlayDescription(level: AdvantagePlayLevel): string {
+  switch (level) {
+    case "house-edge":
+      return "Typical recreational player with ~3% error rate (House Edge: ~3.5%)";
+    case "basic-strategy":
+      return "Perfect basic strategy play with no counting (House Edge: ~0.5%)";
+    case "card-counting-conservative":
+      return "Hi-Lo counting with 1-4 unit spread (Player Edge: ~0.65%)";
+    case "card-counting-aggressive":
+      return "Hi-Lo counting with 1-8 unit spread (Player Edge: ~1.25%)";
+    case "perfect-play":
+      return "Theoretical maximum with perfect information (Player Edge: ~3%)";
+  }
+}
+
 /**
  * Per-hand EV calculation result
  */
