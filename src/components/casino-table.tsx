@@ -20,6 +20,7 @@ import { createTestDeck, parseTestScenario } from "@/modules/game";
 interface CasinoTableProps {
   user: UserProfile;
   bank: UserBank;
+  rules?: import("@/types/user").TableRules;
   onGameEnd: (bank: UserBank) => void;
   onBackToDashboard: () => void;
 }
@@ -36,6 +37,7 @@ type GamePhase =
 export function CasinoTable({
   user,
   bank,
+  rules,
   onGameEnd,
   onBackToDashboard,
 }: CasinoTableProps) {
@@ -82,10 +84,35 @@ export function CasinoTable({
         ? createTestDeck(testConfig.scenario, 6)
         : undefined;
 
-    // Initialize game (with optional test stack)
-    const newGame = new Game(6, 0.75, 1000000, new RuleSet(), testStack);
+    // Build RuleSet from provided rules or use defaults
+    const ruleSet = new RuleSet();
+    if (rules) {
+      ruleSet
+        .setDeckCount(rules.deckCount)
+        .setDealerStand(rules.dealerStand)
+        .setBlackjackPayout(
+          rules.blackjackPayout === "3:2" ? 3 : 6,
+          rules.blackjackPayout === "3:2" ? 2 : 5,
+        )
+        .setDoubleAfterSplit(rules.doubleAfterSplit)
+        .setSurrender(rules.surrender)
+        .setDoubleRestriction(rules.doubleRestriction);
+
+      // Add advanced rules
+      if (rules.resplitAces) {
+        ruleSet.setRule({ type: "resplit_aces", allowed: true });
+      }
+      if (rules.hitSplitAces) {
+        ruleSet.setRule({ type: "hit_split_aces", allowed: true });
+      }
+      ruleSet.setRule({ type: "max_split", times: rules.maxSplits });
+    }
+
+    // Initialize game (with optional test stack and rules)
+    const deckCount = rules?.deckCount || 6;
+    const newGame = new Game(deckCount, 0.75, 1000000, ruleSet, testStack);
     const newPlayer = newGame.addPlayer(user.name, bank.balance);
-    const session = UserService.startSession(user.id);
+    const session = UserService.startSession(user.id, rules);
 
     setGame(newGame);
     setPlayer(newPlayer);
@@ -94,9 +121,9 @@ export function CasinoTable({
     // Initialize decision tracker for this session
     decisionTracker.current = new DecisionTracker(session.id);
 
-    // Initialize card counter (6 decks)
-    cardCounter.current = new HiLoCounter(6, false);
-  }, [user.name, bank.balance, user.id, searchParams]);
+    // Initialize card counter (with configured deck count)
+    cardCounter.current = new HiLoCounter(deckCount, false);
+  }, [user.name, bank.balance, user.id, rules, searchParams]);
 
   // Update hand outcomes when settling phase is reached
   useEffect(() => {

@@ -6,7 +6,7 @@ import { UserAuth } from "./user-auth";
 import { UserDashboard } from "./user-dashboard";
 import { TerminalGamePersistent } from "./terminal-game-persistent";
 import { CasinoTable } from "./casino-table";
-import type { UserProfile, UserBank } from "@/types/user";
+import type { UserProfile, UserBank, TableRules } from "@/types/user";
 import { UserService } from "@/services/user-service";
 
 type AppState = "auth" | "dashboard" | "game";
@@ -18,6 +18,7 @@ export function BlackjackApp() {
   const [bank, setBank] = useState<UserBank | null>(null);
   const [loading, setLoading] = useState(true);
   const [gameMode, setGameMode] = useState<GameMode>("graphical");
+  const [currentRules, setCurrentRules] = useState<TableRules | undefined>();
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -58,8 +59,12 @@ export function BlackjackApp() {
     setBank(updatedBank);
   };
 
-  const handleStartGame = (mode: GameMode = "graphical") => {
+  const handleStartGame = (
+    mode: GameMode = "graphical",
+    rules?: TableRules,
+  ) => {
     setGameMode(mode);
+    setCurrentRules(rules);
     setAppState("game");
   };
 
@@ -107,6 +112,7 @@ export function BlackjackApp() {
         <TerminalGamePersistent
           user={user}
           bank={bank}
+          rules={currentRules}
           onGameEnd={handleGameEnd}
           onBackToDashboard={handleBackToDashboard}
         />
@@ -116,6 +122,7 @@ export function BlackjackApp() {
         <CasinoTable
           user={user}
           bank={bank}
+          rules={currentRules}
           onGameEnd={handleGameEnd}
           onBackToDashboard={handleBackToDashboard}
         />

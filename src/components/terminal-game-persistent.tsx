@@ -31,6 +31,7 @@ type GameState =
 interface TerminalGamePersistentProps {
   user: UserProfile;
   bank: UserBank;
+  rules?: import("@/types/user").TableRules;
   onGameEnd: (bank: UserBank) => void;
   onBackToDashboard: () => void;
 }
@@ -38,6 +39,7 @@ interface TerminalGamePersistentProps {
 export function TerminalGamePersistent({
   user,
   bank,
+  rules,
   onGameEnd,
   onBackToDashboard,
 }: TerminalGamePersistentProps) {
@@ -57,10 +59,35 @@ export function TerminalGamePersistent({
     if (initializedRef.current) return;
     initializedRef.current = true;
 
-    // Initialize game and session
-    const newGame = new Game(6, 0.75, 1000000, new RuleSet());
+    // Build RuleSet from provided rules or use defaults
+    const ruleSet = new RuleSet();
+    if (rules) {
+      ruleSet
+        .setDeckCount(rules.deckCount)
+        .setDealerStand(rules.dealerStand)
+        .setBlackjackPayout(
+          rules.blackjackPayout === "3:2" ? 3 : 6,
+          rules.blackjackPayout === "3:2" ? 2 : 5,
+        )
+        .setDoubleAfterSplit(rules.doubleAfterSplit)
+        .setSurrender(rules.surrender)
+        .setDoubleRestriction(rules.doubleRestriction);
+
+      // Add advanced rules
+      if (rules.resplitAces) {
+        ruleSet.setRule({ type: "resplit_aces", allowed: true });
+      }
+      if (rules.hitSplitAces) {
+        ruleSet.setRule({ type: "hit_split_aces", allowed: true });
+      }
+      ruleSet.setRule({ type: "max_split", times: rules.maxSplits });
+    }
+
+    // Initialize game and session (with configured deck count)
+    const deckCount = rules?.deckCount || 6;
+    const newGame = new Game(deckCount, 0.75, 1000000, ruleSet);
     const newPlayer = newGame.addPlayer(user.name, bank.balance);
-    const newSession = UserService.startSession(user.id);
+    const newSession = UserService.startSession(user.id, rules);
 
     setGame(newGame);
     setPlayer(newPlayer);

@@ -14,18 +14,20 @@ import {
 } from "./ui/card";
 import { SessionReplay } from "./session-replay";
 import { LifetimeStatsCharts } from "./lifetime-stats-charts";
+import { RulesSelector } from "./rules-selector";
 import type {
   UserProfile,
   UserBank,
   UserStats,
   GameSession,
+  TableRules,
 } from "@/types/user";
 
 interface UserDashboardProps {
   user: UserProfile;
   bank: UserBank;
   onBankUpdate: (bank: UserBank) => void;
-  onStartGame: (mode?: "terminal" | "graphical") => void;
+  onStartGame: (mode?: "terminal" | "graphical", rules?: TableRules) => void;
   onLogout: () => void;
 }
 
@@ -50,6 +52,14 @@ export function UserDashboard({
   const [viewMode, setViewMode] = useState<"recent" | "all">("recent");
   const [currentPage, setCurrentPage] = useState(1);
   const sessionsPerPage = 10;
+  // Rules configuration state
+  const [showRulesSelector, setShowRulesSelector] = useState(false);
+  const [currentRules, setCurrentRules] = useState<TableRules | undefined>(
+    undefined,
+  );
+  const [pendingGameMode, setPendingGameMode] = useState<
+    "terminal" | "graphical" | undefined
+  >();
 
   useEffect(() => {
     // Load user stats and sessions
@@ -115,6 +125,37 @@ export function UserDashboard({
       return `${hours}h ${minutes % 60}m`;
     }
     return `${minutes}m`;
+  };
+
+  const handleStartGame = (mode: "terminal" | "graphical") => {
+    setPendingGameMode(mode);
+    setShowRulesSelector(true);
+  };
+
+  const handleSaveRules = (rules: TableRules) => {
+    setCurrentRules(rules);
+    setShowRulesSelector(false);
+    if (pendingGameMode) {
+      onStartGame(pendingGameMode, rules);
+      setPendingGameMode(undefined);
+    }
+  };
+
+  const handleCancelRules = () => {
+    setShowRulesSelector(false);
+    setPendingGameMode(undefined);
+  };
+
+  const formatRules = (rules?: TableRules): string => {
+    if (!rules) return "Default rules";
+    const parts = [];
+    parts.push(`${rules.deckCount}D`);
+    parts.push(rules.dealerStand.toUpperCase());
+    parts.push(`BJ ${rules.blackjackPayout}`);
+    if (rules.doubleAfterSplit) parts.push("DAS");
+    if (rules.surrender !== "none")
+      parts.push(rules.surrender === "late" ? "LS" : "ES");
+    return parts.join(", ");
   };
 
   return (
@@ -193,20 +234,31 @@ export function UserDashboard({
             </div>
             <div className="grid grid-cols-2 gap-2">
               <Button
-                onClick={() => onStartGame("graphical")}
+                onClick={() => handleStartGame("graphical")}
                 className="bg-amber-600 hover:bg-amber-700"
                 disabled={bank.balance < 10}
               >
                 🎰 Casino Table
               </Button>
               <Button
-                onClick={() => onStartGame("terminal")}
+                onClick={() => handleStartGame("terminal")}
                 className="bg-gray-700 hover:bg-gray-600"
                 disabled={bank.balance < 10}
               >
                 💻 Terminal
               </Button>
             </div>
+
+            {/* Current Rules Display */}
+            {currentRules && (
+              <div className="mt-2 p-2 bg-black rounded border border-gray-700">
+                <p className="text-xs text-gray-400">Current table rules:</p>
+                <p className="text-sm text-white">{formatRules(currentRules)}</p>
+                <p className="text-xs text-green-400">
+                  House Edge: {currentRules.houseEdge?.toFixed(2)}%
+                </p>
+              </div>
+            )}
 
             {/* Deposit/Withdraw Form */}
             {(showDeposit || showWithdraw) && (
@@ -445,6 +497,12 @@ export function UserDashboard({
                             </span>
                           </p>
                         )}
+                      {session.rules && (
+                        <p className="text-xs text-amber-400 mt-1">
+                          📋 {formatRules(session.rules)} (House Edge:{" "}
+                          {session.rules.houseEdge?.toFixed(2)}%)
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -497,6 +555,15 @@ export function UserDashboard({
         <SessionReplay
           session={selectedSession}
           onClose={() => setSelectedSession(null)}
+        />
+      )}
+
+      {/* Rules Selector Modal */}
+      {showRulesSelector && (
+        <RulesSelector
+          initialRules={currentRules}
+          onSave={handleSaveRules}
+          onCancel={handleCancelRules}
         />
       )}
     </div>

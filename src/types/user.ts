@@ -15,6 +15,19 @@ export interface UserBank {
   lastUpdated: string;
 }
 
+export interface TableRules {
+  deckCount: number;
+  dealerStand: "s17" | "h17";
+  blackjackPayout: "3:2" | "6:5";
+  doubleAfterSplit: boolean;
+  surrender: "none" | "late" | "early";
+  doubleRestriction: "any" | "9-11" | "10-11" | "11";
+  resplitAces: boolean;
+  hitSplitAces: boolean;
+  maxSplits: number;
+  houseEdge?: number;
+}
+
 export interface GameSession {
   id: string;
   userId: string;
@@ -34,6 +47,7 @@ export interface GameSession {
   totalWagered?: number; // Sum of all bets placed during session
   expectedValue?: number; // EV based on house edge and strategy
   variance?: number; // netProfit - expectedValue (luck factor)
+  rules?: TableRules; // Table rules used for this session
 }
 
 export interface Transaction {

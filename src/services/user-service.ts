@@ -184,7 +184,10 @@ export class UserService {
   /**
    * Start a new game session
    */
-  static startSession(userId: string): GameSession {
+  static startSession(
+    userId: string,
+    rules?: import("@/types/user").TableRules,
+  ): GameSession {
     const bank = BankStorage.getByUserId(userId);
     if (!bank) {
       throw new Error("User bank not found");
@@ -198,6 +201,7 @@ export class UserService {
       endingBalance: bank.balance,
       roundsPlayed: 0,
       netProfit: 0,
+      rules,
     };
 
     SessionStorage.save(session);
