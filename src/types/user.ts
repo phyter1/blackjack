@@ -23,7 +23,7 @@ export interface GameSession {
   startingBalance: number;
   endingBalance: number;
   roundsPlayed: number;
-  netProfit: number; // endingBalance - startingBalance
+  netProfit: number; // endingBalance - startingBalance (Actual Value)
   auditTrailId?: string;
   strategyGrade?: string; // A+, A, A-, B+, etc.
   strategyAccuracy?: number; // Percentage 0-100
@@ -31,6 +31,9 @@ export interface GameSession {
   correctDecisions?: number;
   decisionsData?: string; // JSON serialized PlayerDecision[] for replay
   hasCountData?: boolean; // Whether this session tracked card counting
+  totalWagered?: number; // Sum of all bets placed during session
+  expectedValue?: number; // EV based on house edge and strategy
+  variance?: number; // netProfit - expectedValue (luck factor)
 }
 
 export interface Transaction {

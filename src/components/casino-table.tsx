@@ -42,6 +42,7 @@ export function CasinoTable({
   const [phase, setPhase] = useState<GamePhase>("betting");
   const [betAmount, setBetAmount] = useState(10);
   const [roundsPlayed, setRoundsPlayed] = useState(0);
+  const [totalWagered, setTotalWagered] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [showStats, setShowStats] = useState(false);
   const [, forceUpdate] = useState({});
@@ -226,12 +227,33 @@ export function CasinoTable({
       return;
     }
 
+    // Track total wagered from this round before completing it
+    const round = game.getCurrentRound();
+    if (round) {
+      const roundWagered = round.playerHands.reduce(
+        (sum, hand) => sum + hand.betAmount,
+        0
+      );
+      setTotalWagered((prev) => prev + roundWagered);
+    }
+
     game.completeRound();
     setPhase("betting");
   };
 
   const handleEndGame = () => {
     if (!game || !player || !sessionId) return;
+
+    // Track final round's wager if there's an active round
+    let finalTotalWagered = totalWagered;
+    const round = game.getCurrentRound();
+    if (round && round.state !== "complete") {
+      const roundWagered = round.playerHands.reduce(
+        (sum, hand) => sum + hand.betAmount,
+        0
+      );
+      finalTotalWagered += roundWagered;
+    }
 
     game.endSession();
 
@@ -262,6 +284,7 @@ export function CasinoTable({
       player.bank.balance,
       game.getSessionId(),
       strategyAnalysis,
+      finalTotalWagered,
     );
 
     const updatedBank = UserService.getCurrentUser()?.bank;
@@ -598,9 +621,18 @@ export function CasinoTable({
             <div className="flex gap-4">
               <Button
                 onClick={() => {
-                  game?.takeInsurance(0);
-                  game?.resolveInsurance();
-                  setPhase("playing");
+                  if (!game) return;
+                  game.takeInsurance(0);
+                  game.resolveInsurance();
+
+                  // Check round state after insurance resolution
+                  const round = game.getCurrentRound();
+                  if (round?.state === "settling") {
+                    // Dealer has blackjack - go directly to settling
+                    setTimeout(() => setPhase("settling"), 500);
+                  } else {
+                    setPhase("playing");
+                  }
                 }}
                 className="bg-green-800 hover:bg-green-700 text-white font-serif"
               >
@@ -610,9 +642,18 @@ export function CasinoTable({
               </Button>
               <Button
                 onClick={() => {
-                  game?.declineInsurance(0);
-                  game?.resolveInsurance();
-                  setPhase("playing");
+                  if (!game) return;
+                  game.declineInsurance(0);
+                  game.resolveInsurance();
+
+                  // Check round state after insurance resolution
+                  const round = game.getCurrentRound();
+                  if (round?.state === "settling") {
+                    // Dealer has blackjack - go directly to settling
+                    setTimeout(() => setPhase("settling"), 500);
+                  } else {
+                    setPhase("playing");
+                  }
                 }}
                 className="bg-red-800 hover:bg-red-700 text-white font-serif"
               >

@@ -359,6 +359,21 @@ export function UserDashboard({
                           📊 Count data available
                         </p>
                       )}
+                      {session.expectedValue !== undefined && session.variance !== undefined && (
+                        <p className="text-xs text-gray-400 mt-1">
+                          EV: ${session.expectedValue.toFixed(2)} | Variance:{" "}
+                          <span
+                            className={
+                              session.variance >= 0
+                                ? "text-green-400"
+                                : "text-red-400"
+                            }
+                          >
+                            {session.variance >= 0 ? "+" : ""}$
+                            {session.variance.toFixed(2)}
+                          </span>
+                        </p>
+                      )}
                     </div>
                   </div>
                 ))}

@@ -13,6 +13,7 @@ import {
   SessionStorage,
   TransactionStorage,
 } from "@/lib/storage";
+import { calculateSessionEV } from "@/modules/strategy/ev-calculator";
 
 export class UserService {
   /**
@@ -215,7 +216,8 @@ export class UserService {
       correctDecisions: number;
       decisions: unknown[]; // PlayerDecision[] but avoiding circular import
       hasCountData: boolean;
-    } | null
+    } | null,
+    totalWagered?: number
   ): GameSession {
     const session = SessionStorage.getById(sessionId);
     if (!session) {
@@ -240,6 +242,20 @@ export class UserService {
 
       // Serialize decision data for replay
       session.decisionsData = JSON.stringify(strategyAnalysis.decisions);
+    }
+
+    // Calculate EV if total wagered is provided
+    if (totalWagered !== undefined && totalWagered > 0) {
+      const evCalc = calculateSessionEV({
+        totalWagered,
+        actualValue: netProfit,
+        strategyAccuracy: strategyAnalysis?.accuracy,
+        decisionsData: session.decisionsData,
+      });
+
+      session.totalWagered = totalWagered;
+      session.expectedValue = evCalc.expectedValue;
+      session.variance = evCalc.variance;
     }
 
     SessionStorage.save(session);
