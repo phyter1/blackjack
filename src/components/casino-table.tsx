@@ -60,6 +60,7 @@ export function CasinoTable({
   const [numHands, setNumHands] = useState(1);
   const [currentHandIndex, setCurrentHandIndex] = useState(0);
   const [handBets, setHandBets] = useState<number[]>([0]);
+  const [previousBets, setPreviousBets] = useState<number[] | null>(null); // Track previous bet for re-bet feature
   const [handsPendingInsurance, setHandsPendingInsurance] = useState<number[]>([]);
   const [insuranceHandIndex, setInsuranceHandIndex] = useState(0);
   const [countingEnabled, setCountingEnabled] = useState(true); // Enable counting by default
@@ -940,11 +941,35 @@ export function CasinoTable({
                   Clear All
                 </Button>
               )}
+              {previousBets && (
+                <Button
+                  onClick={() => {
+                    const totalPreviousBet = previousBets.reduce((sum, bet) => sum + bet, 0);
+                    const availableBalance = isTrainerActive ? practiceBalance : (player?.bank.balance ?? 0);
+                    if (totalPreviousBet <= availableBalance) {
+                      // Set the number of hands to match previous bet
+                      setNumHands(previousBets.length);
+                      setHandBets([...previousBets]);
+                      setCurrentHandIndex(0);
+                    }
+                  }}
+                  variant="outline"
+                  className="border-blue-700 bg-blue-950/50 text-blue-200 hover:bg-blue-900 font-serif"
+                  disabled={
+                    !previousBets ||
+                    previousBets.reduce((sum, bet) => sum + bet, 0) > (isTrainerActive ? practiceBalance : (player?.bank.balance ?? 0))
+                  }
+                >
+                  Re-bet ${previousBets.reduce((sum, bet) => sum + bet, 0).toFixed(0)}
+                </Button>
+              )}
               <Button
                 onClick={() => {
                   const allBetsValid = handBets.every((bet) => bet >= 10);
                   const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
                   if (allBetsValid && totalBet > 0) {
+                    // Save current bets for re-bet feature
+                    setPreviousBets([...handBets]);
                     handleBet(handBets);
                     setHandBets(new Array(numHands).fill(0));
                   }
