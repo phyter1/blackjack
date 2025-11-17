@@ -170,8 +170,8 @@ export function BlackjackTable() {
 
           {/* Player's Hand(s) */}
           <div className="flex justify-center gap-8">
-            {currentRound &&
-              currentRound.playerHands.map((hand, index) => (
+            {
+              currentRound?.playerHands.map((hand, index) => (
                 <HandDisplay
                   key={hand.id}
                   cards={hand.hand}
@@ -194,7 +194,7 @@ export function BlackjackTable() {
           <InsuranceDialog
             open={showInsuranceDialog}
             insuranceAmount={currentRound.playerHands[insuranceHandIndex]
-                  ?.betAmount / 2 ?? 0}
+                  ?.betAmount / 2}
             onTakeInsurance={handleTakeInsurance}
             onDeclineInsurance={handleDeclineInsurance}
           />

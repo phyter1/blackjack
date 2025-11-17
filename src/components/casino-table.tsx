@@ -170,7 +170,12 @@ export function CasinoTable({
     game.endSession();
 
     // Calculate strategy analysis if we tracked decisions
-    let strategyAnalysis;
+    let strategyAnalysis: {
+      grade: string;
+      accuracy: number;
+      totalDecisions: number;
+      correctDecisions: number;
+    } | null = null;
     if (decisionTracker.current) {
       const analysis = decisionTracker.current.calculateAnalysis();
       strategyAnalysis = {
@@ -273,7 +278,7 @@ export function CasinoTable({
             <div>
               <div className="text-xs text-amber-400">House Edge</div>
               <div className="text-lg font-bold">
-                {(game.getHouseEdge() * 100).toFixed(2)}%
+                {(game ? game.getHouseEdge() * 100 : 0).toFixed(2)}%
               </div>
             </div>
             <div>
@@ -308,7 +313,7 @@ export function CasinoTable({
             <div className="relative flex" style={{ minHeight: "146px" }}>
               {round.dealerHand.cards.map((card, idx) => (
                 <div
-                  key={`dealer-${idx}`}
+                  key={`dealer-${card.rank}-${card.suit}-${idx ? 2 + idx - 2 : 1}`}
                   className="transition-all duration-300"
                   style={{
                     marginLeft: idx > 0 ? "-55px" : "0",
@@ -344,7 +349,7 @@ export function CasinoTable({
             <div className="flex gap-4">
               {round.playerHands.map((hand, handIdx) => (
                 <div
-                  key={`hand-${handIdx}`}
+                  key={`hand-${handIdx * 1}`}
                   className={cn(
                     "flex flex-col items-center gap-2 p-4 rounded-lg transition-all",
                     round.currentHandIndex === handIdx &&
@@ -355,7 +360,7 @@ export function CasinoTable({
                   <div className="relative flex" style={{ minHeight: "146px" }}>
                     {hand.cards.map((card, cardIdx) => (
                       <div
-                        key={`player-${handIdx}-${cardIdx}`}
+                        key={`player-${handIdx}-${cardIdx * 1}`}
                         className="transition-all duration-300"
                         style={{
                           marginLeft: cardIdx > 0 ? "-55px" : "0",

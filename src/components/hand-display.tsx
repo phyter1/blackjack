@@ -9,7 +9,7 @@ interface HandDisplayProps {
   value?: number;
   label?: string;
   isSoft?: boolean;
-  state?: "active" | "busted" | "stood" | "blackjack" | "surrendered";
+  state?: "active" | "busted" | "stood" | "blackjack" | "surrendered" | "won" | "lost" | "pushed";
   betAmount?: number;
   className?: string;
 }
@@ -56,10 +56,10 @@ export function HandDisplay({
             card={card}
             hidden={index === 1 && hideFirstCard}
             className="transition-all duration-300 ease-in-out"
-            style={{
-              transform: `translateX(${index * -8}px)`,
-              zIndex: index,
-            }}
+            // style={{
+            //   transform: `translateX(${index * -8}px)`,
+            //   zIndex: index,
+            // }}
           />
         ))}
       </div>

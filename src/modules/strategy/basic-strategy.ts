@@ -1,5 +1,5 @@
 import type { ActionType } from "../game/action";
-import type { Card } from "../game/card";
+import type { Card } from "../game/cards";
 
 /**
  * Basic Strategy Engine for Blackjack

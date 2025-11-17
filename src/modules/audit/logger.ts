@@ -30,7 +30,7 @@ export class AuditLogger {
    */
   log<T extends AuditEvent>(
     type: AuditEventType,
-    data: Omit<T, "id" | "timestamp" | "type" | "sessionId" | "roundNumber">
+    data: Omit<T, "id" | "timestamp" | "type">
   ): T {
     const event = {
       id: `event-${crypto.randomUUID()}`,

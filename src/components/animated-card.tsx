@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PlayingCard } from "./playing-card";
-import type { Card as GameCard } from "@/modules/game/card";
+import type { Card as GameCard } from "@/modules/game/cards"
 import { cn } from "@/lib/utils";
 
 interface AnimatedCardProps {

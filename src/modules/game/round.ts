@@ -31,6 +31,7 @@ export type RoundState =
   | "complete"; // Round finished
 
 export class Round {
+  id: string;
   dealerHand: DealerHand;
   playerHands: Hand[];
   state: RoundState;
@@ -43,6 +44,7 @@ export class Round {
     private shoe: Shoe,
     private rules: RuleSet,
   ) {
+    this.id = `round-${crypto.randomUUID()}`;
     const { playerHands, dealerHand } = this.shoe.deal(playerInfo.length);
     this.playerHands = playerHands.map((cards, i) => {
       const info = playerInfo[i];

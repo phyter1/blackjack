@@ -4,6 +4,8 @@ import type { CompleteRuleSet, RuleSet } from "./rules";
 export class DealerHand {
   state: "active" | "busted" | "stood" | "blackjack" = "active";
   rules: CompleteRuleSet;
+  value: number | undefined = undefined;
+  isSoft: boolean = false;
   constructor(public cards: Stack, rules: RuleSet) {
     this.rules = rules.build();
     const cv = this.handValue;

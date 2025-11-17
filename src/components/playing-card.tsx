@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import type { Card as GameCard } from "@/modules/game/card";
+import type { Card as GameCard } from "@/modules/game/cards";
 
 interface PlayingCardProps {
   card?: GameCard;

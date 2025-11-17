@@ -213,7 +213,7 @@ export class UserService {
       accuracy: number;
       totalDecisions: number;
       correctDecisions: number;
-    }
+    } | null
   ): GameSession {
     const session = SessionStorage.getById(sessionId);
     if (!session) {
