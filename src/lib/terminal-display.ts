@@ -32,7 +32,7 @@ const SUITS = {
 function colored(
   text: string,
   color?: TerminalColor,
-  bold = false
+  bold = false,
 ): TerminalSegment {
   return { text, color, bold };
 }
@@ -51,26 +51,34 @@ export function displayCard(card: Card, hidden = false): TerminalLine[] {
 
   const value = card.rank;
   const suit = SUITS[card.suit];
-  const suitColor = card.suit === "hearts" || card.suit === "diamonds" ? "red" : "white";
+  const suitColor =
+    card.suit === "hearts" || card.suit === "diamonds" ? "red" : "white";
   const padding = value.length === 1 ? " " : "";
 
   return [
     [colored("┌─────┐", "white")],
     [colored(`│${value}${padding}   │`, "white")],
-    [colored("│  ", "white"), colored(suit, suitColor), colored("  │", "white")],
+    [
+      colored("│  ", "white"),
+      colored(suit, suitColor),
+      colored("  │", "white"),
+    ],
     [colored(`│   ${padding}${value}│`, "white")],
     [colored("└─────┘", "white")],
   ];
 }
 
 // Display multiple cards side by side
-export function displayCards(cards: Card[], hideSecond = false): TerminalLine[] {
+export function displayCards(
+  cards: Card[],
+  hideSecond = false,
+): TerminalLine[] {
   if (cards.length === 0) {
     return [[colored("No cards")]];
   }
 
   const cardLines: TerminalLine[][] = cards.map((card, index) =>
-    displayCard(card, hideSecond && index === 1)
+    displayCard(card, hideSecond && index === 1),
   );
 
   // Combine cards side by side
@@ -119,7 +127,7 @@ export function displayPlayerHand(hand: Hand, label: string): TerminalLine[] {
   output.push([
     colored(
       `Value: ${hand.handValue}${soft ? " (soft)" : ""}  State: ${hand.state}`,
-      "yellow"
+      "yellow",
     ),
   ]);
   return output;
@@ -149,7 +157,7 @@ function isSoftDealerHand(dealerHand: DealerHand): boolean {
 // Display dealer hand
 export function displayDealerHand(
   dealerHand: DealerHand,
-  hideHoleCard = true
+  hideHoleCard = true,
 ): TerminalLine[] {
   const output: TerminalLine[] = [];
   output.push([colored("\nDealer's Hand:", "magenta", true)]);
@@ -160,7 +168,7 @@ export function displayDealerHand(
     output.push([
       colored(
         `Value: ${dealerHand.handValue}${soft ? " (soft)" : ""}`,
-        "yellow"
+        "yellow",
       ),
     ]);
   }
@@ -172,12 +180,16 @@ export function displayDealerHand(
 export function displayHeader(
   balance: number,
   roundNumber: number,
-  currentBet?: number
+  currentBet?: number,
 ): TerminalLine[] {
   const output: TerminalLine[] = [];
   output.push([colored("═".repeat(60), "green", true)]);
   output.push([
-    colored("                    🃏 BLACKJACK 🃏                    ", "green", true),
+    colored(
+      "                    🃏 BLACKJACK 🃏                    ",
+      "green",
+      true,
+    ),
   ]);
   output.push([colored("═".repeat(60), "green", true)]);
   output.push([
@@ -199,7 +211,7 @@ export function displayHeader(
 // Display settlement result
 export function displaySettlement(
   result: "win" | "loss" | "push" | "blackjack",
-  payout: number
+  payout: number,
 ): TerminalLine[] {
   const output: TerminalLine[] = [];
   output.push([colored("\n" + "═".repeat(60), "yellow", true)]);
@@ -207,11 +219,15 @@ export function displaySettlement(
   switch (result) {
     case "blackjack":
       output.push([colored("        🎉 BLACKJACK! 🎉        ", "green", true)]);
-      output.push([colored(`        You win $${payout.toFixed(2)}!        `, "green")]);
+      output.push([
+        colored(`        You win $${payout.toFixed(2)}!        `, "green"),
+      ]);
       break;
     case "win":
       output.push([colored("        ✓ YOU WIN! ✓        ", "green", true)]);
-      output.push([colored(`        Payout: $${payout.toFixed(2)}        `, "green")]);
+      output.push([
+        colored(`        Payout: $${payout.toFixed(2)}        `, "green"),
+      ]);
       break;
     case "loss":
       output.push([colored("        ✗ YOU LOSE ✗        ", "red", true)]);
@@ -239,12 +255,19 @@ export function displayWelcome(): TerminalLine[] {
   const output: TerminalLine[] = [];
   output.push([colored("\n" + "═".repeat(60), "green", true)]);
   output.push([
-    colored("                    🃏 BLACKJACK 🃏                    ", "green", true),
+    colored(
+      "                    🃏 BLACKJACK 🃏                    ",
+      "green",
+      true,
+    ),
   ]);
   output.push([colored("═".repeat(60), "green", true)]);
   output.push([colored("\nWelcome to the Blackjack Terminal!", "white")]);
   output.push([
-    colored("Rules: Get as close to 21 as possible without going over.", "gray"),
+    colored(
+      "Rules: Get as close to 21 as possible without going over.",
+      "gray",
+    ),
   ]);
   output.push([colored("Dealer stands on 17. Blackjack pays 3:2.\n", "gray")]);
   return output;

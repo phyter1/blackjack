@@ -186,7 +186,9 @@ console.log("Test 4: Insurance loses when dealer doesn't have blackjack");
   console.log(`  Expected: $0 payout, $850 balance (lost insurance)`);
 
   if (playerBank.balance === 850) {
-    console.log(`  ✅ PASS - Insurance lost when dealer doesn't have blackjack\n`);
+    console.log(
+      `  ✅ PASS - Insurance lost when dealer doesn't have blackjack\n`,
+    );
   } else {
     console.log(`  ❌ FAIL\n`);
   }
@@ -302,10 +304,14 @@ console.log("Test 7: Insufficient funds for insurance");
 
   try {
     hand.takeInsurance();
-    console.log(`  ❌ FAIL - Should reject insurance with insufficient funds\n`);
+    console.log(
+      `  ❌ FAIL - Should reject insurance with insufficient funds\n`,
+    );
   } catch (error) {
     console.log(`  Error: ${(error as Error).message}`);
-    console.log(`  ✅ PASS - Correctly rejects insurance with insufficient funds\n`);
+    console.log(
+      `  ✅ PASS - Correctly rejects insurance with insufficient funds\n`,
+    );
   }
 }
 

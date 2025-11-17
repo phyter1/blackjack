@@ -14,7 +14,8 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Blackjack",
-  description: "A Blackjack training and simulation with bankroll management, stats, and more.",
+  description:
+    "A Blackjack training and simulation with bankroll management, stats, and more.",
 };
 
 export default function RootLayout({

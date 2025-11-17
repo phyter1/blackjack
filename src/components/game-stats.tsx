@@ -8,7 +8,11 @@ interface GameStatsProps {
   currentBet?: number;
 }
 
-export function GameStats({ balance, roundNumber, currentBet }: GameStatsProps) {
+export function GameStats({
+  balance,
+  roundNumber,
+  currentBet,
+}: GameStatsProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Card>
@@ -31,9 +35,7 @@ export function GameStats({ balance, roundNumber, currentBet }: GameStatsProps) 
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            #{roundNumber}
-          </div>
+          <div className="text-2xl font-bold">#{roundNumber}</div>
         </CardContent>
       </Card>
 

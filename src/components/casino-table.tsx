@@ -62,18 +62,20 @@ export function CasinoTable({
 
     // If not in URL params, check sessionStorage (for E2E tests)
     if (!testConfig.enabled) {
-      const sessionTestMode = typeof window !== 'undefined'
-        ? sessionStorage.getItem('test-mode')
-        : null;
+      const sessionTestMode =
+        typeof window !== "undefined"
+          ? sessionStorage.getItem("test-mode")
+          : null;
 
       if (sessionTestMode) {
         testConfig = { enabled: true, scenario: sessionTestMode };
       }
     }
 
-    const testStack = testConfig.enabled && testConfig.scenario
-      ? createTestDeck(testConfig.scenario, 6)
-      : undefined;
+    const testStack =
+      testConfig.enabled && testConfig.scenario
+        ? createTestDeck(testConfig.scenario, 6)
+        : undefined;
 
     // Initialize game (with optional test stack)
     const newGame = new Game(6, 0.75, 1000000, new RuleSet(), testStack);
@@ -104,7 +106,7 @@ export function CasinoTable({
               hand.id,
               result.outcome,
               result.payout,
-              result.profit
+              result.profit,
             );
           }
         });
@@ -180,9 +182,10 @@ export function CasinoTable({
           );
 
           // Get count snapshot if counting is enabled
-          const countSnapshot = countingEnabled && cardCounter.current
-            ? cardCounter.current.getSnapshot()
-            : undefined;
+          const countSnapshot =
+            countingEnabled && cardCounter.current
+              ? cardCounter.current.getSnapshot()
+              : undefined;
 
           // Record the decision
           decisionTracker.current.recordDecision(
@@ -214,10 +217,13 @@ export function CasinoTable({
       if (cardCounter.current && countingEnabled) {
         const round = game.getCurrentRound();
         if (round) {
-          const cardsAfter = round.playerHands.reduce((sum, h) => sum + h.cards.length, 0);
+          const cardsAfter = round.playerHands.reduce(
+            (sum, h) => sum + h.cards.length,
+            0,
+          );
           if (cardsAfter > cardsBefore) {
             // New cards were dealt, collect all cards and add the new ones
-            const allCurrentCards = round.playerHands.flatMap(h => h.cards);
+            const allCurrentCards = round.playerHands.flatMap((h) => h.cards);
             const newCards = allCurrentCards.slice(cardsBefore);
             cardCounter.current.addCards(newCards);
           }
@@ -275,7 +281,7 @@ export function CasinoTable({
     if (round) {
       const roundWagered = round.playerHands.reduce(
         (sum, hand) => sum + hand.betAmount,
-        0
+        0,
       );
       setTotalWagered((prev) => prev + roundWagered);
     }
@@ -293,7 +299,7 @@ export function CasinoTable({
     if (round && round.state !== "complete") {
       const roundWagered = round.playerHands.reduce(
         (sum, hand) => sum + hand.betAmount,
-        0
+        0,
       );
       finalTotalWagered += roundWagered;
     }
@@ -402,8 +408,8 @@ export function CasinoTable({
                       cardCounter.current.getTrueCount() >= 2
                         ? "text-green-400"
                         : cardCounter.current.getTrueCount() <= -2
-                        ? "text-red-400"
-                        : "text-yellow-400"
+                          ? "text-red-400"
+                          : "text-yellow-400",
                     )}
                   >
                     {cardCounter.current.getTrueCount() > 0 && "+"}
@@ -501,9 +507,12 @@ export function CasinoTable({
                 >
                   <AnimatedCard
                     card={card}
-                    hidden={idx > 0 &&
-                      (phase === "dealing" || phase === "playing" ||
-                        phase === "insurance")}
+                    hidden={
+                      idx > 0 &&
+                      (phase === "dealing" ||
+                        phase === "playing" ||
+                        phase === "insurance")
+                    }
                     size="xl"
                     dealDelay={idx * 200}
                   />
@@ -513,8 +522,9 @@ export function CasinoTable({
           )}
           {round && phase !== "betting" && (
             <div className="text-amber-400 font-serif">
-              {phase === "dealing" || phase === "playing" ||
-                  phase === "insurance"
+              {phase === "dealing" ||
+              phase === "playing" ||
+              phase === "insurance"
                 ? `Showing: ${round.dealerHand.upCard.rank}`
                 : `Total: ${round.dealerHand.handValue}`}
             </div>
@@ -612,14 +622,17 @@ export function CasinoTable({
                   accentColor={chip.accentColor}
                   onClick={() => {
                     if (
-                      player && currentBet + chip.value <= player.bank.balance
+                      player &&
+                      currentBet + chip.value <= player.bank.balance
                     ) {
                       setCurrentBet((prev) => prev + chip.value);
                     }
                   }}
-                  disabled={player
-                    ? currentBet + chip.value > player.bank.balance
-                    : false}
+                  disabled={
+                    player
+                      ? currentBet + chip.value > player.bank.balance
+                      : false
+                  }
                 />
               ))}
             </div>
@@ -649,9 +662,7 @@ export function CasinoTable({
             </div>
 
             {currentBet < 10 && currentBet > 0 && (
-              <div className="text-amber-400 text-sm">
-                Minimum bet is $10
-              </div>
+              <div className="text-amber-400 text-sm">Minimum bet is $10</div>
             )}
           </div>
         )}
@@ -670,7 +681,10 @@ export function CasinoTable({
 
                   // Check round state after insurance resolution
                   const round = game.getCurrentRound();
-                  if (round?.state === "settling" || round?.state === "complete") {
+                  if (
+                    round?.state === "settling" ||
+                    round?.state === "complete"
+                  ) {
                     // Dealer has blackjack - go directly to settling
                     setTimeout(() => {
                       setPhase("settling");
@@ -683,9 +697,11 @@ export function CasinoTable({
                 }}
                 className="bg-green-800 hover:bg-green-700 text-white font-serif"
               >
-                Yes (costs ${round?.playerHands[0]?.betAmount
+                Yes (costs $
+                {round?.playerHands[0]?.betAmount
                   ? (round.playerHands[0].betAmount / 2).toFixed(2)
-                  : "0"})
+                  : "0"}
+                )
               </Button>
               <Button
                 onClick={() => {
@@ -695,7 +711,10 @@ export function CasinoTable({
 
                   // Check round state after insurance resolution
                   const round = game.getCurrentRound();
-                  if (round?.state === "settling" || round?.state === "complete") {
+                  if (
+                    round?.state === "settling" ||
+                    round?.state === "complete"
+                  ) {
                     // Dealer has blackjack - go directly to settling
                     setTimeout(() => {
                       setPhase("settling");
@@ -765,14 +784,16 @@ export function CasinoTable({
         {phase === "settling" && (
           <div className="flex flex-col items-center gap-4">
             <div className="text-amber-200 font-serif text-xl">
-              {round?.settlementResults?.some((r) =>
-                  r.outcome === "win" || r.outcome === "blackjack" ||
-                  r.outcome === "charlie"
-                )
+              {round?.settlementResults?.some(
+                (r) =>
+                  r.outcome === "win" ||
+                  r.outcome === "blackjack" ||
+                  r.outcome === "charlie",
+              )
                 ? "You Win!"
                 : round?.settlementResults?.some((r) => r.outcome === "push")
-                ? "Push"
-                : "Dealer Wins"}
+                  ? "Push"
+                  : "Dealer Wins"}
             </div>
             <Button
               onClick={handleNextRound}

@@ -43,7 +43,7 @@ export function displayCards(cards: Card[], hideSecond = false): string {
   }
 
   const cardLines: string[][] = cards.map((card, index) =>
-    displayCard(card, hideSecond && index === 1)
+    displayCard(card, hideSecond && index === 1),
   );
 
   // Combine cards side by side
@@ -84,8 +84,8 @@ export function displayPlayerHand(hand: Hand, label: string): string {
   const soft = isSoftHand(hand);
   output.push(
     chalk.yellow(
-      `Value: ${hand.handValue}${soft ? " (soft)" : ""}  State: ${hand.state}`
-    )
+      `Value: ${hand.handValue}${soft ? " (soft)" : ""}  State: ${hand.state}`,
+    ),
   );
   return output.join("\n");
 }
@@ -114,7 +114,7 @@ function isSoftDealerHand(dealerHand: DealerHand): boolean {
 // Display dealer hand
 export function displayDealerHand(
   dealerHand: DealerHand,
-  hideHoleCard = true
+  hideHoleCard = true,
 ): string {
   const output: string[] = [];
   output.push(chalk.magenta.bold("\nDealer's Hand:"));
@@ -123,9 +123,7 @@ export function displayDealerHand(
   if (!hideHoleCard) {
     const soft = isSoftDealerHand(dealerHand);
     output.push(
-      chalk.yellow(
-        `Value: ${dealerHand.handValue}${soft ? " (soft)" : ""}`
-      )
+      chalk.yellow(`Value: ${dealerHand.handValue}${soft ? " (soft)" : ""}`),
     );
   }
 
@@ -136,18 +134,18 @@ export function displayDealerHand(
 export function displayHeader(
   balance: number,
   roundNumber: number,
-  currentBet?: number
+  currentBet?: number,
 ): void {
   console.clear();
   console.log(chalk.green.bold("═".repeat(60)));
   console.log(
-    chalk.green.bold("                    🃏 BLACKJACK 🃏                    ")
+    chalk.green.bold("                    🃏 BLACKJACK 🃏                    "),
   );
   console.log(chalk.green.bold("═".repeat(60)));
   console.log(
     chalk.white(
-      `Balance: ${chalk.green(`$${balance.toFixed(2)}`)}  |  Round: ${chalk.cyan(`#${roundNumber}`)}${currentBet ? `  |  Current Bet: ${chalk.yellow(`$${currentBet.toFixed(2)}`)}` : ""}`
-    )
+      `Balance: ${chalk.green(`$${balance.toFixed(2)}`)}  |  Round: ${chalk.cyan(`#${roundNumber}`)}${currentBet ? `  |  Current Bet: ${chalk.yellow(`$${currentBet.toFixed(2)}`)}` : ""}`,
+    ),
   );
   console.log(chalk.green.bold("═".repeat(60)));
 }
@@ -155,16 +153,16 @@ export function displayHeader(
 // Display settlement result
 export function displaySettlement(
   result: "win" | "loss" | "push" | "blackjack",
-  payout: number
+  payout: number,
 ): void {
   console.log("\n" + chalk.yellow.bold("═".repeat(60)));
 
   switch (result) {
     case "blackjack":
+      console.log(chalk.green.bold("        🎉 BLACKJACK! 🎉        "));
       console.log(
-        chalk.green.bold("        🎉 BLACKJACK! 🎉        ")
+        chalk.green(`        You win $${payout.toFixed(2)}!        `),
       );
-      console.log(chalk.green(`        You win $${payout.toFixed(2)}!        `));
       break;
     case "win":
       console.log(chalk.green.bold("        ✓ YOU WIN! ✓        "));
@@ -172,7 +170,9 @@ export function displaySettlement(
       break;
     case "loss":
       console.log(chalk.red.bold("        ✗ YOU LOSE ✗        "));
-      console.log(chalk.red(`        Lost: $${Math.abs(payout).toFixed(2)}        `));
+      console.log(
+        chalk.red(`        Lost: $${Math.abs(payout).toFixed(2)}        `),
+      );
       break;
     case "push":
       console.log(chalk.yellow.bold("        ⚖ PUSH ⚖        "));
@@ -193,12 +193,12 @@ export function displayWelcome(): void {
   console.clear();
   console.log(chalk.green.bold("\n" + "═".repeat(60)));
   console.log(
-    chalk.green.bold("                    🃏 BLACKJACK 🃏                    ")
+    chalk.green.bold("                    🃏 BLACKJACK 🃏                    "),
   );
   console.log(chalk.green.bold("═".repeat(60)));
   console.log(chalk.white("\nWelcome to the Blackjack CLI!"));
   console.log(
-    chalk.gray("Rules: Get as close to 21 as possible without going over.")
+    chalk.gray("Rules: Get as close to 21 as possible without going over."),
   );
   console.log(chalk.gray("Dealer stands on 17. Blackjack pays 3:2.\n"));
 }

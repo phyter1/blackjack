@@ -2,7 +2,13 @@
 
 import { Button } from "./ui/button";
 import type { ActionType } from "@/modules/game/action";
-import { ACTION_HIT, ACTION_STAND, ACTION_DOUBLE, ACTION_SPLIT, ACTION_SURRENDER } from "@/modules/game/action";
+import {
+  ACTION_HIT,
+  ACTION_STAND,
+  ACTION_DOUBLE,
+  ACTION_SPLIT,
+  ACTION_SURRENDER,
+} from "@/modules/game/action";
 
 interface ActionButtonsProps {
   availableActions: ActionType[];
@@ -26,7 +32,11 @@ const actionVariants = {
   [ACTION_SURRENDER]: "destructive" as const,
 };
 
-export function ActionButtons({ availableActions, onAction, disabled }: ActionButtonsProps) {
+export function ActionButtons({
+  availableActions,
+  onAction,
+  disabled,
+}: ActionButtonsProps) {
   if (availableActions.length === 0) {
     return null;
   }

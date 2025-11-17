@@ -20,11 +20,7 @@ export class PlayerSession {
   turns: PlayerTurn[];
   status: "active" | "completed";
 
-  constructor(
-    player: Player,
-    sessionId: string,
-    startingBankroll: number,
-  ) {
+  constructor(player: Player, sessionId: string, startingBankroll: number) {
     this.player = player;
     this.sessionId = sessionId;
     this.startingBankroll = startingBankroll;

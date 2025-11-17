@@ -34,8 +34,8 @@ export const RANKS = [
 ] as const;
 
 export type Card = {
-  suit: typeof SUITS[number];
-  rank: typeof RANKS[number];
+  suit: (typeof SUITS)[number];
+  rank: (typeof RANKS)[number];
 };
 
 export type Stack = Array<Card>;

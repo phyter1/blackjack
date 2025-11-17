@@ -49,11 +49,7 @@ export class Shoe {
   private roundCompleted: number | null = null;
   private currentRound: number;
 
-  constructor(
-    numDecks: number,
-    penetration: number = 0.1,
-    testStack?: Stack,
-  ) {
+  constructor(numDecks: number, penetration: number = 0.1, testStack?: Stack) {
     this.deck = newShoeStack(numDecks, penetration, testStack);
     this.discardPile = [];
     this.stopPosition = Math.floor(
@@ -78,7 +74,8 @@ export class Shoe {
 
   drawCard(): Card {
     if (
-      this.state === "complete" && this.currentRound !== this.roundCompleted
+      this.state === "complete" &&
+      this.currentRound !== this.roundCompleted
     ) {
       // throw new Error("Shoe is complete, cannot draw more cards.");
       throw new Error("Shoe is complete, cannot draw more cards.");

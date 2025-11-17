@@ -70,8 +70,7 @@ class PlayerRound {
     return hand;
   }
 
-  takeTurn() {
-  }
+  takeTurn() {}
 }
 
 class Round {
@@ -83,8 +82,7 @@ class Round {
     this.shoeId = shoeId;
   }
 
-  deal() {
-  }
+  deal() {}
 }
 
 class PlayerShoe {
@@ -153,10 +151,13 @@ class Session {
   id: string;
   private playerSessions: PlayerSession[] = [];
   private shoes: Shoe[] = [];
-  constructor(players: [Player, number][], private rules: RuleSet) {
+  constructor(
+    players: [Player, number][],
+    private rules: RuleSet,
+  ) {
     this.id = `session-${crypto.randomUUID()}`;
     this.playerSessions = players.map(([player, bankroll]) =>
-      player.startSession(this.id, bankroll)
+      player.startSession(this.id, bankroll),
     );
   }
 
@@ -199,6 +200,8 @@ class Player {
 }
 
 export class SimpleGame {
-  constructor(private players: Player[] = [], private rules: RuleSet) {
-  }
+  constructor(
+    private players: Player[] = [],
+    private rules: RuleSet,
+  ) {}
 }

@@ -10,8 +10,8 @@ import { RANKS, SUITS } from "./cards";
  * Create a card with specific rank and suit
  */
 export function createCard(
-  rank: typeof RANKS[number],
-  suit: typeof SUITS[number] = "hearts"
+  rank: (typeof RANKS)[number],
+  suit: (typeof SUITS)[number] = "hearts",
 ): Card {
   return { rank, suit };
 }
@@ -54,17 +54,14 @@ export function createTestDeck(scenario: string, numDecks: number = 6): Stack {
  */
 function createDealerBlackjackDeck(numDecks: number): Stack {
   const testCards: Stack = [
-    createCard("7", "hearts"),    // Player's first card
-    createCard("8", "diamonds"),  // Player's second card
-    createCard("A", "spades"),    // Dealer's up card (Ace)
-    createCard("K", "clubs"),     // Dealer's hole card (King = blackjack!)
+    createCard("7", "hearts"), // Player's first card
+    createCard("8", "diamonds"), // Player's second card
+    createCard("A", "spades"), // Dealer's up card (Ace)
+    createCard("K", "clubs"), // Dealer's hole card (King = blackjack!)
   ];
 
   // Fill the rest with normal cards to make a full shoe
-  const remainingCards = fillRemainingCards(
-    testCards.length,
-    numDecks * 52
-  );
+  const remainingCards = fillRemainingCards(testCards.length, numDecks * 52);
 
   return [...testCards, ...remainingCards];
 }
@@ -74,16 +71,13 @@ function createDealerBlackjackDeck(numDecks: number): Stack {
  */
 function createPlayerBlackjackDeck(numDecks: number): Stack {
   const testCards: Stack = [
-    createCard("A", "hearts"),    // Player's first card (Ace)
-    createCard("K", "diamonds"),  // Player's second card (King = blackjack!)
-    createCard("6", "spades"),    // Dealer's up card
-    createCard("10", "clubs"),    // Dealer's hole card
+    createCard("A", "hearts"), // Player's first card (Ace)
+    createCard("K", "diamonds"), // Player's second card (King = blackjack!)
+    createCard("6", "spades"), // Dealer's up card
+    createCard("10", "clubs"), // Dealer's hole card
   ];
 
-  const remainingCards = fillRemainingCards(
-    testCards.length,
-    numDecks * 52
-  );
+  const remainingCards = fillRemainingCards(testCards.length, numDecks * 52);
 
   return [...testCards, ...remainingCards];
 }
@@ -94,17 +88,14 @@ function createPlayerBlackjackDeck(numDecks: number): Stack {
  */
 function createDealerBustDeck(numDecks: number): Stack {
   const testCards: Stack = [
-    createCard("10", "hearts"),   // Player's first card
-    createCard("Q", "diamonds"),  // Player's second card (20 total)
-    createCard("6", "spades"),    // Dealer's up card
-    createCard("10", "clubs"),    // Dealer's hole card (16 total)
-    createCard("10", "hearts"),   // Dealer hits and busts
+    createCard("10", "hearts"), // Player's first card
+    createCard("Q", "diamonds"), // Player's second card (20 total)
+    createCard("6", "spades"), // Dealer's up card
+    createCard("10", "clubs"), // Dealer's hole card (16 total)
+    createCard("10", "hearts"), // Dealer hits and busts
   ];
 
-  const remainingCards = fillRemainingCards(
-    testCards.length,
-    numDecks * 52
-  );
+  const remainingCards = fillRemainingCards(testCards.length, numDecks * 52);
 
   return [...testCards, ...remainingCards];
 }
@@ -114,17 +105,14 @@ function createDealerBustDeck(numDecks: number): Stack {
  */
 function createPlayer21Deck(numDecks: number): Stack {
   const testCards: Stack = [
-    createCard("7", "hearts"),    // Player's first card
-    createCard("7", "diamonds"),  // Player's second card (14 total)
-    createCard("6", "spades"),    // Dealer's up card
-    createCard("10", "clubs"),    // Dealer's hole card
-    createCard("7", "hearts"),    // Player hits to 21
+    createCard("7", "hearts"), // Player's first card
+    createCard("7", "diamonds"), // Player's second card (14 total)
+    createCard("6", "spades"), // Dealer's up card
+    createCard("10", "clubs"), // Dealer's hole card
+    createCard("7", "hearts"), // Player hits to 21
   ];
 
-  const remainingCards = fillRemainingCards(
-    testCards.length,
-    numDecks * 52
-  );
+  const remainingCards = fillRemainingCards(testCards.length, numDecks * 52);
 
   return [...testCards, ...remainingCards];
 }
@@ -134,16 +122,13 @@ function createPlayer21Deck(numDecks: number): Stack {
  */
 function createPushDeck(numDecks: number): Stack {
   const testCards: Stack = [
-    createCard("10", "hearts"),   // Player's first card
-    createCard("Q", "diamonds"),  // Player's second card (20 total)
-    createCard("10", "spades"),   // Dealer's up card
-    createCard("K", "clubs"),     // Dealer's hole card (20 total)
+    createCard("10", "hearts"), // Player's first card
+    createCard("Q", "diamonds"), // Player's second card (20 total)
+    createCard("10", "spades"), // Dealer's up card
+    createCard("K", "clubs"), // Dealer's hole card (20 total)
   ];
 
-  const remainingCards = fillRemainingCards(
-    testCards.length,
-    numDecks * 52
-  );
+  const remainingCards = fillRemainingCards(testCards.length, numDecks * 52);
 
   return [...testCards, ...remainingCards];
 }

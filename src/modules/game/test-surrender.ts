@@ -140,7 +140,9 @@ console.log("Test 3: Cannot surrender on split hands");
   if (!hasSurrender) {
     console.log(`  ✅ PASS - Surrender not available on split hands\n`);
   } else {
-    console.log(`  ❌ FAIL - Surrender should not be available on split hands\n`);
+    console.log(
+      `  ❌ FAIL - Surrender should not be available on split hands\n`,
+    );
   }
 }
 

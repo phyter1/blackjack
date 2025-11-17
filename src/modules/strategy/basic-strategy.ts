@@ -61,7 +61,7 @@ function getPairStrategy(
   dealerValue: number,
   canDouble: boolean,
   canSplit: boolean,
-  canSurrender: boolean
+  canSurrender: boolean,
 ): BasicStrategyDecision {
   const dealerCard = dealerValue;
 
@@ -74,9 +74,18 @@ function getPairStrategy(
   }
 
   // Never split 5s or 10s
-  if (pairRank === "5" || pairRank === "10" || ["J", "Q", "K"].includes(pairRank)) {
+  if (
+    pairRank === "5" ||
+    pairRank === "10" ||
+    ["J", "Q", "K"].includes(pairRank)
+  ) {
     // Treat as hard 10 or 20
-    return getHardStrategy(pairRank === "5" ? 10 : 20, dealerValue, canDouble, canSurrender);
+    return getHardStrategy(
+      pairRank === "5" ? 10 : 20,
+      dealerValue,
+      canDouble,
+      canSurrender,
+    );
   }
 
   // Split 9s against 2-9 except 7
@@ -87,7 +96,10 @@ function getPairStrategy(
     if (dealerCard === 8 || dealerCard === 9) {
       return { action: "split", reason: "Split 9s vs dealer 8-9" };
     }
-    return { action: "stand", reason: "Stand with pair of 9s vs dealer 7, 10, or A" };
+    return {
+      action: "stand",
+      reason: "Stand with pair of 9s vs dealer 7, 10, or A",
+    };
   }
 
   // Split 7s against 2-7
@@ -106,7 +118,12 @@ function getPairStrategy(
   }
 
   // Split 3s and 2s against 2-7
-  if ((pairRank === "3" || pairRank === "2") && canSplit && dealerCard >= 2 && dealerCard <= 7) {
+  if (
+    (pairRank === "3" || pairRank === "2") &&
+    canSplit &&
+    dealerCard >= 2 &&
+    dealerCard <= 7
+  ) {
     return { action: "split", reason: `Split ${pairRank}s vs dealer 2-7` };
   }
 
@@ -121,7 +138,7 @@ function getPairStrategy(
 function getSoftStrategy(
   handValue: number,
   dealerValue: number,
-  canDouble: boolean
+  canDouble: boolean,
 ): BasicStrategyDecision {
   const dealerCard = dealerValue;
 
@@ -155,7 +172,10 @@ function getSoftStrategy(
   // Soft 15-16 (A,4-5)
   if (handValue === 15 || handValue === 16) {
     if (dealerCard >= 4 && dealerCard <= 6 && canDouble) {
-      return { action: "double", reason: `Double soft ${handValue} vs dealer 4-6` };
+      return {
+        action: "double",
+        reason: `Double soft ${handValue} vs dealer 4-6`,
+      };
     }
     return { action: "hit", reason: `Hit soft ${handValue}` };
   }
@@ -163,7 +183,10 @@ function getSoftStrategy(
   // Soft 13-14 (A,2-3)
   if (handValue === 13 || handValue === 14) {
     if (dealerCard >= 5 && dealerCard <= 6 && canDouble) {
-      return { action: "double", reason: `Double soft ${handValue} vs dealer 5-6` };
+      return {
+        action: "double",
+        reason: `Double soft ${handValue} vs dealer 5-6`,
+      };
     }
     return { action: "hit", reason: `Hit soft ${handValue}` };
   }
@@ -179,7 +202,7 @@ function getHardStrategy(
   handValue: number,
   dealerValue: number,
   canDouble: boolean,
-  canSurrender: boolean
+  canSurrender: boolean,
 ): BasicStrategyDecision {
   const dealerCard = dealerValue;
 
@@ -192,7 +215,10 @@ function getHardStrategy(
   if (handValue === 16) {
     // Surrender vs dealer 9, 10, or A
     if (canSurrender && dealerCard >= 9) {
-      return { action: "surrender", reason: "Surrender hard 16 vs dealer 9, 10, or A" };
+      return {
+        action: "surrender",
+        reason: "Surrender hard 16 vs dealer 9, 10, or A",
+      };
     }
     if (dealerCard >= 7) {
       return { action: "hit", reason: "Hit hard 16 vs dealer 7 or higher" };
@@ -215,7 +241,10 @@ function getHardStrategy(
   // Hard 13-14
   if (handValue === 13 || handValue === 14) {
     if (dealerCard >= 7) {
-      return { action: "hit", reason: `Hit hard ${handValue} vs dealer 7 or higher` };
+      return {
+        action: "hit",
+        reason: `Hit hard ${handValue} vs dealer 7 or higher`,
+      };
     }
     return { action: "stand", reason: `Stand hard ${handValue} vs dealer 2-6` };
   }
@@ -241,7 +270,13 @@ function getHardStrategy(
     if (canDouble && dealerCard <= 9) {
       return { action: "double", reason: "Double hard 10 vs dealer 2-9" };
     }
-    return { action: "hit", reason: dealerCard >= 10 ? "Hit hard 10 vs dealer 10 or A" : "Hit hard 10 (cannot double)" };
+    return {
+      action: "hit",
+      reason:
+        dealerCard >= 10
+          ? "Hit hard 10 vs dealer 10 or A"
+          : "Hit hard 10 (cannot double)",
+    };
   }
 
   // Hard 9
@@ -265,7 +300,7 @@ export function getBasicStrategyDecision(
   dealerUpCard: Card,
   canDouble: boolean,
   canSplit: boolean,
-  canSurrender: boolean
+  canSurrender: boolean,
 ): BasicStrategyDecision {
   const dealerValue = getDealerValue(dealerUpCard);
 
@@ -276,7 +311,7 @@ export function getBasicStrategyDecision(
       dealerValue,
       canDouble,
       canSplit,
-      canSurrender
+      canSurrender,
     );
   }
 

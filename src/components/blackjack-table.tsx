@@ -39,17 +39,26 @@ export function BlackjackTable() {
   const [playerName, setPlayerName] = useState("");
   const [showInsuranceDialog, setShowInsuranceDialog] = useState(false);
   const [insuranceHandIndex, setInsuranceHandIndex] = useState(0);
+  const [handsPendingInsurance, setHandsPendingInsurance] = useState<number[]>(
+    [],
+  );
 
-  // Handle insurance phase
+  // Handle insurance phase - find all hands that need insurance decision
   useEffect(() => {
     if (currentRound?.state === "insurance") {
-      const hand = currentRound.playerHands[0];
-      if (hand.insuranceOffered && !hand.hasInsurance) {
-        setInsuranceHandIndex(0);
+      const pendingHands = currentRound.playerHands
+        .map((hand, index) => ({ hand, index }))
+        .filter(({ hand }) => hand.insuranceOffered && !hand.hasInsurance)
+        .map(({ index }) => index);
+
+      setHandsPendingInsurance(pendingHands);
+
+      if (pendingHands.length > 0 && !showInsuranceDialog) {
+        setInsuranceHandIndex(pendingHands[0]);
         setShowInsuranceDialog(true);
       }
     }
-  }, [currentRound?.state, currentRound?.playerHands]);
+  }, [currentRound?.state, currentRound?.playerHands, showInsuranceDialog]);
 
   const handleStartGame = () => {
     if (playerName.trim()) {
@@ -59,14 +68,36 @@ export function BlackjackTable() {
 
   const handleTakeInsurance = () => {
     takeInsurance(insuranceHandIndex);
-    setShowInsuranceDialog(false);
-    resolveInsurance();
+
+    // Check if there are more hands needing insurance
+    const remainingHands = handsPendingInsurance.filter(
+      (i) => i !== insuranceHandIndex,
+    );
+    if (remainingHands.length > 0) {
+      setInsuranceHandIndex(remainingHands[0]);
+      setHandsPendingInsurance(remainingHands);
+    } else {
+      setShowInsuranceDialog(false);
+      setHandsPendingInsurance([]);
+      resolveInsurance();
+    }
   };
 
   const handleDeclineInsurance = () => {
     declineInsurance(insuranceHandIndex);
-    setShowInsuranceDialog(false);
-    resolveInsurance();
+
+    // Check if there are more hands needing insurance
+    const remainingHands = handsPendingInsurance.filter(
+      (i) => i !== insuranceHandIndex,
+    );
+    if (remainingHands.length > 0) {
+      setInsuranceHandIndex(remainingHands[0]);
+      setHandsPendingInsurance(remainingHands);
+    } else {
+      setShowInsuranceDialog(false);
+      setHandsPendingInsurance([]);
+      resolveInsurance();
+    }
   };
 
   const handleAction = (action: ActionType) => {
@@ -126,12 +157,16 @@ export function BlackjackTable() {
             {currentRound && (
               <HandDisplay
                 cards={currentRound.dealerHand.cards}
-                hideFirstCard={currentRound.state !== "settling" &&
-                  currentRound.state !== "complete"}
-                value={currentRound.state === "settling" ||
-                    currentRound.state === "complete"
-                  ? currentRound.dealerHand.value
-                  : undefined}
+                hideFirstCard={
+                  currentRound.state !== "settling" &&
+                  currentRound.state !== "complete"
+                }
+                value={
+                  currentRound.state === "settling" ||
+                  currentRound.state === "complete"
+                    ? currentRound.dealerHand.value
+                    : undefined
+                }
                 label="Dealer"
                 isSoft={currentRound.dealerHand.isSoft}
               />
@@ -141,19 +176,16 @@ export function BlackjackTable() {
           {/* Center Area - Actions or Betting */}
           <div className="flex justify-center mb-16">
             {gameState === "waiting_for_bets" && (
-              <BettingControls
-                balance={balance}
-                onPlaceBet={placeBet}
-              />
+              <BettingControls balance={balance} onPlaceBet={placeBet} />
             )}
 
             {gameState === "in_round" &&
               currentRound?.state === "player_turn" && (
-              <ActionButtons
-                availableActions={getAvailableActions()}
-                onAction={handleAction}
-              />
-            )}
+                <ActionButtons
+                  availableActions={getAvailableActions()}
+                  onAction={handleAction}
+                />
+              )}
 
             {gameState === "round_complete" && (
               <div className="flex flex-col items-center gap-4">
@@ -170,22 +202,21 @@ export function BlackjackTable() {
 
           {/* Player's Hand(s) */}
           <div className="flex justify-center gap-8">
-            {
-              currentRound?.playerHands.map((hand, index) => (
-                <HandDisplay
-                  key={hand.id}
-                  cards={hand.hand}
-                  value={hand.value}
-                  label={`${currentPlayer.name}${
-                    currentRound.playerHands.length > 1
-                      ? ` (Hand ${index + 1})`
-                      : ""
-                  }`}
-                  isSoft={hand.isSoft}
-                  state={hand.state}
-                  betAmount={hand.betAmount}
-                />
-              ))}
+            {currentRound?.playerHands.map((hand, index) => (
+              <HandDisplay
+                key={hand.id}
+                cards={hand.hand}
+                value={hand.value}
+                label={`${currentPlayer.name}${
+                  currentRound.playerHands.length > 1
+                    ? ` (Hand ${index + 1})`
+                    : ""
+                }`}
+                isSoft={hand.isSoft}
+                state={hand.state}
+                betAmount={hand.betAmount}
+              />
+            ))}
           </div>
         </div>
 
@@ -193,10 +224,16 @@ export function BlackjackTable() {
         {currentRound && (
           <InsuranceDialog
             open={showInsuranceDialog}
-            insuranceAmount={currentRound.playerHands[insuranceHandIndex]
-                  ?.betAmount / 2}
+            insuranceAmount={
+              currentRound.playerHands[insuranceHandIndex]?.betAmount / 2
+            }
             onTakeInsurance={handleTakeInsurance}
             onDeclineInsurance={handleDeclineInsurance}
+            handNumber={
+              currentRound.playerHands.length > 1
+                ? insuranceHandIndex + 1
+                : undefined
+            }
           />
         )}
       </div>

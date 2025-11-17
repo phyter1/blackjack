@@ -27,7 +27,7 @@ export function CasinoChip({
       className={cn(
         "relative w-16 h-16 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
         !disabled && "hover:scale-110 hover:shadow-lg cursor-pointer",
-        selected && "scale-110 shadow-xl ring-2 ring-amber-400"
+        selected && "scale-110 shadow-xl ring-2 ring-amber-400",
       )}
       style={{
         background: `radial-gradient(circle at 30% 30%, ${color} 0%, ${accentColor} 100%)`,
@@ -63,9 +63,7 @@ export function CasinoChip({
         </div>
 
         {/* Inner decorative ring */}
-        <div
-          className="absolute inset-2 rounded-full border-2 border-white opacity-40"
-        />
+        <div className="absolute inset-2 rounded-full border-2 border-white opacity-40" />
       </div>
     </button>
   );

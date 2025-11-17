@@ -154,6 +154,7 @@ export interface RoundStartEvent extends BaseAuditEvent {
   roundNumber: number;
   playerCount: number;
   totalBets: number;
+  totalHands?: number; // Total hands being played (for multi-hand support)
 }
 
 export interface RoundCompleteEvent extends BaseAuditEvent {
@@ -203,6 +204,8 @@ export interface HandCreatedEvent extends BaseAuditEvent {
   playerId: string;
   betAmount: number;
   isSplit: boolean;
+  originalHandIndex?: number; // For multi-hand play
+  parentHandId?: string | null; // For split hands
 }
 
 export interface HandDealtEvent extends BaseAuditEvent {

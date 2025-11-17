@@ -72,9 +72,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
 
     if (auditData) {
       addLine([{ text: "\n" + "═".repeat(60), color: "cyan" }]);
-      addLine([
-        { text: `Session ID: ${auditData.sessionId}`, color: "cyan" },
-      ]);
+      addLine([{ text: `Session ID: ${auditData.sessionId}`, color: "cyan" }]);
       addLine([
         { text: `Total Events: ${auditData.totalEvents}`, color: "cyan" },
       ]);
@@ -97,9 +95,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
 
   const viewAllEvents = () => {
     clearScreen();
-    addLine([
-      { text: "All Events:", color: "cyan", bold: true },
-    ]);
+    addLine([{ text: "All Events:", color: "cyan", bold: true }]);
     addLine([{ text: "", color: "white" }]);
 
     if (auditData) {
@@ -113,9 +109,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
           },
         ]);
         if (event.roundNumber !== undefined) {
-          addLine([
-            { text: `   Round: ${event.roundNumber}`, color: "gray" },
-          ]);
+          addLine([{ text: `   Round: ${event.roundNumber}`, color: "gray" }]);
         }
         addLine([
           { text: `   ${JSON.stringify(event, null, 2)}`, color: "gray" },
@@ -130,9 +124,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
 
   const viewSummary = () => {
     clearScreen();
-    addLine([
-      { text: "Summary by Event Type:", color: "cyan", bold: true },
-    ]);
+    addLine([{ text: "Summary by Event Type:", color: "cyan", bold: true }]);
     addLine([{ text: "", color: "white" }]);
 
     if (auditData) {
@@ -157,23 +149,17 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
 
   const promptFilterType = () => {
     clearScreen();
-    addLine([
-      { text: "Available Event Types:", color: "cyan", bold: true },
-    ]);
+    addLine([{ text: "Available Event Types:", color: "cyan", bold: true }]);
     addLine([{ text: "", color: "white" }]);
 
     if (auditData) {
       const eventTypes = [...new Set(auditData.events.map((e) => e.type))];
       eventTypes.forEach((type, index) => {
-        addLine([
-          { text: `${index + 1}. ${type}`, color: "white" },
-        ]);
+        addLine([{ text: `${index + 1}. ${type}`, color: "white" }]);
       });
     }
 
-    addLine([
-      { text: "\nEnter event type name or number: ", color: "cyan" },
-    ]);
+    addLine([{ text: "\nEnter event type name or number: ", color: "cyan" }]);
     setViewerState("get_filter_type");
   };
 
@@ -195,9 +181,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
     addLine([
       { text: `Events of type: ${eventType}`, color: "cyan", bold: true },
     ]);
-    addLine([
-      { text: `Found ${filtered.length} events\n`, color: "yellow" },
-    ]);
+    addLine([{ text: `Found ${filtered.length} events\n`, color: "yellow" }]);
 
     filtered.forEach((event, index) => {
       addLine([
@@ -208,9 +192,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
         },
       ]);
       if (event.roundNumber !== undefined) {
-        addLine([
-          { text: `   Round: ${event.roundNumber}`, color: "gray" },
-        ]);
+        addLine([{ text: `   Round: ${event.roundNumber}`, color: "gray" }]);
       }
       addLine([
         { text: `   ${JSON.stringify(event, null, 2)}`, color: "gray" },
@@ -224,9 +206,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
 
   const promptFilterRound = () => {
     clearScreen();
-    addLine([
-      { text: "Filter by Round Number", color: "cyan", bold: true },
-    ]);
+    addLine([{ text: "Filter by Round Number", color: "cyan", bold: true }]);
     addLine([{ text: "", color: "white" }]);
 
     if (auditData) {
@@ -234,7 +214,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
         ...new Set(
           auditData.events
             .map((e) => e.roundNumber)
-            .filter((r): r is number => r !== undefined)
+            .filter((r): r is number => r !== undefined),
         ),
       ].sort((a, b) => a - b);
 
@@ -256,7 +236,10 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
     const roundNum = parseInt(roundStr);
     if (isNaN(roundNum)) {
       addLine([
-        { text: "Invalid round number. Press Enter to try again...", color: "red" },
+        {
+          text: "Invalid round number. Press Enter to try again...",
+          color: "red",
+        },
       ]);
       setViewerState("filter_round");
       return;
@@ -268,9 +251,7 @@ export function TerminalAuditViewer({ auditData }: TerminalAuditViewerProps) {
     addLine([
       { text: `Events from Round ${roundNum}`, color: "cyan", bold: true },
     ]);
-    addLine([
-      { text: `Found ${filtered.length} events\n`, color: "yellow" },
-    ]);
+    addLine([{ text: `Found ${filtered.length} events\n`, color: "yellow" }]);
 
     filtered.forEach((event, index) => {
       addLine([

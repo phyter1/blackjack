@@ -10,10 +10,7 @@ import { type Bank, type House } from "./bank";
 import { DealerHand } from "./dealer-hand";
 import { Hand } from "./hand";
 import type { RuleSet } from "./rules";
-import {
-  type SettlementResult,
-  settleRound,
-} from "./settlement";
+import { type SettlementResult, settleRound } from "./settlement";
 import type { Shoe } from "./shoe";
 
 export type PlayerRoundInfo = {
@@ -46,8 +43,17 @@ export class Round {
   ) {
     this.id = `round-${crypto.randomUUID()}`;
     const { playerHands, dealerHand } = this.shoe.deal(playerInfo.length);
+
+    // Track hand indices per player for multi-hand support
+    const playerHandCounts = new Map<string, number>();
+
     this.playerHands = playerHands.map((cards, i) => {
       const info = playerInfo[i];
+
+      // Get and increment hand index for this player
+      const playerHandIndex = playerHandCounts.get(info.userId) ?? 0;
+      playerHandCounts.set(info.userId, playerHandIndex + 1);
+
       const h = new Hand(
         rules,
         info.userId,
@@ -57,6 +63,8 @@ export class Round {
         false,
         false,
         0,
+        playerHandIndex, // Set original hand index
+        null, // No parent hand (not a split)
       );
       h.start(cards[0]);
       return h;
@@ -161,12 +169,13 @@ export class Round {
    */
   private checkAndProgressHand() {
     const hand = this.currentHand;
-    if (hand && (
-      hand.state === "blackjack" ||
-      hand.state === "busted" ||
-      hand.state === "stood" ||
-      hand.state === "surrendered"
-    )) {
+    if (
+      hand &&
+      (hand.state === "blackjack" ||
+        hand.state === "busted" ||
+        hand.state === "stood" ||
+        hand.state === "surrendered")
+    ) {
       this.moveToNextHand();
     }
   }

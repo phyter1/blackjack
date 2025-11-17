@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test';
+import { Page } from "@playwright/test";
 
 /**
  * Helper functions for setting up game scenarios in E2E tests
@@ -14,15 +14,15 @@ export interface TestUser {
  */
 export async function createAndLoginUser(
   page: Page,
-  name: string = `TestUser${Date.now()}`
+  name: string = `TestUser${Date.now()}`,
 ): Promise<void> {
-  await page.goto('/');
+  await page.goto("/");
 
   // Fill in the name
   await page.fill('input[placeholder*="name" i]', name);
 
   // Click the "Sign up" link to go to signup page
-  const signUpLink = page.locator('text=Sign up');
+  const signUpLink = page.locator("text=Sign up");
   if (await signUpLink.isVisible({ timeout: 1000 })) {
     await signUpLink.click();
     await page.waitForTimeout(500);
@@ -33,7 +33,7 @@ export async function createAndLoginUser(
     // Initial balance should be pre-filled with 1000, but we can set it to be sure
     const balanceInput = page.locator('input[type="number"]').first();
     if (await balanceInput.isVisible({ timeout: 1000 })) {
-      await balanceInput.fill('1000');
+      await balanceInput.fill("1000");
     }
   }
 
@@ -52,7 +52,7 @@ export async function createAndLoginUser(
  */
 export async function ensureBalance(
   page: Page,
-  amount: number = 1000
+  amount: number = 1000,
 ): Promise<void> {
   const depositButton = page.locator('button:has-text("Deposit")');
 
@@ -70,23 +70,28 @@ export async function ensureBalance(
  */
 export async function goToCasinoTable(
   page: Page,
-  testMode?: string
+  testMode?: string,
 ): Promise<void> {
   // If test mode is specified, we need to inject it before clicking the button
   if (testMode) {
     // Set the test mode in URL before navigating
     await page.evaluate((mode) => {
       // Store in sessionStorage so it persists
-      sessionStorage.setItem('test-mode', mode);
+      sessionStorage.setItem("test-mode", mode);
     }, testMode);
   }
 
   // Wait for Casino Table button to be visible
-  await page.waitForSelector('button:has-text("Casino Table"), button:has-text("🎰 Casino Table")', { timeout: 10000 });
+  await page.waitForSelector(
+    'button:has-text("Casino Table"), button:has-text("🎰 Casino Table")',
+    { timeout: 10000 },
+  );
 
-  await page.click('button:has-text("Casino Table"), button:has-text("🎰 Casino Table")');
+  await page.click(
+    'button:has-text("Casino Table"), button:has-text("🎰 Casino Table")',
+  );
 
-  await page.waitForSelector('text=Place Your Bet', { timeout: 15000 });
+  await page.waitForSelector("text=Place Your Bet", { timeout: 15000 });
 }
 
 /**
@@ -106,7 +111,7 @@ export async function placeBet(page: Page, amount: number = 10): Promise<void> {
  */
 export async function isInsuranceOffered(page: Page): Promise<boolean> {
   return await page
-    .locator('text=Insurance')
+    .locator("text=Insurance")
     .isVisible({ timeout: 2000 })
     .catch(() => false);
 }
@@ -116,7 +121,7 @@ export async function isInsuranceOffered(page: Page): Promise<boolean> {
  */
 export async function handleInsurance(
   page: Page,
-  accept: boolean
+  accept: boolean,
 ): Promise<void> {
   const button = accept
     ? page.locator('button:has-text("Yes")')
@@ -129,32 +134,56 @@ export async function handleInsurance(
 /**
  * Gets the current game phase by checking visible UI elements
  */
-export async function getGamePhase(page: Page): Promise<
-  'betting' | 'insurance' | 'playing' | 'settling' | 'complete' | 'unknown'
+export async function getGamePhase(
+  page: Page,
+): Promise<
+  "betting" | "insurance" | "playing" | "settling" | "complete" | "unknown"
 > {
-  if (await page.locator('text=Place Your Bet').isVisible({ timeout: 500 }).catch(() => false)) {
-    return 'betting';
+  if (
+    await page
+      .locator("text=Place Your Bet")
+      .isVisible({ timeout: 500 })
+      .catch(() => false)
+  ) {
+    return "betting";
   }
 
-  if (await page.locator('text=Insurance').isVisible({ timeout: 500 }).catch(() => false)) {
-    return 'insurance';
+  if (
+    await page
+      .locator("text=Insurance")
+      .isVisible({ timeout: 500 })
+      .catch(() => false)
+  ) {
+    return "insurance";
   }
 
-  const hitButton = await page.locator('button:has-text("Hit")').isVisible({ timeout: 500 }).catch(() => false);
-  const standButton = await page.locator('button:has-text("Stand")').isVisible({ timeout: 500 }).catch(() => false);
+  const hitButton = await page
+    .locator('button:has-text("Hit")')
+    .isVisible({ timeout: 500 })
+    .catch(() => false);
+  const standButton = await page
+    .locator('button:has-text("Stand")')
+    .isVisible({ timeout: 500 })
+    .catch(() => false);
 
   if (hitButton || standButton) {
-    return 'playing';
+    return "playing";
   }
 
-  const nextButton = await page.locator('button:has-text("Next Round")').isVisible({ timeout: 500 }).catch(() => false);
-  const cashOutButton = await page.locator('button:has-text("Cash Out")').isVisible({ timeout: 500 }).catch(() => false);
+  const nextButton = await page
+    .locator('button:has-text("Next Round")')
+    .isVisible({ timeout: 500 })
+    .catch(() => false);
+  const cashOutButton = await page
+    .locator('button:has-text("Cash Out")')
+    .isVisible({ timeout: 500 })
+    .catch(() => false);
 
   if (nextButton || cashOutButton) {
-    return 'settling';
+    return "settling";
   }
 
-  return 'unknown';
+  return "unknown";
 }
 
 /**
@@ -169,7 +198,7 @@ export async function playHandBasicStrategy(page: Page): Promise<void> {
 
     const phase = await getGamePhase(page);
 
-    if (phase === 'playing') {
+    if (phase === "playing") {
       // Simple strategy: stand on 17+
       const hitButton = page.locator('button:has-text("Hit")');
       const standButton = page.locator('button:has-text("Stand")');
@@ -181,9 +210,9 @@ export async function playHandBasicStrategy(page: Page): Promise<void> {
         await hitButton.click();
         await page.waitForTimeout(500);
       }
-    } else if (phase === 'settling' || phase === 'complete') {
+    } else if (phase === "settling" || phase === "complete") {
       playing = false;
-    } else if (phase === 'betting') {
+    } else if (phase === "betting") {
       playing = false;
     } else {
       // Unknown state, stop
@@ -204,4 +233,3 @@ export async function advanceToNextRound(page: Page): Promise<void> {
     await page.waitForTimeout(1500);
   }
 }
-

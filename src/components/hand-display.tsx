@@ -9,7 +9,15 @@ interface HandDisplayProps {
   value?: number;
   label?: string;
   isSoft?: boolean;
-  state?: "active" | "busted" | "stood" | "blackjack" | "surrendered" | "won" | "lost" | "pushed";
+  state?:
+    | "active"
+    | "busted"
+    | "stood"
+    | "blackjack"
+    | "surrendered"
+    | "won"
+    | "lost"
+    | "pushed";
   betAmount?: number;
   className?: string;
 }

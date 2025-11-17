@@ -103,7 +103,7 @@ export class HiLoCounter {
    * Get number of cards remaining in shoe
    */
   getCardsRemaining(): number {
-    return (this.totalDecks * 52) - this.cardsDealt;
+    return this.totalDecks * 52 - this.cardsDealt;
   }
 
   /**
@@ -129,7 +129,10 @@ export class HiLoCounter {
   /**
    * Record a player's count guess (for practice mode)
    */
-  recordGuess(playerRunningCount: number, playerTrueCount?: number): CountGuess {
+  recordGuess(
+    playerRunningCount: number,
+    playerTrueCount?: number,
+  ): CountGuess {
     const actual = this.getSnapshot();
 
     const guess: CountGuess = {
@@ -138,9 +141,10 @@ export class HiLoCounter {
       actualRunningCount: actual.runningCount,
       actualTrueCount: actual.trueCount,
       isRunningCountCorrect: playerRunningCount === actual.runningCount,
-      isTrueCountCorrect: playerTrueCount !== undefined
-        ? playerTrueCount === actual.trueCount
-        : true, // Not checking true count if not provided
+      isTrueCountCorrect:
+        playerTrueCount !== undefined
+          ? playerTrueCount === actual.trueCount
+          : true, // Not checking true count if not provided
       timestamp: new Date().toISOString(),
     };
 
@@ -160,7 +164,7 @@ export class HiLoCounter {
    */
   getRunningCountAccuracy(): number {
     if (this.guesses.length === 0) return 0;
-    const correct = this.guesses.filter(g => g.isRunningCountCorrect).length;
+    const correct = this.guesses.filter((g) => g.isRunningCountCorrect).length;
     return (correct / this.guesses.length) * 100;
   }
 
@@ -168,9 +172,11 @@ export class HiLoCounter {
    * Calculate true count accuracy
    */
   getTrueCountAccuracy(): number {
-    const trueCountGuesses = this.guesses.filter(g => g.playerTrueCount !== undefined);
+    const trueCountGuesses = this.guesses.filter(
+      (g) => g.playerTrueCount !== undefined,
+    );
     if (trueCountGuesses.length === 0) return 0;
-    const correct = trueCountGuesses.filter(g => g.isTrueCountCorrect).length;
+    const correct = trueCountGuesses.filter((g) => g.isTrueCountCorrect).length;
     return (correct / trueCountGuesses.length) * 100;
   }
 
@@ -199,7 +205,10 @@ export class HiLoCounter {
   /**
    * Determine if player has achieved proficiency level
    */
-  hasAchievedProficiency(level: CountingProficiency, minGuesses: number = 20): boolean {
+  hasAchievedProficiency(
+    level: CountingProficiency,
+    minGuesses: number = 20,
+  ): boolean {
     if (this.guesses.length < minGuesses) return false;
 
     switch (level) {
@@ -208,7 +217,10 @@ export class HiLoCounter {
       case "running_count":
         return this.getRunningCountAccuracy() >= 85;
       case "true_count":
-        return this.getRunningCountAccuracy() >= 90 && this.getTrueCountAccuracy() >= 85;
+        return (
+          this.getRunningCountAccuracy() >= 90 &&
+          this.getTrueCountAccuracy() >= 85
+        );
       default:
         return false;
     }

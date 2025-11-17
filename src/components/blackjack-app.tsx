@@ -22,9 +22,9 @@ export function BlackjackApp() {
 
   useEffect(() => {
     // Check for test-mode URL parameter and store it in sessionStorage
-    const testMode = searchParams.get('test-mode');
-    if (testMode && typeof window !== 'undefined') {
-      sessionStorage.setItem('test-mode', testMode);
+    const testMode = searchParams.get("test-mode");
+    if (testMode && typeof window !== "undefined") {
+      sessionStorage.setItem("test-mode", testMode);
       console.log(`Test mode enabled: ${testMode}`);
     }
 
@@ -38,7 +38,10 @@ export function BlackjackApp() {
     setLoading(false);
   }, [searchParams]);
 
-  const handleAuthenticated = (authenticatedUser: UserProfile, authenticatedBank: UserBank) => {
+  const handleAuthenticated = (
+    authenticatedUser: UserProfile,
+    authenticatedBank: UserBank,
+  ) => {
     setUser(authenticatedUser);
     setBank(authenticatedBank);
     setAppState("dashboard");

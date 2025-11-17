@@ -75,7 +75,9 @@ export class UserStorage {
 
   static getByName(name: string): UserProfile | null {
     const users = this.getAll();
-    return users.find((u) => u.name.toLowerCase() === name.toLowerCase()) || null;
+    return (
+      users.find((u) => u.name.toLowerCase() === name.toLowerCase()) || null
+    );
   }
 
   static save(user: UserProfile): void {

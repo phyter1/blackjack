@@ -35,10 +35,10 @@ export interface TimePlayedDataPoint {
  * Transform sessions into profit/loss chart data
  */
 export function transformToProfitLossData(
-  sessions: GameSession[]
+  sessions: GameSession[],
 ): ProfitLossDataPoint[] {
   const sortedSessions = [...sessions].sort(
-    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
   );
 
   let cumulativeProfit = 0;
@@ -68,10 +68,10 @@ function calculateSessionWinRate(session: GameSession): number {
  */
 export function transformToWinRateData(
   sessions: GameSession[],
-  movingAverageWindow: number = 5
+  movingAverageWindow: number = 5,
 ): WinRateDataPoint[] {
   const sortedSessions = [...sessions].sort(
-    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
   );
 
   return sortedSessions.map((session, index) => {
@@ -98,7 +98,7 @@ export function transformToWinRateData(
  */
 export function transformToEVData(sessions: GameSession[]): EVDataPoint[] {
   const sortedSessions = [...sessions].sort(
-    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
   );
 
   return sortedSessions
@@ -106,7 +106,7 @@ export function transformToEVData(sessions: GameSession[]): EVDataPoint[] {
       (session) =>
         session.expectedValue !== undefined &&
         session.variance !== undefined &&
-        session.totalWagered !== undefined
+        session.totalWagered !== undefined,
     )
     .map((session, index) => ({
       sessionNumber: index + 1,
@@ -122,10 +122,10 @@ export function transformToEVData(sessions: GameSession[]): EVDataPoint[] {
  * Transform sessions into time played chart data
  */
 export function transformToTimePlayedData(
-  sessions: GameSession[]
+  sessions: GameSession[],
 ): TimePlayedDataPoint[] {
   const sortedSessions = [...sessions].sort(
-    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime()
+    (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
   );
 
   let cumulativeTime = 0;

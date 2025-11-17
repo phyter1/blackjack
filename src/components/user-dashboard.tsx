@@ -14,7 +14,12 @@ import {
 } from "./ui/card";
 import { SessionReplay } from "./session-replay";
 import { LifetimeStatsCharts } from "./lifetime-stats-charts";
-import type { UserProfile, UserBank, UserStats, GameSession } from "@/types/user";
+import type {
+  UserProfile,
+  UserBank,
+  UserStats,
+  GameSession,
+} from "@/types/user";
 
 interface UserDashboardProps {
   user: UserProfile;
@@ -38,7 +43,9 @@ export function UserDashboard({
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
-  const [selectedSession, setSelectedSession] = useState<GameSession | null>(null);
+  const [selectedSession, setSelectedSession] = useState<GameSession | null>(
+    null,
+  );
 
   useEffect(() => {
     // Load user stats and sessions
@@ -52,7 +59,7 @@ export function UserDashboard({
     setError("");
     try {
       const depositAmount = parseFloat(amount);
-      if (isNaN(depositAmount) || depositAmount <= 0) {
+      if (Number.isNaN(depositAmount) || depositAmount <= 0) {
         setError("Please enter a valid amount");
         return;
       }
@@ -235,9 +242,7 @@ export function UserDashboard({
                     Cancel
                   </Button>
                 </div>
-                {error && (
-                  <p className="text-red-500 text-sm mt-2">{error}</p>
-                )}
+                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
               </div>
             )}
           </CardContent>
@@ -336,7 +341,7 @@ export function UserDashboard({
                         {session.endTime &&
                           ` • ${formatDuration(
                             new Date(session.endTime).getTime() -
-                              new Date(session.startTime).getTime()
+                              new Date(session.startTime).getTime(),
                           )}`}
                         {session.decisionsData && (
                           <span className="ml-2 text-green-500">
@@ -362,7 +367,8 @@ export function UserDashboard({
                       </p>
                       {session.strategyGrade && (
                         <p className="text-xs text-blue-400 mt-1">
-                          Strategy: {session.strategyGrade} ({session.strategyAccuracy?.toFixed(1)}%)
+                          Strategy: {session.strategyGrade} (
+                          {session.strategyAccuracy?.toFixed(1)}%)
                         </p>
                       )}
                       {session.hasCountData && (
@@ -370,21 +376,22 @@ export function UserDashboard({
                           📊 Count data available
                         </p>
                       )}
-                      {session.expectedValue !== undefined && session.variance !== undefined && (
-                        <p className="text-xs text-gray-400 mt-1">
-                          EV: ${session.expectedValue.toFixed(2)} | Variance:{" "}
-                          <span
-                            className={
-                              session.variance >= 0
-                                ? "text-green-400"
-                                : "text-red-400"
-                            }
-                          >
-                            {session.variance >= 0 ? "+" : ""}$
-                            {session.variance.toFixed(2)}
-                          </span>
-                        </p>
-                      )}
+                      {session.expectedValue !== undefined &&
+                        session.variance !== undefined && (
+                          <p className="text-xs text-gray-400 mt-1">
+                            EV: ${session.expectedValue.toFixed(2)} | Variance:{" "}
+                            <span
+                              className={
+                                session.variance >= 0
+                                  ? "text-green-400"
+                                  : "text-red-400"
+                              }
+                            >
+                              {session.variance >= 0 ? "+" : ""}$
+                              {session.variance.toFixed(2)}
+                            </span>
+                          </p>
+                        )}
                     </div>
                   </div>
                 ))}

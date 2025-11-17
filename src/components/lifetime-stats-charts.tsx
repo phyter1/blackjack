@@ -13,7 +13,13 @@ import {
   transformToEVData,
   transformToTimePlayedData,
 } from "@/lib/chart-data-utils";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface LifetimeStatsChartsProps {
   sessions: GameSession[];
@@ -22,19 +28,19 @@ interface LifetimeStatsChartsProps {
 export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
   const profitLossData = useMemo(
     () => transformToProfitLossData(sessions),
-    [sessions]
+    [sessions],
   );
 
   const winRateData = useMemo(
     () => transformToWinRateData(sessions),
-    [sessions]
+    [sessions],
   );
 
   const evData = useMemo(() => transformToEVData(sessions), [sessions]);
 
   const timePlayedData = useMemo(
     () => transformToTimePlayedData(sessions),
-    [sessions]
+    [sessions],
   );
 
   if (sessions.length === 0) {
@@ -58,9 +64,12 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-white">Lifetime Statistics</h2>
+        <h2 className="text-2xl font-bold tracking-tight text-white">
+          Lifetime Statistics
+        </h2>
         <p className="text-gray-400">
-          Track your performance across {sessions.length} session{sessions.length !== 1 ? "s" : ""}
+          Track your performance across {sessions.length} session
+          {sessions.length !== 1 ? "s" : ""}
         </p>
       </div>
 
@@ -86,14 +95,15 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
           ) : (
             <Card className="bg-gray-900 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
-                <CardDescription>
-                  No EV/AV data available
-                </CardDescription>
+                <CardTitle className="text-white">
+                  Expected vs Actual Value
+                </CardTitle>
+                <CardDescription>No EV/AV data available</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-400 text-center py-8">
-                  EV/AV tracking is available when playing with strategy analysis enabled.
+                  EV/AV tracking is available when playing with strategy
+                  analysis enabled.
                 </p>
               </CardContent>
             </Card>

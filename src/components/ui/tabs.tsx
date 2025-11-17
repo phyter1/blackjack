@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import * as TabsPrimitive from "@radix-ui/react-tabs"
+import * as React from "react";
+import * as TabsPrimitive from "@radix-ui/react-tabs";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 function Tabs({
   className,
@@ -15,7 +15,7 @@ function Tabs({
       className={cn("flex flex-col gap-2", className)}
       {...props}
     />
-  )
+  );
 }
 
 function TabsList({
@@ -27,11 +27,11 @@ function TabsList({
       data-slot="tabs-list"
       className={cn(
         "bg-gray-800 text-gray-400 inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsTrigger({
@@ -46,11 +46,11 @@ function TabsTrigger({
         "text-gray-400 hover:text-gray-300",
         "data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:shadow-sm",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        className
+        className,
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsContent({
@@ -63,7 +63,7 @@ function TabsContent({
       className={cn("flex-1 outline-none", className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+export { Tabs, TabsList, TabsTrigger, TabsContent };

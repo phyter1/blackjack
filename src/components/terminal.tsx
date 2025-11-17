@@ -23,7 +23,7 @@ const colorClasses: Record<string, string> = {
 function TerminalSegmentComponent({ segment }: { segment: TerminalSegment }) {
   const className = cn(
     segment.color && colorClasses[segment.color],
-    segment.bold && "font-bold"
+    segment.bold && "font-bold",
   );
 
   return <span className={className}>{segment.text}</span>;
@@ -44,7 +44,7 @@ export function Terminal({ lines, className }: TerminalProps) {
       ref={terminalRef}
       className={cn(
         "bg-black text-white text-sm p-4 h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900",
-        className
+        className,
       )}
       style={{
         fontFamily: "'Courier New', Courier, monospace",
@@ -56,10 +56,7 @@ export function Terminal({ lines, className }: TerminalProps) {
         {lines.map((line, lineIndex) => (
           <div key={lineIndex}>
             {line.map((segment, segmentIndex) => (
-              <TerminalSegmentComponent
-                key={segmentIndex}
-                segment={segment}
-              />
+              <TerminalSegmentComponent key={segmentIndex} segment={segment} />
             ))}
           </div>
         ))}

@@ -68,8 +68,12 @@ export function TerminalGamePersistent({
 
     // Show welcome message
     addLines(displayWelcome());
-    addLine([{ text: `\nWelcome back, ${user.name}!`, color: "cyan", bold: true }]);
-    addLine([{ text: `Balance: $${bank.balance.toFixed(2)}\n`, color: "green" }]);
+    addLine([
+      { text: `\nWelcome back, ${user.name}!`, color: "cyan", bold: true },
+    ]);
+    addLine([
+      { text: `Balance: $${bank.balance.toFixed(2)}\n`, color: "green" },
+    ]);
     addLine([
       {
         text: `\nEnter bet amount (Balance: $${bank.balance.toFixed(2)}, default: $10): `,
@@ -96,8 +100,8 @@ export function TerminalGamePersistent({
       displayHeader(
         player.bank.balance,
         stats?.roundNumber ?? 0,
-        round.playerHands[0]?.betAmount
-      )
+        round.playerHands[0]?.betAmount,
+      ),
     );
 
     addLines(displayDealerHand(round.dealerHand, hideDealer));
@@ -132,8 +136,8 @@ export function TerminalGamePersistent({
         } else if (player && betAmount > player.bank.balance) {
           addLines(
             displayError(
-              `Insufficient funds (you have $${player.bank.balance.toFixed(2)})`
-            )
+              `Insufficient funds (you have $${player.bank.balance.toFixed(2)})`,
+            ),
           );
           addLine([
             {
@@ -276,7 +280,9 @@ export function TerminalGamePersistent({
 
     addLine([{ text: "\nChoose your action:", color: "cyan" }]);
     actions.forEach((action, index) => {
-      addLine([{ text: `${index + 1}. ${actionLabels[action]}`, color: "white" }]);
+      addLine([
+        { text: `${index + 1}. ${actionLabels[action]}`, color: "white" },
+      ]);
     });
     addLine([{ text: "\nEnter action number: ", color: "cyan" }]);
   };
@@ -323,7 +329,10 @@ export function TerminalGamePersistent({
     }
 
     addLine([
-      { text: `\nNew balance: $${player?.bank.balance.toFixed(2)}`, color: "white" },
+      {
+        text: `\nNew balance: $${player?.bank.balance.toFixed(2)}`,
+        color: "white",
+      },
     ]);
 
     addLine([{ text: "\nPlay another round? [y/n]: ", color: "cyan" }]);
@@ -340,7 +349,7 @@ export function TerminalGamePersistent({
       session.id,
       roundsPlayed,
       player.bank.balance,
-      game.getSessionId()
+      game.getSessionId(),
     );
 
     addLine([{ text: "\n" + "═".repeat(60), color: "green", bold: true }]);
@@ -355,7 +364,9 @@ export function TerminalGamePersistent({
     if (summary) {
       addLine([{ text: "\n📊 Session Summary:", color: "cyan", bold: true }]);
       addLine([{ text: `  Rounds Played: ${roundsPlayed}`, color: "white" }]);
-      addLine([{ text: `  Total Events: ${summary.totalEvents}`, color: "white" }]);
+      addLine([
+        { text: `  Total Events: ${summary.totalEvents}`, color: "white" },
+      ]);
       const profit = player.bank.balance - bank.balance;
       addLine([
         {
@@ -365,7 +376,9 @@ export function TerminalGamePersistent({
       ]);
     }
 
-    addLine([{ text: "\nPress Enter to return to dashboard...", color: "cyan" }]);
+    addLine([
+      { text: "\nPress Enter to return to dashboard...", color: "cyan" },
+    ]);
     setGameState("game_over");
 
     // Update parent with new bank balance

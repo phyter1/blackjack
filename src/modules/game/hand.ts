@@ -3,11 +3,23 @@ import { type Bank, Escrow } from "./bank";
 import type { Card, Stack } from "./cards";
 import type { RuleSet } from "./rules";
 import { getAuditLogger } from "../audit/logger";
-import type { HandCreatedEvent, BetPlacedEvent, HandActionEvent } from "../audit/types";
+import type {
+  HandCreatedEvent,
+  BetPlacedEvent,
+  HandActionEvent,
+} from "../audit/types";
 
 export class Hand {
   id: string;
-  state: "active" | "busted" | "stood" | "blackjack" | "surrendered" | "won" | "lost" | "pushed" = "active";
+  state:
+    | "active"
+    | "busted"
+    | "stood"
+    | "blackjack"
+    | "surrendered"
+    | "won"
+    | "lost"
+    | "pushed" = "active";
   availableActions: ActionType[] = [];
   hand: Stack = [];
   value: number | undefined = undefined;
@@ -15,6 +27,8 @@ export class Hand {
   private bet: Escrow;
   private insuranceBet: Escrow | null = null;
   insuranceOffered: boolean = false;
+  public originalHandIndex: number = 0; // Index of original hand for multi-hand play (0, 1, 2...)
+  public parentHandId: string | null = null; // ID of parent hand if this is a split hand
   constructor(
     private rules: RuleSet,
     private userId: string,
@@ -24,8 +38,12 @@ export class Hand {
     public isSplit: boolean = false,
     public isSplitAce: boolean = false,
     private splitCount: number = 0,
+    originalHandIndex: number = 0,
+    parentHandId: string | null = null,
   ) {
     this.id = `hand-${crypto.randomUUID()}`;
+    this.originalHandIndex = originalHandIndex;
+    this.parentHandId = parentHandId;
     if (bet > bank.balance) {
       throw new Error("Insufficient funds to place bet");
     }
@@ -39,6 +57,8 @@ export class Hand {
       playerId: this.userId,
       betAmount: bet,
       isSplit: this.isSplit,
+      originalHandIndex: this.originalHandIndex,
+      parentHandId: this.parentHandId,
     });
 
     getAuditLogger().log<BetPlacedEvent>("bet_placed", {
@@ -195,6 +215,8 @@ export class Hand {
       true,
       this.isSplitAce,
       this.splitCount,
+      this.originalHandIndex, // Inherit original hand index
+      this.id, // Set parent hand ID to this hand's ID
     );
     const splitHandActions = splitHand.start([splitHandCard, card2]);
 

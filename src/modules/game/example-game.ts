@@ -67,9 +67,7 @@ for (let i = 1; i <= 3; i++) {
     const handValue = currentHand.handValue;
     const availableActions = game.getAvailableActions();
 
-    console.log(
-      `\n  ${currentPlayer.name}'s turn (hand value: ${handValue})`,
-    );
+    console.log(`\n  ${currentPlayer.name}'s turn (hand value: ${handValue})`);
     console.log(`    Available: ${availableActions.join(", ")}`);
 
     // Simple strategy: stand on 17+, otherwise hit
@@ -107,15 +105,13 @@ for (let i = 1; i <= 3; i++) {
         result.profit > 0
           ? `+$${result.profit}`
           : result.profit < 0
-          ? `-$${Math.abs(result.profit)}`
-          : "$0";
+            ? `-$${Math.abs(result.profit)}`
+            : "$0";
 
       console.log(
         `  ${player.name}: ${result.playerHandValue} vs ${result.dealerHandValue} = ${result.outcome.toUpperCase()} (${profitStr})`,
       );
-      console.log(
-        `    New balance: $${player.bank.balance}`,
-      );
+      console.log(`    New balance: $${player.bank.balance}`);
     });
   }
 
@@ -135,14 +131,15 @@ console.log("FINAL SUMMARY");
 console.log("=".repeat(60));
 
 game.getAllPlayers().forEach((player) => {
-  const netChange = player.bank.balance -
+  const netChange =
+    player.bank.balance -
     (player.name === "Alice" ? 1000 : player.name === "Bob" ? 1500 : 500);
   const changeStr =
     netChange > 0
       ? `+$${netChange}`
       : netChange < 0
-      ? `-$${Math.abs(netChange)}`
-      : "$0";
+        ? `-$${Math.abs(netChange)}`
+        : "$0";
 
   console.log(`${player.name}: $${player.bank.balance} (${changeStr})`);
 });
@@ -150,4 +147,6 @@ game.getAllPlayers().forEach((player) => {
 const stats = game.getStats();
 console.log(`\nHouse: $${stats.houseBankroll} (profit: $${stats.houseProfit})`);
 console.log(`\nTotal rounds played: ${stats.roundNumber}`);
-console.log(`Shoe status: ${stats.shoeComplete ? "Complete (needs reshuffle)" : `${stats.shoeRemainingCards} cards remaining`}`);
+console.log(
+  `Shoe status: ${stats.shoeComplete ? "Complete (needs reshuffle)" : `${stats.shoeRemainingCards} cards remaining`}`,
+);

@@ -7,21 +7,28 @@ export const randomInterleaveLen = (remaining: number): number => {
   return Math.min(len, remaining);
 };
 
-const penetrationChoices = Array(200).fill(0).map((_, i) => {
-  if (i <= 100) {
-    // ascending from 0 to 100
-    return [i, i * .01];
-  } else {
-    // descending from 99 to 0
-    const desc = 200 - i;
-    return [i, desc * .01];
-  }
-});
+const penetrationChoices = Array(200)
+  .fill(0)
+  .map((_, i) => {
+    if (i <= 100) {
+      // ascending from 0 to 100
+      return [i, i * 0.01];
+    } else {
+      // descending from 99 to 0
+      const desc = 200 - i;
+      return [i, desc * 0.01];
+    }
+  });
 
-export const cutStackAtPenetration = (
-  { stack, penetration: pen }: { stack: Stack; penetration?: number },
-) => {
-  let penetration: number = pen ??
+export const cutStackAtPenetration = ({
+  stack,
+  penetration: pen,
+}: {
+  stack: Stack;
+  penetration?: number;
+}) => {
+  let penetration: number =
+    pen ??
     weightedRandomChoice(
       penetrationChoices.map((pc) => pc[0]),
       penetrationChoices.map((pc) => pc[1]),

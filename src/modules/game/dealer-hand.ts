@@ -6,7 +6,10 @@ export class DealerHand {
   rules: CompleteRuleSet;
   value: number | undefined = undefined;
   isSoft: boolean = false;
-  constructor(public cards: Stack, rules: RuleSet) {
+  constructor(
+    public cards: Stack,
+    rules: RuleSet,
+  ) {
     this.rules = rules.build();
     const cv = this.handValue;
 

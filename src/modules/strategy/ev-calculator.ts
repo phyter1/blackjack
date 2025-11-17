@@ -29,7 +29,9 @@ export const DEFAULT_RULES: GameRules = {
  * Calculate base house edge percentage based on game rules
  * Returns negative percentage (e.g., -0.5 means 0.5% house edge)
  */
-export function calculateBaseHouseEdge(rules: GameRules = DEFAULT_RULES): number {
+export function calculateBaseHouseEdge(
+  rules: GameRules = DEFAULT_RULES,
+): number {
   // Start with base edge for perfect basic strategy
   let houseEdge = -0.5; // -0.5% with perfect basic strategy and good rules
 
@@ -76,7 +78,7 @@ export function calculateBaseHouseEdge(rules: GameRules = DEFAULT_RULES): number
  */
 export function adjustForStrategyAccuracy(
   baseHouseEdge: number,
-  accuracyPercentage: number
+  accuracyPercentage: number,
 ): number {
   // Each 1% below perfect strategy adds approximately 0.03% to house edge
   const accuracyPenalty = (100 - accuracyPercentage) * 0.03;
@@ -96,7 +98,7 @@ export function calculateCountAdvantage(averageTrueCount: number): number {
  * Calculate average true count from count snapshots
  */
 export function calculateAverageTrueCount(
-  decisionsData?: string
+  decisionsData?: string,
 ): number | null {
   if (!decisionsData) return null;
 
@@ -157,7 +159,7 @@ export function calculateSessionEV(params: {
   // Adjust for strategy accuracy
   const adjustedHouseEdge = adjustForStrategyAccuracy(
     baseHouseEdge,
-    strategyAccuracy
+    strategyAccuracy,
   );
 
   // Calculate count advantage if data available

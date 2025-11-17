@@ -40,9 +40,7 @@ console.log(`Round state: ${round.state}`);
 console.log("\n--- Player 1's Turn ---");
 console.log(`Current hand index: ${round.currentHandIndex}`);
 console.log(`Hand value: ${round.currentHand.handValue}`);
-console.log(
-  `Available actions: ${round.getAvailableActions().join(", ")}`,
-);
+console.log(`Available actions: ${round.getAvailableActions().join(", ")}`);
 
 // Player 1 decides to hit
 console.log("\nPlayer 1 hits...");
@@ -62,9 +60,7 @@ console.log("\n--- Player 2's Turn ---");
 if (round.state === "player_turn") {
   console.log(`Current hand index: ${round.currentHandIndex}`);
   console.log(`Hand value: ${round.currentHand.handValue}`);
-  console.log(
-    `Available actions: ${round.getAvailableActions().join(", ")}`,
-  );
+  console.log(`Available actions: ${round.getAvailableActions().join(", ")}`);
 
   // Player 2 stands
   console.log("\nPlayer 2 stands.");

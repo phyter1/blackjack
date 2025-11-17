@@ -53,26 +53,16 @@ export function Card({ card, hidden = false, className }: CardProps) {
     >
       {/* Top left corner */}
 
-      <div
-        className={cn(
-          "flex flex-col items-start leading-none",
-          colorClass,
-        )}
-      >
+      <div className={cn("flex flex-col items-start leading-none", colorClass)}>
         <div
-          className={cn(
-            "flex flex-col items-center leading-none ",
-            colorClass,
-          )}
+          className={cn("flex flex-col items-center leading-none ", colorClass)}
         >
           <span className="text-6xl font-bold">{displayRank}</span>
           <span className="text-4xl">{symbol}</span>
         </div>
       </div>
 
-      <div className={cn("text-5xl self-center", colorClass)}>
-        {symbol}
-      </div>
+      <div className={cn("text-5xl self-center", colorClass)}>{symbol}</div>
 
       {/* Bottom right corner (upside down) */}
       <div
@@ -81,12 +71,7 @@ export function Card({ card, hidden = false, className }: CardProps) {
           colorClass,
         )}
       >
-        <div
-          className={cn(
-            "flex flex-col items-end leading-none",
-            colorClass,
-          )}
-        >
+        <div className={cn("flex flex-col items-end leading-none", colorClass)}>
           <span className="text-6xl font-bold">{displayRank}</span>
           <span className="text-4xl">{symbol}</span>
         </div>

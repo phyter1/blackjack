@@ -19,7 +19,10 @@ export class UserService {
   /**
    * Create a new user with initial bank balance
    */
-  static createUser(name: string, initialBalance: number = 1000): {
+  static createUser(
+    name: string,
+    initialBalance: number = 1000,
+  ): {
     user: UserProfile;
     bank: UserBank;
   } {
@@ -158,7 +161,7 @@ export class UserService {
 
     if (bank.balance < amount) {
       throw new Error(
-        `Insufficient funds. Balance: $${bank.balance.toFixed(2)}, Requested: $${amount.toFixed(2)}`
+        `Insufficient funds. Balance: $${bank.balance.toFixed(2)}, Requested: $${amount.toFixed(2)}`,
       );
     }
 
@@ -217,7 +220,7 @@ export class UserService {
       decisions: unknown[]; // PlayerDecision[] but avoiding circular import
       hasCountData: boolean;
     } | null,
-    totalWagered?: number
+    totalWagered?: number,
   ): GameSession {
     const session = SessionStorage.getById(sessionId);
     if (!session) {
@@ -295,25 +298,26 @@ export class UserService {
 
     const totalRoundsPlayed = completedSessions.reduce(
       (sum, s) => sum + s.roundsPlayed,
-      0
+      0,
     );
     const totalSessionsPlayed = completedSessions.length;
 
     const wins = completedSessions.filter((s) => s.netProfit > 0).length;
-    const winRate = totalSessionsPlayed > 0 ? (wins / totalSessionsPlayed) * 100 : 0;
+    const winRate =
+      totalSessionsPlayed > 0 ? (wins / totalSessionsPlayed) * 100 : 0;
 
     const biggestWin = Math.max(
       ...completedSessions.map((s) => s.netProfit),
-      0
+      0,
     );
     const biggestLoss = Math.min(
       ...completedSessions.map((s) => s.netProfit),
-      0
+      0,
     );
 
     const totalProfit = completedSessions.reduce(
       (sum, s) => sum + s.netProfit,
-      0
+      0,
     );
     const averageSessionProfit =
       totalSessionsPlayed > 0 ? totalProfit / totalSessionsPlayed : 0;
@@ -344,7 +348,8 @@ export class UserService {
    */
   static getTransactions(userId: string): Transaction[] {
     return TransactionStorage.getByUserId(userId).sort(
-      (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
     );
   }
 
@@ -353,7 +358,8 @@ export class UserService {
    */
   static getSessions(userId: string): GameSession[] {
     return SessionStorage.getByUserId(userId).sort(
-      (a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
+      (a, b) =>
+        new Date(b.startTime).getTime() - new Date(a.startTime).getTime(),
     );
   }
 

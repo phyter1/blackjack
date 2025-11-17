@@ -66,8 +66,8 @@ export function TerminalGame({ onGameUpdate }: TerminalGameProps) {
       displayHeader(
         player.bank.balance,
         stats?.roundNumber ?? 0,
-        round.playerHands[0]?.betAmount
-      )
+        round.playerHands[0]?.betAmount,
+      ),
     );
 
     // Display dealer hand
@@ -148,8 +148,8 @@ export function TerminalGame({ onGameUpdate }: TerminalGameProps) {
         } else if (player && betAmount > player.bank.balance) {
           addLines(
             displayError(
-              `Insufficient funds (you have $${player.bank.balance.toFixed(2)})`
-            )
+              `Insufficient funds (you have $${player.bank.balance.toFixed(2)})`,
+            ),
           );
           addLine([
             {
@@ -237,10 +237,7 @@ export function TerminalGame({ onGameUpdate }: TerminalGameProps) {
             const newActions = game?.getAvailableActions() ?? [];
             setAvailableActions(newActions);
 
-            if (
-              newActions.length > 0 &&
-              round?.state === "player_turn"
-            ) {
+            if (newActions.length > 0 && round?.state === "player_turn") {
               showActionPrompt(newActions);
             } else {
               handleSettlement();
@@ -347,7 +344,10 @@ export function TerminalGame({ onGameUpdate }: TerminalGameProps) {
     }
 
     addLine([
-      { text: `\nNew balance: $${player?.bank.balance.toFixed(2)}`, color: "white" },
+      {
+        text: `\nNew balance: $${player?.bank.balance.toFixed(2)}`,
+        color: "white",
+      },
     ]);
 
     addLine([{ text: "\nPlay another round? [y/n]: ", color: "cyan" }]);
@@ -367,8 +367,12 @@ export function TerminalGame({ onGameUpdate }: TerminalGameProps) {
     const summary = game?.getAuditSummary();
     if (summary) {
       addLine([{ text: "\n📊 Session Summary:", color: "cyan", bold: true }]);
-      addLine([{ text: `  Total Events: ${summary.totalEvents}`, color: "white" }]);
-      addLine([{ text: `  Total Rounds: ${summary.totalRounds}`, color: "white" }]);
+      addLine([
+        { text: `  Total Events: ${summary.totalEvents}`, color: "white" },
+      ]);
+      addLine([
+        { text: `  Total Rounds: ${summary.totalRounds}`, color: "white" },
+      ]);
       if (summary.firstEvent && summary.lastEvent) {
         const duration =
           new Date(summary.lastEvent).getTime() -

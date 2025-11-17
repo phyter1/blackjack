@@ -30,7 +30,7 @@ export class AuditLogger {
    */
   log<T extends AuditEvent>(
     type: AuditEventType,
-    data: Omit<T, "id" | "timestamp" | "type">
+    data: Omit<T, "id" | "timestamp" | "type">,
   ): T {
     const event = {
       id: `event-${crypto.randomUUID()}`,
@@ -90,7 +90,7 @@ export class AuditLogger {
    */
   getEventsByTimeRange(start: Date, end: Date): AuditEvent[] {
     return this.events.filter(
-      (event) => event.timestamp >= start && event.timestamp <= end
+      (event) => event.timestamp >= start && event.timestamp <= end,
     );
   }
 
@@ -106,7 +106,7 @@ export class AuditLogger {
         events: this.events,
       },
       null,
-      2
+      2,
     );
   }
 

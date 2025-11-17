@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { PlayingCard } from "./playing-card";
-import type { Card as GameCard } from "@/modules/game/cards"
+import type { Card as GameCard } from "@/modules/game/cards";
 import { cn } from "@/lib/utils";
 
 interface AnimatedCardProps {
@@ -56,7 +56,7 @@ export function AnimatedCard({
     <div
       className={cn(
         "transition-all duration-300",
-        isDealing && "opacity-0 -translate-y-8 scale-90"
+        isDealing && "opacity-0 -translate-y-8 scale-90",
       )}
       style={{
         animation: isDealing ? "none" : "cardDeal 0.3s ease-out forwards",
@@ -65,17 +65,13 @@ export function AnimatedCard({
       <div
         className={cn(
           "transition-all duration-300",
-          isFlipped && flipDelay !== undefined && "rotate-y-180"
+          isFlipped && flipDelay !== undefined && "rotate-y-180",
         )}
         style={{
           transformStyle: "preserve-3d",
         }}
       >
-        <PlayingCard
-          card={card}
-          hidden={isFlipped}
-          size={size}
-        />
+        <PlayingCard card={card} hidden={isFlipped} size={size} />
       </div>
     </div>
   );

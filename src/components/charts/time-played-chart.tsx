@@ -1,7 +1,21 @@
 "use client";
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import type { TimePlayedDataPoint } from "@/lib/chart-data-utils";
 
 interface TimePlayedChartProps {
@@ -45,27 +59,45 @@ export function TimePlayedChart({ data }: TimePlayedChartProps) {
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 5 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
+          >
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis
               dataKey="sessionNumber"
-              label={{ value: "Session #", position: "insideBottom", offset: -5, fill: "#9CA3AF" }}
+              label={{
+                value: "Session #",
+                position: "insideBottom",
+                offset: -5,
+                fill: "#9CA3AF",
+              }}
               stroke="#6B7280"
               tick={{ fill: "#9CA3AF" }}
             />
             <YAxis
-              label={{ value: "Minutes", angle: -90, position: "insideLeft", fill: "#9CA3AF" }}
+              label={{
+                value: "Minutes",
+                angle: -90,
+                position: "insideLeft",
+                fill: "#9CA3AF",
+              }}
               tickFormatter={(value) => formatTime(value)}
               stroke="#6B7280"
               tick={{ fill: "#9CA3AF" }}
             />
             <Tooltip
-              contentStyle={{ backgroundColor: "#1F2937", border: "1px solid #374151", borderRadius: "6px" }}
+              contentStyle={{
+                backgroundColor: "#1F2937",
+                border: "1px solid #374151",
+                borderRadius: "6px",
+              }}
               labelStyle={{ color: "#9CA3AF" }}
               itemStyle={{ color: "#F3F4F6" }}
               formatter={(value: any, name: string) => {
                 if (typeof value === "number") {
-                  const label = name === "cumulativeTime" ? "Total Time" : "Session";
+                  const label =
+                    name === "cumulativeTime" ? "Total Time" : "Session";
                   return [formatTime(value), label];
                 }
                 return [value, name];

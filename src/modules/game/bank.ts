@@ -15,7 +15,10 @@ export class Bank {
   private total: number;
   protected skipAuditLog = false; // Flag for subclasses to control logging
 
-  constructor(private userId: string, initialAmount: number) {
+  constructor(
+    private userId: string,
+    initialAmount: number,
+  ) {
     this.total = initialAmount;
   }
 

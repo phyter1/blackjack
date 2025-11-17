@@ -137,7 +137,7 @@ export class DecisionTracker {
     actualAction: ActionType,
     optimalDecision: BasicStrategyDecision,
     betAmount: number,
-    countSnapshot?: CountSnapshot
+    countSnapshot?: CountSnapshot,
   ): void {
     const decision: PlayerDecision = {
       playerCards,
@@ -167,7 +167,7 @@ export class DecisionTracker {
     handId: string,
     outcome: HandOutcome,
     payout: number,
-    profit: number
+    profit: number,
   ): void {
     // Update all decisions for this hand with outcome data
     for (const decision of this.decisions) {
@@ -196,7 +196,9 @@ export class DecisionTracker {
       totalDecisions > 0 ? (correctDecisions / totalDecisions) * 100 : 0;
     const grade = calculateGrade(accuracyPercentage);
     const gradePoints = getGradePoints(grade);
-    const hasCountData = this.decisions.some((d) => d.countSnapshot !== undefined);
+    const hasCountData = this.decisions.some(
+      (d) => d.countSnapshot !== undefined,
+    );
 
     return {
       sessionId: this.sessionId,
@@ -246,7 +248,11 @@ export class DecisionTracker {
       return "hard";
     };
 
-    const byType = { hard: [] as PlayerDecision[], soft: [] as PlayerDecision[], pair: [] as PlayerDecision[] };
+    const byType = {
+      hard: [] as PlayerDecision[],
+      soft: [] as PlayerDecision[],
+      pair: [] as PlayerDecision[],
+    };
 
     for (const decision of this.decisions) {
       const type = categorizeDecision(decision);
@@ -254,9 +260,24 @@ export class DecisionTracker {
     }
 
     return {
-      hard: byType.hard.length > 0 ? (byType.hard.filter(d => d.isCorrect).length / byType.hard.length) * 100 : 0,
-      soft: byType.soft.length > 0 ? (byType.soft.filter(d => d.isCorrect).length / byType.soft.length) * 100 : 0,
-      pair: byType.pair.length > 0 ? (byType.pair.filter(d => d.isCorrect).length / byType.pair.length) * 100 : 0,
+      hard:
+        byType.hard.length > 0
+          ? (byType.hard.filter((d) => d.isCorrect).length /
+              byType.hard.length) *
+            100
+          : 0,
+      soft:
+        byType.soft.length > 0
+          ? (byType.soft.filter((d) => d.isCorrect).length /
+              byType.soft.length) *
+            100
+          : 0,
+      pair:
+        byType.pair.length > 0
+          ? (byType.pair.filter((d) => d.isCorrect).length /
+              byType.pair.length) *
+            100
+          : 0,
     };
   }
 

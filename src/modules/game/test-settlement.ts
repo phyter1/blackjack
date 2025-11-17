@@ -46,9 +46,7 @@ console.log(`  Player hand: ${result1.playerHandValue}`);
 console.log(`  Dealer hand: ${result1.dealerHandValue}`);
 console.log(`  Payout: $${result1.payout}`);
 console.log(`  Profit: $${result1.profit}`);
-console.log(
-  `  Player balance: $${initialBalance1} -> $${playerBank1.balance}`,
-);
+console.log(`  Player balance: $${initialBalance1} -> $${playerBank1.balance}`);
 console.log(`  Expected: Blackjack, $250 payout (3:2), $150 profit\n`);
 
 // Test 2: Player 20 vs Dealer 19 (Regular Win)
@@ -82,9 +80,7 @@ const result2 = settleHand(playerHand2, dealerHand2, house, rules);
 console.log(`  Outcome: ${result2.outcome}`);
 console.log(`  Payout: $${result2.payout}`);
 console.log(`  Profit: $${result2.profit}`);
-console.log(
-  `  Player balance: $${initialBalance2} -> $${playerBank2.balance}`,
-);
+console.log(`  Player balance: $${initialBalance2} -> $${playerBank2.balance}`);
 console.log(`  Expected: Win, $200 payout (1:1), $100 profit\n`);
 
 // Test 3: Player 18 vs Dealer 20 (Loss)
@@ -118,9 +114,7 @@ const result3 = settleHand(playerHand3, dealerHand3, house, rules);
 console.log(`  Outcome: ${result3.outcome}`);
 console.log(`  Payout: $${result3.payout}`);
 console.log(`  Profit: $${result3.profit}`);
-console.log(
-  `  Player balance: $${initialBalance3} -> $${playerBank3.balance}`,
-);
+console.log(`  Player balance: $${initialBalance3} -> $${playerBank3.balance}`);
 console.log(`  Expected: Lose, $0 payout, -$100 profit\n`);
 
 // Test 4: Player 19 vs Dealer 19 (Push)
@@ -154,9 +148,7 @@ const result4 = settleHand(playerHand4, dealerHand4, house, rules);
 console.log(`  Outcome: ${result4.outcome}`);
 console.log(`  Payout: $${result4.payout}`);
 console.log(`  Profit: $${result4.profit}`);
-console.log(
-  `  Player balance: $${initialBalance4} -> $${playerBank4.balance}`,
-);
+console.log(`  Player balance: $${initialBalance4} -> $${playerBank4.balance}`);
 console.log(`  Expected: Push, $100 payout, $0 profit\n`);
 
 // Test 5: Player Bust
@@ -191,9 +183,7 @@ const result5 = settleHand(playerHand5, dealerHand5, house, rules);
 console.log(`  Outcome: ${result5.outcome}`);
 console.log(`  Payout: $${result5.payout}`);
 console.log(`  Profit: $${result5.profit}`);
-console.log(
-  `  Player balance: $${initialBalance5} -> $${playerBank5.balance}`,
-);
+console.log(`  Player balance: $${initialBalance5} -> $${playerBank5.balance}`);
 console.log(`  Expected: Lose, $0 payout, -$100 profit\n`);
 
 console.log("=== House Summary ===");

@@ -16,6 +16,7 @@ interface InsuranceDialogProps {
   insuranceAmount: number;
   onTakeInsurance: () => void;
   onDeclineInsurance: () => void;
+  handNumber?: number; // Optional hand number for multi-hand display
 }
 
 export function InsuranceDialog({
@@ -23,14 +24,19 @@ export function InsuranceDialog({
   insuranceAmount,
   onTakeInsurance,
   onDeclineInsurance,
+  handNumber,
 }: InsuranceDialogProps) {
   return (
     <AlertDialog open={open}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Insurance?</AlertDialogTitle>
+          <AlertDialogTitle>
+            Insurance{handNumber ? ` - Hand ${handNumber}` : ""}?
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            The dealer is showing an Ace. Would you like to take insurance for ${insuranceAmount}?
+            The dealer is showing an Ace. Would you like to take insurance
+            {handNumber ? ` for Hand ${handNumber}` : ""} for ${insuranceAmount}
+            ?
             <br />
             <br />
             Insurance pays 2:1 if the dealer has blackjack.

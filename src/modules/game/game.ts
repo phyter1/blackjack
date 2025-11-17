@@ -15,7 +15,7 @@ import type {
   PlayerLeaveEvent,
   GameStateChangeEvent,
   RoundStartEvent,
-  RoundCompleteEvent
+  RoundCompleteEvent,
 } from "../audit/types";
 
 export type GameState = "waiting_for_bets" | "in_round" | "round_complete";
@@ -163,14 +163,19 @@ export class Game {
     this.roundNumber++;
     const totalBets = bets.reduce((sum, bet) => sum + bet.amount, 0);
 
+    // Count unique players and total hands (for multi-hand tracking)
+    const uniquePlayers = new Set(bets.map((b) => b.playerId));
+    const totalHands = bets.length;
+
     // Set current round number in audit logger
     getAuditLogger().setCurrentRound(this.roundNumber);
 
     // Audit log round start
     getAuditLogger().log<RoundStartEvent>("round_start", {
       roundNumber: this.roundNumber,
-      playerCount: bets.length,
+      playerCount: uniquePlayers.size,
       totalBets,
+      totalHands,
     });
 
     this.currentRound = new Round(

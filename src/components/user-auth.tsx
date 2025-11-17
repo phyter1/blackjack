@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { UserService } from "@/services/user-service";
 import { Button } from "./ui/button";
-import { Input} from "./ui/input";
+import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import type { UserProfile, UserBank } from "@/types/user";
 
@@ -130,9 +130,7 @@ export function UserAuth({ onAuthenticated }: UserAuthProps) {
                   step="10"
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">
-                Minimum $10 required
-              </p>
+              <p className="text-xs text-gray-500 mt-1">Minimum $10 required</p>
             </div>
           )}
 

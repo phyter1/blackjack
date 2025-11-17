@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, useSyncExternalStore, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
 import { Game, type PlayerBet } from "@/modules/game/game";
 import { RuleSet } from "@/modules/game/rules";
 import type { Player } from "@/modules/game/player";
@@ -37,24 +44,26 @@ class GameStore {
   private notify = () => {
     this.version++;
     this.updateSnapshot();
-    this.listeners.forEach(listener => listener());
+    this.listeners.forEach((listener) => listener());
   };
 
   private updateSnapshot = () => {
     const currentRound = this.game.getCurrentRound();
 
     // Create a shallow copy of the round with cloned arrays to ensure React detects changes
-    const roundSnapshot = currentRound ? {
-      ...currentRound,
-      dealerHand: {
-        ...currentRound.dealerHand,
-        cards: [...currentRound.dealerHand.cards],
-      },
-      playerHands: currentRound.playerHands.map(hand => ({
-        ...hand,
-        hand: [...hand.hand],
-      })),
-    } : undefined;
+    const roundSnapshot = currentRound
+      ? {
+          ...currentRound,
+          dealerHand: {
+            ...currentRound.dealerHand,
+            cards: [...currentRound.dealerHand.cards],
+          },
+          playerHands: currentRound.playerHands.map((hand) => ({
+            ...hand,
+            hand: [...hand.hand],
+          })),
+        }
+      : undefined;
 
     this.cachedSnapshot = {
       game: this.game,
@@ -78,10 +87,19 @@ class GameStore {
     return this.player;
   };
 
-  placeBet = (amount: number) => {
+  placeBet = (bets: number | number[]) => {
     if (!this.player) throw new Error("No player");
-    const bets: PlayerBet[] = [{ playerId: this.player.id, amount }];
-    this.game.startRound(bets);
+
+    // Support both single bet (number) and multi-hand (array) for backward compatibility
+    const betAmounts = Array.isArray(bets) ? bets : [bets];
+
+    // Create PlayerBet array - one entry per hand
+    const playerBets: PlayerBet[] = betAmounts.map((amount) => ({
+      playerId: this.player!.id,
+      amount,
+    }));
+
+    this.game.startRound(playerBets);
     this.notify();
   };
 
@@ -119,7 +137,9 @@ interface BlackjackGameContextType {
   store: GameStore;
 }
 
-const BlackjackGameContext = createContext<BlackjackGameContextType | undefined>(undefined);
+const BlackjackGameContext = createContext<
+  BlackjackGameContextType | undefined
+>(undefined);
 
 export function BlackjackGameProvider({ children }: { children: ReactNode }) {
   const [store] = useState(() => new GameStore());
@@ -136,7 +156,9 @@ export function BlackjackGameProvider({ children }: { children: ReactNode }) {
 export function useBlackjackGame() {
   const context = useContext(BlackjackGameContext);
   if (!context) {
-    throw new Error("useBlackjackGame must be used within BlackjackGameProvider");
+    throw new Error(
+      "useBlackjackGame must be used within BlackjackGameProvider",
+    );
   }
 
   const { store } = context;
@@ -145,7 +167,7 @@ export function useBlackjackGame() {
   const snapshot = useSyncExternalStore(
     store.subscribe,
     store.getSnapshot,
-    store.getSnapshot
+    store.getSnapshot,
   );
 
   return {
@@ -155,8 +177,9 @@ export function useBlackjackGame() {
     gameState: snapshot.gameState,
 
     // Actions
-    startGame: (playerName: string, bankroll: number) => store.addPlayer(playerName, bankroll),
-    placeBet: (amount: number) => store.placeBet(amount),
+    startGame: (playerName: string, bankroll: number) =>
+      store.addPlayer(playerName, bankroll),
+    placeBet: (bets: number | number[]) => store.placeBet(bets),
     playAction: (action: ActionType) => store.playAction(action),
     takeInsurance: (handIndex: number) => store.takeInsurance(handIndex),
     declineInsurance: (handIndex: number) => store.declineInsurance(handIndex),

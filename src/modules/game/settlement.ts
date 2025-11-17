@@ -90,8 +90,8 @@ export function determineOutcome(
     return rules.blackjackTie.outcome === "push"
       ? "push"
       : rules.blackjackTie.outcome === "win"
-      ? "blackjack"
-      : "lose";
+        ? "blackjack"
+        : "lose";
   }
 
   if (isPlayerBlackjack) {
@@ -228,7 +228,5 @@ export function settleRound(
   house: House,
   rules: CompleteRuleSet,
 ): SettlementResult[] {
-  return playerHands.map((hand) =>
-    settleHand(hand, dealerHand, house, rules)
-  );
+  return playerHands.map((hand) => settleHand(hand, dealerHand, house, rules));
 }

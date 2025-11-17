@@ -58,7 +58,10 @@ class BlackjackCLI {
       // Main game loop
       await this.gameLoop();
     } catch (error) {
-      if (error instanceof Error && error.message === "User force closed the prompt") {
+      if (
+        error instanceof Error &&
+        error.message === "User force closed the prompt"
+      ) {
         console.log("\n\nThanks for playing! 👋\n");
       } else {
         console.error("An error occurred:", error);
@@ -74,7 +77,7 @@ class BlackjackCLI {
       displayHeader(
         this.player.bank.balance,
         stats.roundNumber,
-        this.game.getCurrentRound()?.playerHands[0]?.betAmount
+        this.game.getCurrentRound()?.playerHands[0]?.betAmount,
       );
 
       // Get bet
@@ -120,7 +123,7 @@ class BlackjackCLI {
 
     console.log("\n" + "═".repeat(60));
     console.log(
-      `\n👋 Thanks for playing, ${this.player?.name}!\nFinal balance: $${this.player?.bank.balance.toFixed(2)}\n`
+      `\n👋 Thanks for playing, ${this.player?.name}!\nFinal balance: $${this.player?.bank.balance.toFixed(2)}\n`,
     );
 
     // Save audit trail
@@ -192,7 +195,7 @@ class BlackjackCLI {
     displayHeader(
       this.player.bank.balance,
       this.game.getStats().roundNumber,
-      round.playerHands[0]?.betAmount
+      round.playerHands[0]?.betAmount,
     );
 
     // Display dealer hand
@@ -300,9 +303,7 @@ class BlackjackCLI {
       displaySettlement(result, payout);
     }
 
-    console.log(
-      `\nNew balance: $${this.player?.bank.balance.toFixed(2)}`
-    );
+    console.log(`\nNew balance: $${this.player?.bank.balance.toFixed(2)}`);
   }
 
   private async pressEnterToContinue(): Promise<void> {
@@ -344,7 +345,11 @@ class BlackjackCLI {
       console.log(chalk.cyan("\n📊 Session Summary:"));
       console.log(chalk.white(`  Total Events: ${summary.totalEvents}`));
       console.log(chalk.white(`  Total Rounds: ${summary.totalRounds}`));
-      console.log(chalk.white(`  Duration: ${summary.firstEvent ? new Date(summary.lastEvent!).getTime() - new Date(summary.firstEvent).getTime() : 0}ms\n`));
+      console.log(
+        chalk.white(
+          `  Duration: ${summary.firstEvent ? new Date(summary.lastEvent!).getTime() - new Date(summary.firstEvent).getTime() : 0}ms\n`,
+        ),
+      );
     } catch (error) {
       console.log(chalk.red(`\n❌ Error saving audit trail: ${error}\n`));
     }

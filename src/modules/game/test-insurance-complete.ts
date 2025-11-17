@@ -40,7 +40,9 @@ console.log("Test 1: Insurance with dealer blackjack");
     const insuranceResult = round.resolveInsurance(house);
 
     console.log(`  Dealer has blackjack: ${insuranceResult.dealerBlackjack}`);
-    console.log(`  Insurance payout: $${insuranceResult.insuranceResults[0].payout}`);
+    console.log(
+      `  Insurance payout: $${insuranceResult.insuranceResults[0].payout}`,
+    );
     console.log(`  Player balance after resolution: $${playerBank.balance}`);
 
     if (insuranceResult.dealerBlackjack) {
@@ -109,9 +111,15 @@ console.log("Test 2: Multiple players with insurance decisions");
     // Player 3 takes insurance
     round.takeInsurance(2);
 
-    console.log(`\n  Player 1 has insurance: ${round.playerHands[0].hasInsurance}`);
-    console.log(`  Player 2 has insurance: ${round.playerHands[1].hasInsurance}`);
-    console.log(`  Player 3 has insurance: ${round.playerHands[2].hasInsurance}`);
+    console.log(
+      `\n  Player 1 has insurance: ${round.playerHands[0].hasInsurance}`,
+    );
+    console.log(
+      `  Player 2 has insurance: ${round.playerHands[1].hasInsurance}`,
+    );
+    console.log(
+      `  Player 3 has insurance: ${round.playerHands[2].hasInsurance}`,
+    );
 
     // Resolve
     const results = round.resolveInsurance(house);
@@ -120,7 +128,7 @@ console.log("Test 2: Multiple players with insurance decisions");
 
     results.insuranceResults.forEach((result, idx) => {
       console.log(
-        `  Player ${idx + 1}: Had insurance: ${result.hadInsurance}, Payout: $${result.payout}`
+        `  Player ${idx + 1}: Had insurance: ${result.hadInsurance}, Payout: $${result.payout}`,
       );
     });
 
@@ -155,9 +163,13 @@ console.log("Test 3: No insurance when dealer doesn't show Ace");
   if (round.dealerHand.upCard.rank !== "A") {
     const expectedState = "player_turn";
     if (round.state === expectedState) {
-      console.log(`  ✅ PASS - Skipped insurance, went straight to player_turn\n`);
+      console.log(
+        `  ✅ PASS - Skipped insurance, went straight to player_turn\n`,
+      );
     } else {
-      console.log(`  ❌ FAIL - Expected ${expectedState}, got ${round.state}\n`);
+      console.log(
+        `  ❌ FAIL - Expected ${expectedState}, got ${round.state}\n`,
+      );
     }
   } else {
     console.log(`  ⚠️  SKIP - Dealer shows Ace\n`);

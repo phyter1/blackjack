@@ -46,7 +46,8 @@ export const dasRule = (allowed: boolean) => {
 };
 
 export const DOUBLE_ON_TWO_RULE = "double_on_two" as const;
-export type DoubleOnTwoRule = { // Fixed typo
+export type DoubleOnTwoRule = {
+  // Fixed typo
   type: typeof DOUBLE_ON_TWO_RULE;
   allowed: boolean;
   range?: [number, number];
@@ -124,9 +125,7 @@ export type BlackjackPayoutRule = {
   type: typeof BLACKJACK_PAYOUT_RULE;
   function: (bet: number) => number;
 };
-export const blackjackPayoutRule = (
-  fn: (bet: number) => number,
-) => {
+export const blackjackPayoutRule = (fn: (bet: number) => number) => {
   return {
     type: BLACKJACK_PAYOUT_RULE,
     function: fn,
@@ -389,7 +388,8 @@ export class RuleSet {
 
     const maxSplit = this.rules.get(MAX_SPLIT_RULE) as MaxSplitRule;
     if (maxSplit) {
-      if (maxSplit.times === 1) edge += 0.03; // Only one split allowed
+      if (maxSplit.times === 1)
+        edge += 0.03; // Only one split allowed
       else if (maxSplit.times === 2) edge += 0.01; // Two splits (3 hands)
       // 3 splits (4 hands) is baseline
     }
@@ -413,9 +413,11 @@ export class RuleSet {
     ) as BlackjackPayoutRule;
     if (blackjackPayout) {
       const payout = blackjackPayout.function(100);
-      if (Math.abs(payout - 120) < 0.01) { // 6:5
+      if (Math.abs(payout - 120) < 0.01) {
+        // 6:5
         edge += 1.39;
-      } else if (Math.abs(payout - 100) < 0.01) { // 1:1 (even money)
+      } else if (Math.abs(payout - 100) < 0.01) {
+        // 1:1 (even money)
         edge += 2.27;
       }
       // 3:2 (150) is baseline
@@ -586,8 +588,10 @@ export class RuleSet {
       if (hasSoftAce) {
         // Soft hands can be doubled if either the soft or hard value is in range
         const hardValue = handValue - 10; // Convert soft ace to hard
-        return (handValue >= min && handValue <= max) ||
-          (hardValue >= min && hardValue <= max);
+        return (
+          (handValue >= min && handValue <= max) ||
+          (hardValue >= min && hardValue <= max)
+        );
       } else {
         // Hard hands must be in range
         return handValue >= min && handValue <= max;
@@ -646,9 +650,8 @@ export class RuleSet {
     }
 
     // Check if any surrender is allowed
-    const earlySurrender = this.getRule<EarlySurrenderRule>(
-      EARLY_SURRENDER_RULE,
-    );
+    const earlySurrender =
+      this.getRule<EarlySurrenderRule>(EARLY_SURRENDER_RULE);
     const lateSurrender = this.getRule<LateSurrenderRule>(LATE_SURRENDER_RULE);
 
     if (earlySurrender?.allowed) {
@@ -679,23 +682,14 @@ export const COMMON_RULESETS = {
 
   // Standard Vegas Strip
   vegasStrip: () =>
-    new RuleSet()
-      .setDealerStand("s17")
-      .setDeckCount(4)
-      .setSurrender("late"),
+    new RuleSet().setDealerStand("s17").setDeckCount(4).setSurrender("late"),
 
   // Atlantic City
   atlanticCity: () =>
-    new RuleSet()
-      .setDealerStand("s17")
-      .setDeckCount(8)
-      .setSurrender("late"),
+    new RuleSet().setDealerStand("s17").setDeckCount(8).setSurrender("late"),
 
   // Downtown Vegas
-  downtown: () =>
-    new RuleSet()
-      .setDealerStand("h17")
-      .setDeckCount(2),
+  downtown: () => new RuleSet().setDealerStand("h17").setDeckCount(2),
 
   // Single deck
   singleDeck: () =>

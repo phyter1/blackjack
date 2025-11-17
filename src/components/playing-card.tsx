@@ -53,10 +53,11 @@ export function PlayingCard({
         className={cn(
           "relative rounded-lg border-2 border-amber-900 shadow-lg transition-all duration-300",
           sizeClasses[size],
-          className
+          className,
         )}
         style={{
-          background: "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)",
+          background:
+            "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)",
         }}
       >
         {/* Ornate pattern */}
@@ -89,7 +90,7 @@ export function PlayingCard({
       className={cn(
         "relative rounded-lg border-2 border-gray-800 shadow-lg bg-amber-50 transition-all duration-300 hover:shadow-xl",
         sizeClasses[size],
-        className
+        className,
       )}
     >
       {/* Vintage paper texture overlay */}
@@ -97,7 +98,7 @@ export function PlayingCard({
         className="absolute inset-0 rounded-lg opacity-10"
         style={{
           backgroundImage:
-            "url('data:image/svg+xml,%3Csvg width=\"100\" height=\"100\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cfilter id=\"noise\"%3E%3CfeTurbulence type=\"fractalNoise\" baseFrequency=\"0.9\" numOctaves=\"4\" /%3E%3C/filter%3E%3Crect width=\"100\" height=\"100\" filter=\"url(%23noise)\" opacity=\"0.3\"/%3E%3C/svg%3E')",
+            'url(\'data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.3"/%3E%3C/svg%3E\')',
         }}
       />
 
@@ -109,17 +110,17 @@ export function PlayingCard({
         >
           {card.rank}
         </span>
-        <span className={cn("font-serif", fontSize[size].rank)} style={{ color: suitColor }}>
+        <span
+          className={cn("font-serif", fontSize[size].rank)}
+          style={{ color: suitColor }}
+        >
           {suitSymbol}
         </span>
       </div>
 
       {/* Center suit - subtle background */}
       <div className="absolute inset-0 flex items-center justify-center">
-        <span
-          className="text-6xl opacity-10"
-          style={{ color: suitColor }}
-        >
+        <span className="text-6xl opacity-10" style={{ color: suitColor }}>
           {suitSymbol}
         </span>
       </div>
@@ -135,7 +136,10 @@ export function PlayingCard({
         >
           {card.rank}
         </span>
-        <span className={cn("font-serif", fontSize[size].rank)} style={{ color: suitColor }}>
+        <span
+          className={cn("font-serif", fontSize[size].rank)}
+          style={{ color: suitColor }}
+        >
           {suitSymbol}
         </span>
       </div>

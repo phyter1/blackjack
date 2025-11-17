@@ -93,10 +93,10 @@ export const cutDeck = (deck: Deck): Deck => {
   // Cut the deck at a random position between 20% and 80% of the deck length, weighted towards the center
   const minCut = Math.floor(deck.length * 0.2);
   const maxCut = Math.floor(deck.length * 0.8);
-  const cutPosition = Math.floor(
-    (Math.random() * Math.random() * Math.random()) *
-      (maxCut - minCut),
-  ) + minCut;
+  const cutPosition =
+    Math.floor(
+      Math.random() * Math.random() * Math.random() * (maxCut - minCut),
+    ) + minCut;
 
   return [...deck.slice(cutPosition), ...deck.slice(0, cutPosition)];
 };
@@ -135,7 +135,7 @@ export const getHandValue = (hand: Array<Card>): number => {
     if (["J", "Q", "K"].includes(card.rank)) {
       value += 10;
     } else if (card.rank === "A") {
-      value += (value + 11 > 21 && aceCount > 0) ? 1 : 11;
+      value += value + 11 > 21 && aceCount > 0 ? 1 : 11;
       aceCount += 1;
     } else {
       value += parseInt(card.rank, 10);
@@ -182,10 +182,7 @@ export type Action = {
   playerHandIndex: number;
 };
 
-export const nextAction = (
-  action: Action,
-  round: Round,
-): Round => {
+export const nextAction = (action: Action, round: Round): Round => {
   // Placeholder for the function that determines the next action
   // This function should be implemented based on game logic
 
@@ -260,16 +257,8 @@ export const nextAction = (
 
       const newPlayerHands = [...round.playerHands];
       // Replace the original hand with the first hand and add the second hand
-      newPlayerHands.splice(
-        action.playerHandIndex,
-        1,
-        firstHand,
-      );
-      newPlayerHands.splice(
-        action.playerHandIndex + 1,
-        0,
-        secondHand,
-      );
+      newPlayerHands.splice(action.playerHandIndex, 1, firstHand);
+      newPlayerHands.splice(action.playerHandIndex + 1, 0, secondHand);
 
       round = {
         ...round,
