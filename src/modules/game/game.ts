@@ -54,7 +54,7 @@ export class Game {
     this.shoe = new Shoe(numDecks, penetration, testStack);
 
     // Initialize audit logger for this session
-    const logger = initAuditLogger({});
+    const logger = initAuditLogger({ enableFileLog: true, enableConsoleLog: true, logFilePath: "./audit_log.csv" });
     this.sessionId = logger.getSessionId();
 
     // Audit log session start

@@ -1,3 +1,4 @@
+// import { writeFileSync } from "node:fs";
 import type { AuditEvent, AuditEventType } from "./types";
 
 export interface AuditLoggerOptions {
@@ -21,12 +22,27 @@ export class AuditLogger {
   constructor(options: AuditLoggerOptions = {}) {
     this.sessionId = options.sessionId ?? `session-${crypto.randomUUID()}`;
     this.enableConsoleLog = options.enableConsoleLog ?? false;
-    this.enableFileLog = options.enableFileLog ?? false;
+    this.enableFileLog = false //  options.enableFileLog ?? false;
     this.logFilePath = options.logFilePath;
+    // this.initLogFile();
   }
 
+  // private initLogFile(): void {
+  //   if (this.enableFileLog && this.logFilePath) {
+  //     // const header = "id,timestamp,type,sessionId,roundNumber,data\n";
+  //     // writeFileSync(this.logFilePath, header, { flag: "w" });
+  //   }
+  // }
+
+  // private appendToLogFile(event: AuditEvent): void {
+  //   if (this.enableFileLog && this.logFilePath) {
+  //     // const row = `${event.id},${event.timestamp.toISOString()},${event.type},${event.sessionId},${event.roundNumber ?? ""},"${JSON.stringify(event)}"\n`;
+  //     // writeFileSync(this.logFilePath, row, { flag: "a" });
+  //   }
+  // }
+
   /**
-   * Log an audit event
+   * Log an audit eventd
    */
   log<T extends AuditEvent>(
     type: AuditEventType,
@@ -45,6 +61,10 @@ export class AuditLogger {
 
     if (this.enableConsoleLog) {
       console.log(`[AUDIT] ${type}:`, event);
+    }
+
+    if (this.enableFileLog) {
+      // this.appendToLogFile(event);
     }
 
     return event;
