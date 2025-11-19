@@ -21,7 +21,7 @@ export function InsurancePhase({
     : "0";
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 pb-20">
       <div className="text-amber-200 font-serif text-lg">
         Dealer shows Ace - Take Insurance?
         {round && round.playerHands.length > 1 && (

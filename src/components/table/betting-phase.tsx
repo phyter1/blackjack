@@ -116,7 +116,7 @@ export function BettingPhase({
   const hasInvalidBets = handBets.some((bet) => bet > 0 && bet < 10);
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-6 pb-20">
       {isTrainerActive && (
         <div className="px-4 py-2 bg-blue-950/80 border border-blue-500/50 rounded-lg text-blue-200 text-sm">
           🎓 <strong>Practice Mode</strong> - Using virtual balance, real

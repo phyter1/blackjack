@@ -102,7 +102,7 @@ export function BettingControls({
   const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
 
   return (
-    <div className="flex flex-col gap-4 p-6 bg-gray-800 rounded-lg">
+    <div className="flex flex-col gap-4 p-6 pb-20 bg-gray-800 rounded-lg">
       <div className="flex items-center justify-between">
         <span className="text-white font-semibold">Balance:</span>
         <span className="text-green-400 text-xl font-bold">${balance}</span>
