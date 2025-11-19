@@ -2,7 +2,11 @@
 
 import { cn } from "@/lib/utils";
 import { Card as UICard } from "@/components/ui/card";
-import type { Card, Rank, Suit } from "@/modules/game/cards";
+import type { Card } from "@/modules/game/cards";
+import { RANKS, SUITS } from "@/modules/game/cards";
+
+type Suit = (typeof SUITS)[number];
+type Rank = (typeof RANKS)[number];
 
 interface DiscardPileProps {
   discardPile: Card[];
@@ -22,22 +26,6 @@ function getCardDisplay(card: Card): {
     spades: "♠",
   };
 
-  const rankDisplay: Record<Rank, string> = {
-    ace: "A",
-    two: "2",
-    three: "3",
-    four: "4",
-    five: "5",
-    six: "6",
-    seven: "7",
-    eight: "8",
-    nine: "9",
-    ten: "10",
-    jack: "J",
-    queen: "Q",
-    king: "K",
-  };
-
   const color =
     card.suit === "hearts" || card.suit === "diamonds"
       ? "text-red-500"
@@ -46,7 +34,7 @@ function getCardDisplay(card: Card): {
   return {
     symbol: suitSymbols[card.suit],
     color,
-    rank: rankDisplay[card.rank],
+    rank: card.rank,
     suit: card.suit,
   };
 }
@@ -59,27 +47,11 @@ export function DiscardPile({ discardPile }: DiscardPileProps) {
   // Calculate card value distribution for statistics
   const distribution = discardPile.reduce(
     (acc, card) => {
-      const value = ["jack", "queen", "king"].includes(card.rank)
+      const value = ["J", "Q", "K", "10"].includes(card.rank)
         ? "10+"
-        : card.rank === "ace"
+        : card.rank === "A"
           ? "A"
-          : card.rank === "two"
-            ? "2"
-            : card.rank === "three"
-              ? "3"
-              : card.rank === "four"
-                ? "4"
-                : card.rank === "five"
-                  ? "5"
-                  : card.rank === "six"
-                    ? "6"
-                    : card.rank === "seven"
-                      ? "7"
-                      : card.rank === "eight"
-                        ? "8"
-                        : card.rank === "nine"
-                          ? "9"
-                          : "10+";
+          : card.rank; // For ranks 2-9, use the rank directly
 
       acc[value] = (acc[value] || 0) + 1;
       return acc;

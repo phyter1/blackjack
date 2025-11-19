@@ -1,5 +1,5 @@
-import type { Card, Stack } from "./cards";
-import { RANKS, SUITS } from "./cards";
+import type { Card, Stack } from "../cards";
+import { RANKS, SUITS } from "../cards";
 
 /**
  * Test deck builder for creating deterministic card sequences

@@ -27,7 +27,6 @@ export function BlackjackApp() {
     const testMode = searchParams.get("test-mode");
     if (testMode && typeof window !== "undefined") {
       sessionStorage.setItem("test-mode", testMode);
-      console.log(`Test mode enabled: ${testMode}`);
     }
 
     // Check if user is already logged in

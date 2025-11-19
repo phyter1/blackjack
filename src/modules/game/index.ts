@@ -99,4 +99,4 @@ export {
   createTestDeck,
   parseTestScenario,
   createCard,
-} from "./test-deck-builder";
+} from "./__tests__/test-deck-builder";
