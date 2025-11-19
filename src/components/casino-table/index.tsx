@@ -90,7 +90,7 @@ export function CasinoTable({
   );
 
   // Insurance hook
-  const { handsPendingInsurance, insuranceHandIndex, handleInsuranceAction } =
+  const { insuranceHandIndex, handleInsuranceAction } =
     useInsurance({
       game,
       phase,
