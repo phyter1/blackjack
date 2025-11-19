@@ -253,7 +253,7 @@ export function UserDashboard({
             </div>
             {/* <Button
               onClick={() => window.location.href = '/trainer'}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
+              className="w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold"
             >
               🎓 Practice Mode (Trainer)
             </Button> */}

@@ -31,7 +31,7 @@ export function ShoeIndicator({
   );
 
   return (
-    <Card className="p-4 bg-gradient-to-br from-gray-900 to-gray-800 border-gray-700">
+    <Card className="p-4 bg-linear-to-br from-gray-900 to-gray-800 border-gray-700">
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-semibold text-gray-300">Shoe</h3>
@@ -46,7 +46,7 @@ export function ShoeIndicator({
           <div className="relative w-24 h-28">
             {/* Back of shoe (angled plate) */}
             <div
-              className="absolute inset-0 bg-gradient-to-b from-gray-700 to-gray-800 rounded-sm"
+              className="absolute inset-0 bg-linear-to-b from-gray-700 to-gray-800 rounded-sm"
               style={{
                 transform: "perspective(200px) rotateY(-20deg) rotateX(5deg)",
                 transformOrigin: "center",
@@ -65,7 +65,7 @@ export function ShoeIndicator({
                     <div
                       key={i}
                       className={cn(
-                        "absolute inset-0 bg-gradient-to-br rounded-sm border border-gray-600",
+                        "absolute inset-0 bg-linear-to-br rounded-sm border border-gray-600",
                         isComplete
                           ? "from-red-900 to-red-950"
                           : "from-blue-900 to-blue-950",
@@ -131,7 +131,7 @@ export function ShoeIndicator({
           <div className="relative h-3 bg-gray-700 rounded-full overflow-hidden">
             {/* Dealt cards portion */}
             <div
-              className="absolute left-0 top-0 h-full bg-gradient-to-r from-red-600 to-red-500 transition-all duration-500"
+              className="absolute left-0 top-0 h-full bg-linear-to-r from-red-600 to-red-500 transition-all duration-500"
               style={{ width: `${dealtPercentage}%` }}
             />
 
@@ -146,7 +146,7 @@ export function ShoeIndicator({
 
             {/* Remaining cards */}
             <div
-              className="absolute inset-y-0 right-0 bg-gradient-to-r from-blue-600 to-blue-500 opacity-30"
+              className="absolute inset-y-0 right-0 bg-linear-to-r from-blue-600 to-blue-500 opacity-30"
               style={{ width: `${100 - dealtPercentage}%` }}
             />
           </div>

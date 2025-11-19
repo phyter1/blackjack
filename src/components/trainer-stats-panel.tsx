@@ -32,7 +32,7 @@ export function TrainerStatsPanel() {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-slate-950/90 to-slate-900/90 border-slate-500/20">
+    <Card className="bg-linear-to-br from-slate-950/90 to-slate-900/90 border-slate-500/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-slate-200">
           <BarChart3 className="w-5 h-5" />

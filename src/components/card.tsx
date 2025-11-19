@@ -27,7 +27,7 @@ export function Card({ card, hidden = false, className }: CardProps) {
       <div
         className={cn(
           "relative h-32 w-24 rounded-lg border-2 border-gray-300",
-          "bg-gradient-to-br from-blue-600 to-blue-800",
+          "bg-linear-to-br from-blue-600 to-blue-800",
           "shadow-lg",
           "flex items-center justify-center",
           className,

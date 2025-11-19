@@ -3,6 +3,7 @@ const DIAMONDS = "diamonds" as const;
 const CLUBS = "clubs" as const;
 const SPADES = "spades" as const;
 export const SUITS = [HEARTS, DIAMONDS, CLUBS, SPADES] as const;
+export type Suit = (typeof SUITS)[number];
 
 const TWO = "2" as const;
 const THREE = "3" as const;
@@ -32,6 +33,7 @@ export const RANKS = [
   KING,
   ACE,
 ] as const;
+export type Rank = (typeof RANKS)[number];
 
 export type Card = {
   suit: (typeof SUITS)[number];

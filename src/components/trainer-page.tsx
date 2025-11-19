@@ -145,7 +145,7 @@ export function TrainerPage() {
   // No player yet - show setup screen
   if (!currentPlayer) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-800 to-green-900">
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-green-800 to-green-900">
         <Card className="w-96">
           <CardHeader>
             <CardTitle>Blackjack Trainer Mode</CardTitle>
@@ -177,7 +177,7 @@ export function TrainerPage() {
   const currentBet = getCurrentBet();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-800 to-green-900 p-4">
+    <div className="min-h-screen bg-linear-to-br from-green-800 to-green-900 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Header with back button */}
         <div className="mb-4 flex items-center justify-between">
@@ -214,7 +214,7 @@ export function TrainerPage() {
             {isActive && <StrategyFeedback />}
 
             {/* Game Table */}
-            <Card className="bg-gradient-to-br from-green-700/50 to-green-800/50 border-amber-600/30">
+            <Card className="bg-linear-to-br from-green-700/50 to-green-800/50 border-amber-600/30">
               <CardContent className="p-8">
                 <div className="space-y-8">
                   {/* Dealer */}

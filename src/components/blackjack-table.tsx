@@ -144,7 +144,7 @@ export function BlackjackTable() {
   const currentBet = getCurrentBet();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-800 to-green-900 p-4">
+    <div className="min-h-screen bg-linear-to-br from-green-800 to-green-900 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Stats */}
         <GameStats

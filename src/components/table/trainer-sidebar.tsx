@@ -14,7 +14,7 @@ interface TrainerSidebarProps {
 
 export function TrainerSidebar({ isActive, onClose }: TrainerSidebarProps) {
   return (
-    <div className="fixed right-0 top-0 h-full w-96 bg-gradient-to-l from-black/95 to-black/85 border-l border-blue-500/30 p-4 overflow-y-auto z-50 backdrop-blur-sm">
+    <div className="fixed right-0 top-0 h-full w-96 bg-linear-to-l from-black/95 to-black/85 border-l border-blue-500/30 p-4 overflow-y-auto z-50 backdrop-blur-sm">
       <div className="space-y-4">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-blue-200 flex items-center gap-2">

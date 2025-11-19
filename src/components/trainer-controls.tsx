@@ -45,7 +45,7 @@ export function TrainerControls() {
   };
 
   return (
-    <Card className="bg-gradient-to-br from-blue-950/90 to-purple-950/90 border-blue-500/20">
+    <Card className="bg-linear-to-br from-blue-950/90 to-purple-950/90 border-blue-500/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-blue-200">
           <GraduationCap className="w-5 h-5" />

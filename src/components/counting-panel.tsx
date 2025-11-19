@@ -70,7 +70,7 @@ export function CountingPanel() {
 
   return (
     <div className="space-y-3">
-      <Card className="bg-gradient-to-br from-purple-950/90 to-blue-950/90 border-purple-500/20">
+      <Card className="bg-linear-to-br from-purple-950/90 to-blue-950/90 border-purple-500/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-purple-200">
             <Calculator className="w-5 h-5" />
