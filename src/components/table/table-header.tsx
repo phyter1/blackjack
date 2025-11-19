@@ -26,7 +26,7 @@ export function TableHeader({
     <div className="relative z-10 flex justify-between items-center p-4 text-amber-100">
       <div className="flex items-center gap-4">
         <h1 className="text-2xl font-serif font-bold text-amber-200">
-          ♠ BLACKJACK ♠
+          ♠ 21 ♠
         </h1>
       </div>
 
