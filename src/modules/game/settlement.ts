@@ -1,7 +1,7 @@
 import type { Bank, Escrow, House } from "./bank";
 import type { DealerHand } from "./dealer-hand";
 import type { Hand } from "./hand";
-import type { CompleteRuleSet } from "./rules";
+import type { CompleteRuleSet } from "./rules/index";
 
 export type HandOutcome =
   | "blackjack" // Player natural blackjack (pays 3:2 or 6:5)

@@ -1,6 +1,6 @@
 import { ACTION_HIT, ACTION_STAND } from "./action";
 import { Game } from "./game";
-import { COMMON_RULESETS } from "./rules";
+import { COMMON_RULESETS } from "./rules/index";
 
 console.log("=== Blackjack Game Example ===\n");
 

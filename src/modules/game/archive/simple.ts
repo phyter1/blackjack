@@ -1,7 +1,7 @@
 import { Bank } from "./bank";
 import type { Card } from "./cards";
 import { Hand } from "./hand";
-import type { RuleSet } from "./rules";
+import type { RuleSet } from "./rules/index";
 
 class PlayerHand extends Hand {
   shoeId: string;

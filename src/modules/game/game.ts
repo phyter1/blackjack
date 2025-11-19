@@ -3,7 +3,7 @@ import { House } from "./bank";
 import type { Player } from "./player";
 import { PlayerManager } from "./player";
 import { Round, type PlayerRoundInfo } from "./round";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import type { SettlementResult } from "./settlement";
 import { Shoe } from "./shoe";
 import type { Stack } from "./cards";

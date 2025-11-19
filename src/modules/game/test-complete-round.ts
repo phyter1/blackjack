@@ -1,7 +1,7 @@
 import { ACTION_HIT, ACTION_STAND } from "./action";
 import { Bank, House } from "./bank";
 import { Round, type PlayerRoundInfo } from "./round";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import { Shoe } from "./shoe";
 
 console.log("=== Complete Blackjack Round Test ===\n");

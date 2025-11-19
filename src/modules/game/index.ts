@@ -23,7 +23,7 @@ export {
 export type { HandOutcome, SettlementResult } from "./settlement";
 
 // Rules & Configuration
-export { RuleSet, COMMON_RULESETS } from "./rules";
+export { RuleSet, COMMON_RULESETS } from "./rules/index";
 export type {
   CompleteRuleSet,
   BlackjackRule,
@@ -41,7 +41,7 @@ export type {
   BlackjackTieRule,
   CharlieRule,
   Dealer22PushRule,
-} from "./rules";
+} from "./rules/index";
 
 // Actions
 export {

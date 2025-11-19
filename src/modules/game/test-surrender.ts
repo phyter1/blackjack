@@ -2,7 +2,7 @@ import { ACTION_HIT, ACTION_SURRENDER } from "./action";
 import { Bank, House } from "./bank";
 import { Hand } from "./hand";
 import { Round, type PlayerRoundInfo } from "./round";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import { DealerHand } from "./dealer-hand";
 import { settleHand } from "./settlement";
 import { Shoe } from "./shoe";
