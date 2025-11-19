@@ -247,7 +247,6 @@ export function BettingPhase({
               variant="outline"
               className="border-purple-700 bg-purple-950/50 text-purple-200 hover:bg-purple-900 font-serif"
               disabled={
-                !previousBets ||
                 previousBets.reduce((sum, bet) => sum + bet, 0) * 2 >
                   availableBalance
               }
