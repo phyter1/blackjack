@@ -1,17 +1,27 @@
 "use client";
 
+import React from "react";
 import type { Round } from "@/modules/game/round";
 import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
 import { cn } from "@/lib/utils";
+import { useSettings } from "@/hooks/use-settings";
 
 interface PlayerAreaProps {
   round: Round | undefined;
   phase: GamePhase;
   userName: string;
+  version?: number;
 }
 
-export function PlayerArea({ round, phase, userName }: PlayerAreaProps) {
+export function PlayerArea({ round, phase, userName, version }: PlayerAreaProps) {
+  const { settings } = useSettings();
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  React.useEffect(() => {
+    forceUpdate();
+  }, [version]);
+
   if (!round) return null;
 
   return (
@@ -36,10 +46,10 @@ export function PlayerArea({ round, phase, userName }: PlayerAreaProps) {
               </div>
             )}
 
-            <div className="relative flex" style={{ minHeight: "146px" }}>
+            <div className="relative flex" style={{ minHeight: "146px" }} key={`hand-${handIdx}`}>
               {hand.cards.map((card, cardIdx) => (
                 <div
-                  key={`player-${handIdx}-${cardIdx}`}
+                  key={`card-${cardIdx}-${card.rank}-${card.suit}`}
                   className="transition-all duration-300"
                   style={{
                     marginLeft: cardIdx > 0 ? "-55px" : "0",
@@ -49,7 +59,7 @@ export function PlayerArea({ round, phase, userName }: PlayerAreaProps) {
                   <AnimatedCard
                     card={card}
                     size="xl"
-                    dealDelay={cardIdx * 200 + 100}
+                    dealDelay={settings.animations.enableAnimations ? cardIdx * settings.animations.dealingSpeed + 100 : 0}
                   />
                 </div>
               ))}

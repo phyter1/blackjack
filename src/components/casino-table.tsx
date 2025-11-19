@@ -13,6 +13,7 @@ import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
 import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import { createTestDeck, parseTestScenario } from "@/modules/game";
 import { useTrainerMode } from "@/hooks/use-trainer-mode";
+import { useSettings } from "@/hooks/use-settings";
 
 // Import new components
 import type { GamePhase } from "./table/types";
@@ -25,6 +26,7 @@ import { InsurancePhase } from "./table/insurance-phase";
 import { PlayingPhase } from "./table/playing-phase";
 import { SettlingPhase } from "./table/settling-phase";
 import { TrainerSidebar } from "./table/trainer-sidebar";
+import { SettingsDialog } from "./settings-dialog";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -53,10 +55,12 @@ export function CasinoTable({
   const [showCount, setShowCount] = useState(true);
   const [showTrainerSidebar, setShowTrainerSidebar] = useState(false);
   const [currentBalance, setCurrentBalance] = useState(0); // Track current balance for UI updates
+  const [roundVersion, setRoundVersion] = useState(0); // Force re-renders when round updates
   const decisionTracker = useRef<DecisionTracker | null>(null);
   const cardCounter = useRef<HiLoCounter | null>(null);
   const originalBalanceRef = useRef<number>(0);
   const searchParams = useSearchParams();
+  const { settings } = useSettings();
 
   // Trainer mode hook
   const {
@@ -228,8 +232,13 @@ export function CasinoTable({
       setCurrentBalance(player.bank.balance);
 
       // Update round state to show new cards
-      setCurrentRound(game.getCurrentRound());
+      const roundAfterBet = game.getCurrentRound();
+      // Simply update the round and increment version to force re-render
+      setCurrentRound(roundAfterBet);
       setCurrentActions(game.getAvailableActions() ?? []);
+      // Use roundVersion to trigger re-render
+      // This is the key - incrementing version will cause useEffect in components to fire
+      setRoundVersion(v => v + 1);
 
       setRoundsPlayed((prev) => prev + 1);
       setPhase("dealing");
@@ -268,6 +277,19 @@ export function CasinoTable({
         }
       }
 
+      // Calculate total dealing time based on the number of cards and dealing speed
+      // Typically 2 cards for dealer + 2 cards per player hand
+      const round = game.getCurrentRound();
+      let totalCards = 2; // Dealer gets 2 cards
+      if (round) {
+        totalCards += round.playerHands.length * 2; // Each hand gets 2 cards initially
+      }
+
+      // Calculate wait time: max card index * dealing speed + buffer time for animation
+      const dealingTime = settings.animations.enableAnimations
+        ? Math.max(totalCards * settings.animations.dealingSpeed, 1000) + 300 // Add 300ms buffer
+        : 100; // Minimal delay if animations are disabled
+
       // After dealing animation, check for insurance or proceed to playing
       setTimeout(() => {
         const round = game.getCurrentRound();
@@ -278,7 +300,7 @@ export function CasinoTable({
         } else {
           setPhase("settling");
         }
-      }, 1000);
+      }, dealingTime);
     } catch (error) {
       console.error("Failed to start round:", error);
     }
@@ -389,8 +411,47 @@ export function CasinoTable({
       const newActions = game.getAvailableActions() ?? [];
 
       // Update round state to show new cards immediately
-      setCurrentRound(newRound);
+      // Create a deep clone of the round to force React to see the changes
+      if (newRound) {
+        // Deep clone the round object to force React to see the changes
+        // We need to preserve ALL properties including betAmount, handValue, etc.
+        const clonedRound = {
+          ...newRound,
+          playerHands: newRound.playerHands.map(hand => ({
+            ...hand,
+            cards: [...hand.cards], // Create new array reference for cards
+            betAmount: hand.betAmount,
+            handValue: hand.handValue,
+            hardValue: hand.hardValue,
+            isSoft: hand.isSoft,
+            state: hand.state,
+            id: hand.id,
+            playerId: hand.playerId,
+            canSplit: hand.canSplit,
+            isDoubled: hand.isDoubled,
+            isSplit: hand.isSplit
+          })),
+          dealerHand: {
+            ...newRound.dealerHand,
+            cards: [...newRound.dealerHand.cards],
+            handValue: newRound.dealerHand.handValue,
+            hardValue: newRound.dealerHand.hardValue,
+            isSoft: newRound.dealerHand.isSoft,
+            upCard: newRound.dealerHand.upCard
+          },
+          // Preserve other round properties
+          state: newRound.state,
+          id: newRound.id,
+          currentHandIndex: newRound.currentHandIndex
+        };
+        setCurrentRound(clonedRound as any);
+      } else {
+        setCurrentRound(newRound);
+      }
       setCurrentActions(newActions);
+      // Use roundVersion to trigger re-render
+      // This is the key - incrementing version will cause useEffect in components to fire
+      setRoundVersion(v => v + 1);
 
       // Check if we're still in player turn with actions available
       if (newActions.length > 0 && newRound?.state === "player_turn") {
@@ -535,13 +596,17 @@ export function CasinoTable({
         // Dealer has blackjack - go directly to settling
         setTimeout(() => {
           setPhase("settling");
-          setCurrentRound(game.getCurrentRound());
+          const roundAfterInsurance = game.getCurrentRound();
+          setCurrentRound(roundAfterInsurance);
           setCurrentActions(game.getAvailableActions() ?? []);
+          setRoundVersion(v => v + 1);
         }, 500);
       } else {
         setPhase("playing");
-        setCurrentRound(game.getCurrentRound());
+        const roundAfterInsuranceDecline = game.getCurrentRound();
+        setCurrentRound(roundAfterInsuranceDecline);
         setCurrentActions(game.getAvailableActions() ?? []);
+        setRoundVersion(v => v + 1);
       }
     }
   };
@@ -577,10 +642,10 @@ export function CasinoTable({
       {/* Main playing area */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-12 p-8">
         {/* Dealer area */}
-        <DealerArea round={round} phase={phase} />
+        <DealerArea round={round} phase={phase} version={roundVersion} />
 
         {/* Player area */}
-        <PlayerArea round={round} phase={phase} userName={user.name} />
+        <PlayerArea round={round} phase={phase} userName={user.name} version={roundVersion} />
       </div>
 
       {/* Action area */}
@@ -626,6 +691,9 @@ export function CasinoTable({
           onClose={() => setShowTrainerSidebar(false)}
         />
       )}
+
+      {/* Settings Dialog */}
+      <SettingsDialog />
     </div>
   );
 }

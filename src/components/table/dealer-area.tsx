@@ -1,19 +1,29 @@
 "use client";
 
+import React from "react";
 import type { Round } from "@/modules/game/round";
 import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
+import { useSettings } from "@/hooks/use-settings";
 
 interface DealerAreaProps {
   round: Round | undefined;
   phase: GamePhase;
+  version?: number;
 }
 
-export function DealerArea({ round, phase }: DealerAreaProps) {
+export function DealerArea({ round, phase, version }: DealerAreaProps) {
+  const { settings } = useSettings();
+  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+
+  React.useEffect(() => {
+    forceUpdate();
+  }, [version]);
+
   if (!round) return null;
 
   const showingText = phase === "dealing" || phase === "playing" || phase === "insurance"
-    ? `Showing: ${round.dealerHand.upCard.rank}`
+    ? `Showing: ${round.dealerHand.upCard?.rank || round.dealerHand.cards[0]?.rank || ''}`
     : `Total: ${round.dealerHand.handValue}`;
 
   return (
@@ -23,7 +33,7 @@ export function DealerArea({ round, phase }: DealerAreaProps) {
       <div className="relative flex" style={{ minHeight: "146px" }}>
         {round.dealerHand.cards.map((card, idx) => (
           <div
-            key={`dealer-${card.rank}-${card.suit}-${idx}`}
+            key={`card-${idx}-${card.rank}-${card.suit}`}
             className="transition-all duration-300"
             style={{
               marginLeft: idx > 0 ? "-55px" : "0",
@@ -39,7 +49,7 @@ export function DealerArea({ round, phase }: DealerAreaProps) {
                   phase === "insurance")
               }
               size="xl"
-              dealDelay={idx * 200}
+              dealDelay={settings.animations.enableAnimations ? idx * settings.animations.dealingSpeed : 0}
             />
           </div>
         ))}
