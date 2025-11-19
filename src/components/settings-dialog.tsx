@@ -112,21 +112,7 @@ export function SettingsDialog({
               )}
 
               {/* Show Card Count Toggle */}
-              {onToggleCount !== undefined && (
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <Label htmlFor="show-count">Show Card Count</Label>
-                    <p className="text-xs text-muted-foreground">
-                      Display running and true count
-                    </p>
-                  </div>
-                  <Switch
-                    id="show-count"
-                    checked={showCount}
-                    onCheckedChange={onToggleCount}
-                  />
-                </div>
-              )}
+              {/* Card count display is currently not supported. Toggle removed. */}
             </div>
           )}
 
