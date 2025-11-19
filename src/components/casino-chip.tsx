@@ -75,4 +75,7 @@ export const CHIP_VALUES = [
   { value: 10, color: "#2563EB", accentColor: "#1E40AF" }, // Blue
   { value: 25, color: "#16A34A", accentColor: "#15803D" }, // Green
   { value: 100, color: "#1F2937", accentColor: "#111827" }, // Black
+  { value: 500, color: "#F59E0B", accentColor: "#B45309" }, // Gold
+  { value: 1000, color: "#8B5CF6", accentColor: "#6D28D9" }, // Purple
+  { value: 5000, color: "#14B8A6", accentColor: "#0D9488" }, // Teal
 ];
