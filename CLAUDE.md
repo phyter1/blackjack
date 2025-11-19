@@ -110,16 +110,20 @@ game.completeRound();
 
 ## Documentation
 
-- **[QUICK-START.md](QUICK-START.md)**: Game engine API
-- **[STATE-MACHINE-ARCHITECTURE.md](STATE-MACHINE-ARCHITECTURE.md)**: State management
-- **[MODULAR-RULES-ARCHITECTURE.md](MODULAR-RULES-ARCHITECTURE.md)**: Rules system
-- **[adr/](adr/)**: Architecture decisions
+All documentation is centralized in `docs/`:
+
+- **[docs/guides/quick-start.md](docs/guides/quick-start.md)**: Game engine API
+- **[docs/architecture/state-machine.md](docs/architecture/state-machine.md)**: State management
+- **[docs/architecture/modular-rules.md](docs/architecture/modular-rules.md)**: Rules system
+- **[docs/adr/](docs/adr/)**: Architecture decisions
+- **[docs/README.md](docs/README.md)**: Documentation index
 - **[README.md](README.md)**: Project overview
 
 ## Recent Changes (Nov 2025)
 
 **Phase 2**: Modularized rules, state machines, and components (50-60% size reduction)
 **Phase 3**: Added comprehensive documentation and ADRs
+**Phase 4**: Centralized all documentation in `docs/` directory
 
 ---
 

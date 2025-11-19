@@ -253,6 +253,6 @@ describe("GameStateMachine", () => {
 
 ## Related Documentation
 
-- [Game Architecture](QUICK-START.md)
-- [Casino Table Architecture](CASINO-TABLE-ARCHITECTURE.md)
-- [Audit Trail System](AUDIT-TRAIL.md)
+- [Game Architecture](../guides/quick-start.md)
+- [Casino Table Architecture](casino-table.md)
+- [Audit Trail System](audit-trail.md)

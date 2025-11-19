@@ -259,7 +259,7 @@ Potential improvements:
 - `src/cli/audit-viewer.ts` - Audit trail viewer
 
 ### Documentation
-- `AUDIT-TRAIL.md` - This file
+- `docs/architecture/audit-trail.md` - This file
 
 ## Example Session
 

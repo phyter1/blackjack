@@ -46,8 +46,8 @@ Based on our ADRs, the project follows these principles:
 
 ## Related Documentation
 
-- [Project README](../README.md)
-- [Quick Start Guide](../QUICK-START.md)
-- [State Machine Architecture](../STATE-MACHINE-ARCHITECTURE.md)
-- [Modular Rules Architecture](../MODULAR-RULES-ARCHITECTURE.md)
-- [Claude Assistant Guide](../CLAUDE.md)
+- [Project README](../../README.md)
+- [Quick Start Guide](../guides/quick-start.md)
+- [State Machine Architecture](../architecture/state-machine.md)
+- [Modular Rules Architecture](../architecture/modular-rules.md)
+- [Claude Assistant Guide](../../CLAUDE.md)

@@ -120,10 +120,10 @@ Following separation of concerns:
 
 ### Architecture Decisions
 
-See [`adr/`](adr/) directory for detailed Architecture Decision Records:
-- [ADR-001](adr/001-modular-architecture.md): Modular Architecture Pattern
-- [ADR-002](adr/002-state-machine-pattern.md): State Machine Pattern
-- [ADR-003](adr/003-separation-of-concerns.md): Separation of Concerns
+See [`docs/adr/`](docs/adr/) directory for detailed Architecture Decision Records:
+- [ADR-001](docs/adr/001-modular-architecture.md): Modular Architecture Pattern
+- [ADR-002](docs/adr/002-state-machine-pattern.md): State Machine Pattern
+- [ADR-003](docs/adr/003-separation-of-concerns.md): Separation of Concerns
 
 ## Project Structure
 
@@ -146,19 +146,27 @@ blackjack/
 │   ├── hooks/                # Custom React hooks
 │   ├── cli/                  # Terminal interface
 │   └── lib/                  # Utilities
-├── adr/                      # Architecture Decision Records
+├── docs/                     # Documentation
+│   ├── guides/              # User guides
+│   ├── architecture/        # Architecture docs
+│   ├── adr/                # Architecture Decision Records
+│   ├── development/        # Development history
+│   └── testing/            # Testing guides
 ├── public/                   # Static assets
 └── [config files]           # Configuration
 ```
 
 ## Documentation
 
-- 📚 [Quick Start Guide](QUICK-START.md) - Game engine API usage
-- 🎮 [CLI Guide](CLI-README.md) - Terminal game documentation
-- 🖼️ [UI Guide](UI-GUIDE.md) - Web interface architecture
-- 📊 [Audit Trail](AUDIT-TRAIL.md) - Event logging system
-- 🏗️ [State Machines](STATE-MACHINE-ARCHITECTURE.md) - State management
-- 📦 [Modular Rules](MODULAR-RULES-ARCHITECTURE.md) - Rules system
+**📖 [Complete Documentation Index](docs/README.md)**
+
+### Quick Links
+- 📚 [Quick Start Guide](docs/guides/quick-start.md) - Game engine API usage
+- 🎮 [CLI Guide](docs/guides/cli-guide.md) - Terminal game documentation
+- 🖼️ [UI Guide](docs/guides/ui-guide.md) - Web interface architecture
+- 📊 [Audit Trail](docs/architecture/audit-trail.md) - Event logging system
+- 🏗️ [State Machines](docs/architecture/state-machine.md) - State management
+- 📦 [Modular Rules](docs/architecture/modular-rules.md) - Rules system
 - 🤖 [AI Assistant Guide](CLAUDE.md) - For AI pair programming
 
 ## Game Rules Configuration

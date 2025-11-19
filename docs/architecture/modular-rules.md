@@ -348,6 +348,6 @@ The public API remains unchanged, ensuring backward compatibility.
 
 ## Related Documentation
 
-- [Game Architecture](QUICK-START.md)
-- [State Machine Architecture](STATE-MACHINE-ARCHITECTURE.md)
-- [Casino Table Architecture](CASINO-TABLE-ARCHITECTURE.md)
+- [Game Architecture](../guides/quick-start.md)
+- [State Machine Architecture](state-machine.md)
+- [Casino Table Architecture](casino-table.md)
