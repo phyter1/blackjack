@@ -73,7 +73,6 @@ export function CasinoTable({
     currentRound,
     currentActions,
     decisionTracker,
-    originalBalanceRef,
     setPhase,
     setRoundsPlayed,
     setTotalWagered,
