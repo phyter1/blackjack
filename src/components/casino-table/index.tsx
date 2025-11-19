@@ -49,6 +49,8 @@ export function CasinoTable({
 }: CasinoTableProps) {
   const { settings } = useSettings();
   const [showTrainerSidebar, setShowTrainerSidebar] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [previousBets, setPreviousBets] = useState<number[] | null>(null);
 
   // Trainer mode hook
   const {
@@ -206,12 +208,7 @@ export function CasinoTable({
         currentBalance={currentBalance}
         practiceBalance={practiceBalance}
         isTrainerActive={isTrainerActive}
-        countingEnabled={countingEnabled}
-        showCount={showCount}
-        cardCounter={cardCounter}
-        showTrainerSidebar={showTrainerSidebar}
-        onToggleCount={() => setShowCount(!showCount)}
-        onToggleTrainer={() => setShowTrainerSidebar(!showTrainerSidebar)}
+        onOpenSettings={() => setShowSettingsDialog(true)}
         onEndGame={onEndGame}
       />
 
@@ -237,7 +234,9 @@ export function CasinoTable({
             practiceBalance={practiceBalance}
             isTrainerActive={isTrainerActive}
             maxPlayableHands={rules?.maxPlayableHands || 5}
+            previousBets={previousBets}
             onBet={onBet}
+            onSetPreviousBets={setPreviousBets}
           />
         )}
 
@@ -272,7 +271,14 @@ export function CasinoTable({
       )}
 
       {/* Settings Dialog */}
-      <SettingsDialog />
+      <SettingsDialog
+        open={showSettingsDialog}
+        onOpenChange={setShowSettingsDialog}
+        showTrainerSidebar={showTrainerSidebar}
+        onToggleTrainer={() => setShowTrainerSidebar(!showTrainerSidebar)}
+        showCount={showCount}
+        onToggleCount={() => setShowCount(!showCount)}
+      />
     </div>
   );
 }

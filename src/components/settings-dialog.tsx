@@ -7,13 +7,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Settings } from "lucide-react";
 import { useSettings } from "@/hooks/use-settings";
 import { SETTINGS_CONSTRAINTS } from "@/types/settings";
 import { AnimatedCard } from "./animated-card";
@@ -25,9 +23,24 @@ const SAMPLE_CARDS: Card[] = [
   { suit: "diamonds", rank: "K" },
 ];
 
-export function SettingsDialog() {
+interface SettingsDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  showTrainerSidebar?: boolean;
+  onToggleTrainer?: () => void;
+  showCount?: boolean;
+  onToggleCount?: () => void;
+}
+
+export function SettingsDialog({
+  open,
+  onOpenChange,
+  showTrainerSidebar,
+  onToggleTrainer,
+  showCount,
+  onToggleCount,
+}: SettingsDialogProps) {
   const { settings, updateAnimationSettings, resetSettings } = useSettings();
-  const [open, setOpen] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
 
   // State for local changes before saving
@@ -52,12 +65,12 @@ export function SettingsDialog() {
 
   const handleSave = () => {
     updateAnimationSettings(localSettings);
-    setOpen(false);
+    onOpenChange(false);
   };
 
   const handleCancel = () => {
     setLocalSettings(settings.animations);
-    setOpen(false);
+    onOpenChange(false);
   };
 
   const handleReset = () => {
@@ -66,16 +79,7 @@ export function SettingsDialog() {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="fixed top-4 right-4 z-50"
-        >
-          <Settings className="h-4 w-4" />
-        </Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle>Game Settings</DialogTitle>
@@ -85,6 +89,47 @@ export function SettingsDialog() {
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
+          {/* Game Settings Section */}
+          {(onToggleTrainer || onToggleCount) && (
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Game Options</h3>
+
+              {/* Show Trainer Toggle */}
+              {onToggleTrainer !== undefined && (
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <Label htmlFor="show-trainer">Show Trainer</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Display strategy trainer sidebar
+                    </p>
+                  </div>
+                  <Switch
+                    id="show-trainer"
+                    checked={showTrainerSidebar}
+                    onCheckedChange={onToggleTrainer}
+                  />
+                </div>
+              )}
+
+              {/* Show Card Count Toggle */}
+              {onToggleCount !== undefined && (
+                <div className="flex items-center justify-between">
+                  <div className="space-y-1">
+                    <Label htmlFor="show-count">Show Card Count</Label>
+                    <p className="text-xs text-muted-foreground">
+                      Display running and true count
+                    </p>
+                  </div>
+                  <Switch
+                    id="show-count"
+                    checked={showCount}
+                    onCheckedChange={onToggleCount}
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Animation Settings Section */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium">Animation Settings</h3>

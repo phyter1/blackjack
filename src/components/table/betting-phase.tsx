@@ -10,7 +10,9 @@ interface BettingPhaseProps {
   practiceBalance?: number;
   isTrainerActive: boolean;
   maxPlayableHands?: number; // 1-5, defaults to 5
+  previousBets: number[] | null;
   onBet: (bets: number[]) => void;
+  onSetPreviousBets: (bets: number[] | null) => void;
 }
 
 export function BettingPhase({
@@ -18,14 +20,15 @@ export function BettingPhase({
   practiceBalance = 0,
   isTrainerActive,
   maxPlayableHands = 5,
+  previousBets,
   onBet,
+  onSetPreviousBets,
 }: BettingPhaseProps) {
   // Always track all 5 positions
   const [handBets, setHandBets] = useState<number[]>([0, 0, 0, 0, 0]);
   const [selectedChipValue, setSelectedChipValue] = useState<number | null>(
     null,
   );
-  const [previousBets, setPreviousBets] = useState<number[] | null>(null);
 
   const availableBalance = isTrainerActive ? practiceBalance : currentBalance;
   const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
@@ -50,7 +53,7 @@ export function BettingPhase({
     // Filter only hands with bets >= 10
     const validBets = handBets.filter((bet) => bet >= 10);
     if (validBets.length > 0 && totalBet > 0) {
-      setPreviousBets([...handBets]);
+      onSetPreviousBets([...handBets]);
       onBet(validBets);
       setHandBets([0, 0, 0, 0, 0]);
       setSelectedChipValue(null);
@@ -62,6 +65,15 @@ export function BettingPhase({
     const totalPreviousBet = previousBets.reduce((sum, bet) => sum + bet, 0);
     if (totalPreviousBet <= availableBalance) {
       setHandBets([...previousBets]);
+    }
+  };
+
+  const handleReBetAndDouble = () => {
+    if (!previousBets) return;
+    const doubledBets = previousBets.map((bet) => bet * 2);
+    const totalDoubledBet = doubledBets.reduce((sum, bet) => sum + bet, 0);
+    if (totalDoubledBet <= availableBalance) {
+      setHandBets(doubledBets);
     }
   };
 
@@ -120,6 +132,21 @@ export function BettingPhase({
           ? "Click a chip to select it, then click a betting circle to place bet"
           : `Selected: $${selectedChipValue} - Click a betting circle to add`}
       </div>
+
+      {/* Total bet display - MOVED HERE ABOVE CIRCLES */}
+      {totalBet > 0 && (
+        <div className="bg-amber-950/30 px-8 py-3 rounded-lg border-2 border-amber-600">
+          <div className="text-center">
+            <div className="text-xs text-amber-400 uppercase tracking-wide">
+              Total Bet
+              {activeBetsCount > 0 && ` (${activeBetsCount} hands)`}
+            </div>
+            <div className="text-3xl font-bold text-yellow-400 font-serif">
+              ${totalBet.toFixed(2)}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Betting Circles - Casino Style Layout */}
       <div className="relative w-full max-w-4xl">
@@ -196,21 +223,6 @@ export function BettingPhase({
         </div>
       </div>
 
-      {/* Total bet display */}
-      {totalBet > 0 && (
-        <div className="bg-amber-950/30 px-8 py-3 rounded-lg border-2 border-amber-600">
-          <div className="text-center">
-            <div className="text-xs text-amber-400 uppercase tracking-wide">
-              Total Bet
-              {activeBetsCount > 0 && ` (${activeBetsCount} hands)`}
-            </div>
-            <div className="text-3xl font-bold text-yellow-400 font-serif">
-              ${totalBet.toFixed(2)}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Chips */}
       <div className="flex gap-3 items-center">
         {CHIP_VALUES.map((chip) => (
@@ -229,17 +241,35 @@ export function BettingPhase({
       {/* Action buttons */}
       <div className="flex gap-3">
         {previousBets && (
-          <Button
-            onClick={handleReBet}
-            variant="outline"
-            className="border-blue-700 bg-blue-950/50 text-blue-200 hover:bg-blue-900 font-serif"
-            disabled={
-              !previousBets ||
-              previousBets.reduce((sum, bet) => sum + bet, 0) > availableBalance
-            }
-          >
-            Re-bet ${previousBets.reduce((sum, bet) => sum + bet, 0).toFixed(0)}
-          </Button>
+          <>
+            <Button
+              onClick={handleReBet}
+              variant="outline"
+              className="border-blue-700 bg-blue-950/50 text-blue-200 hover:bg-blue-900 font-serif"
+              disabled={
+                !previousBets ||
+                previousBets.reduce((sum, bet) => sum + bet, 0) >
+                  availableBalance
+              }
+            >
+              Re-bet $
+              {previousBets.reduce((sum, bet) => sum + bet, 0).toFixed(0)}
+            </Button>
+
+            <Button
+              onClick={handleReBetAndDouble}
+              variant="outline"
+              className="border-purple-700 bg-purple-950/50 text-purple-200 hover:bg-purple-900 font-serif"
+              disabled={
+                !previousBets ||
+                previousBets.reduce((sum, bet) => sum + bet, 0) * 2 >
+                  availableBalance
+              }
+            >
+              Re-bet & Double $
+              {(previousBets.reduce((sum, bet) => sum + bet, 0) * 2).toFixed(0)}
+            </Button>
+          </>
         )}
 
         <Button

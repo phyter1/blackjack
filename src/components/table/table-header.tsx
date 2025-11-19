@@ -1,9 +1,8 @@
 "use client";
 
 import type { Player } from "@/modules/game/player";
-import type { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import { Button } from "@/components/ui/button";
-import { GraduationCap } from "lucide-react";
+import { Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface TableHeaderProps {
@@ -11,12 +10,7 @@ interface TableHeaderProps {
   currentBalance: number;
   practiceBalance: number;
   isTrainerActive: boolean;
-  countingEnabled: boolean;
-  showCount: boolean;
-  cardCounter: HiLoCounter | null;
-  showTrainerSidebar: boolean;
-  onToggleCount: () => void;
-  onToggleTrainer: () => void;
+  onOpenSettings: () => void;
   onEndGame: () => void;
 }
 
@@ -25,12 +19,7 @@ export function TableHeader({
   currentBalance,
   practiceBalance,
   isTrainerActive,
-  countingEnabled,
-  showCount,
-  cardCounter,
-  showTrainerSidebar,
-  onToggleCount,
-  onToggleTrainer,
+  onOpenSettings,
   onEndGame,
 }: TableHeaderProps) {
   return (
@@ -42,39 +31,6 @@ export function TableHeader({
       </div>
 
       <div className="flex items-center gap-4">
-        {/* Card Count Display */}
-        {countingEnabled && cardCounter && showCount && (
-          <div className="px-4 py-2 bg-black/60 border border-purple-700 rounded-lg">
-            <div className="text-xs text-purple-400">Card Count</div>
-            <div className="flex gap-3 items-center">
-              <div>
-                <div className="text-xs text-gray-400">Running</div>
-                <div className="text-lg font-bold text-white">
-                  {cardCounter.getRunningCount() > 0 && "+"}
-                  {cardCounter.getRunningCount()}
-                </div>
-              </div>
-              <div className="h-8 w-px bg-gray-600" />
-              <div>
-                <div className="text-xs text-gray-400">True</div>
-                <div
-                  className={cn(
-                    "text-lg font-bold",
-                    cardCounter.getTrueCount() >= 2
-                      ? "text-green-400"
-                      : cardCounter.getTrueCount() <= -2
-                        ? "text-red-400"
-                        : "text-yellow-400",
-                  )}
-                >
-                  {cardCounter.getTrueCount() > 0 && "+"}
-                  {cardCounter.getTrueCount()}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
         {/* Balance Display */}
         <div className="text-right">
           <div className="text-sm text-amber-400">
@@ -96,29 +52,17 @@ export function TableHeader({
           )}
         </div>
 
-        {/* Control Buttons */}
+        {/* Settings Button */}
         <Button
-          onClick={onToggleCount}
+          onClick={onOpenSettings}
           variant="outline"
-          size="sm"
-          className="border-purple-700 bg-purple-950/50 text-purple-200 hover:bg-purple-900"
+          size="icon"
+          className="border-gray-700 bg-gray-950/50 text-gray-200 hover:bg-gray-900"
         >
-          {showCount ? "Hide Count" : "Show Count"}
+          <Settings className="h-4 w-4" />
         </Button>
 
-        <Button
-          onClick={onToggleTrainer}
-          variant="outline"
-          size="sm"
-          className={cn(
-            "border-blue-700 text-blue-200 hover:bg-blue-900",
-            showTrainerSidebar ? "bg-blue-800/80" : "bg-blue-950/50",
-          )}
-        >
-          <GraduationCap className="w-4 h-4 mr-2" />
-          {showTrainerSidebar ? "Hide Trainer" : "Show Trainer"}
-        </Button>
-
+        {/* Cash Out Button */}
         <Button
           onClick={onEndGame}
           variant="outline"
