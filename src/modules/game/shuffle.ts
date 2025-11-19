@@ -123,7 +123,7 @@ export const overhandShuffleStack = (stack: Stack): Stack => {
  * @returns Fully shuffled shoe ready for play
  */
 export const shuffleShoe = (shoe: Stack): Stack => {
-  // break the shoe into chunks of around 52 cards (1 deck) each, riffle shuffle each chunk 3 times, overhand shuffle each chunk once, then reassemble and cut the shoe at OPOSITE the desired penetration point, effectively achieving the desired penetration
+  // break the shoe into chunks of around 52 cards (1 deck) each, riffle shuffle each chunk 3 times, overhand shuffle each chunk once, then reassemble and cut the shoe at OPPOSITE the desired penetration point, effectively achieving the desired penetration
 
   const deckSize = 52;
   const numDecks = Math.ceil(shoe.length / deckSize);
