@@ -70,7 +70,10 @@ export class RoundStateMachine extends BaseStateMachine<
   }
 
   /**
-   * Resolve insurance phase
+   * Resolve insurance phase and transition to next state
+   *
+   * @param dealerBlackjack - Whether dealer has blackjack (determines next state)
+   * @throws Error if not in insurance state
    */
   resolveInsurance(dealerBlackjack: boolean): void {
     if (this.currentState !== "insurance") {
@@ -92,7 +95,10 @@ export class RoundStateMachine extends BaseStateMachine<
   }
 
   /**
-   * Process a player action
+   * Process a player action during player turn
+   *
+   * @param action - The action being performed (hit, stand, double, etc.)
+   * @throws Error if not in player_turn state
    */
   processPlayerAction(action: ActionType): void {
     if (this.currentState !== "player_turn") {
@@ -224,7 +230,31 @@ export const roundStateValidation = {
 };
 
 /**
- * Create a new round state machine instance
+ * Creates a new round state machine instance for managing round phases.
+ *
+ * The round state machine manages five states:
+ * - `insurance`: Offering insurance (if dealer shows Ace)
+ * - `player_turn`: Players making decisions
+ * - `dealer_turn`: Dealer playing their hand
+ * - `settling`: Calculating and distributing payouts
+ * - `complete`: Round fully complete
+ *
+ * @param hasInsurance - Whether to start with insurance phase (dealer shows Ace)
+ * @returns {RoundStateMachine} A new round state machine instance
+ *
+ * @example
+ * ```typescript
+ * // Create machine without insurance phase
+ * const roundMachine = createRoundStateMachine(false);
+ *
+ * // Create machine with insurance phase
+ * const roundWithInsurance = createRoundStateMachine(true);
+ *
+ * // Process player actions
+ * if (roundMachine.isPlayerTurn()) {
+ *   roundMachine.processPlayerAction(ACTION_HIT);
+ * }
+ * ```
  */
 export function createRoundStateMachine(
   hasInsurance: boolean = false,

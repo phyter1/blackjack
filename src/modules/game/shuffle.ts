@@ -1,6 +1,13 @@
 import type { Stack } from "./cards";
 import { weightedRandomChoice } from "./random";
 
+/**
+ * Determines a random interleave length for riffle shuffle.
+ * Simulates realistic card interleaving during a riffle.
+ *
+ * @param remaining - Number of cards remaining to interleave
+ * @returns Number of cards to take (1-4, weighted toward 1)
+ */
 export const randomInterleaveLen = (remaining: number): number => {
   if (remaining <= 0) return 0;
   const len = weightedRandomChoice([1, 2, 3, 4], [0.6, 0.15, 0.15, 0.1]);
@@ -20,6 +27,15 @@ const penetrationChoices = Array(200)
     }
   });
 
+/**
+ * Cuts the stack at a specific penetration point.
+ * Penetration determines where the cut card is placed.
+ *
+ * @param params - Configuration object
+ * @param params.stack - The card stack to cut
+ * @param params.penetration - Percentage (0-100) where to cut, random if not specified
+ * @returns Object containing cut stack, penetration value, and cut position
+ */
 export const cutStackAtPenetration = ({
   stack,
   penetration: pen,
@@ -42,6 +58,13 @@ export const cutStackAtPenetration = ({
   };
 };
 
+/**
+ * Performs a realistic riffle shuffle on a card stack.
+ * Splits the deck near middle and interleaves cards from each half.
+ *
+ * @param stack - The card stack to shuffle
+ * @returns Shuffled card stack
+ */
 export const riffleShuffleStack = (stack: Stack): Stack => {
   const middle = weightedRandomChoice(
     [0.4, 0.42, 0.45, 0.5, 0.55, 0.6],
@@ -66,6 +89,13 @@ export const riffleShuffleStack = (stack: Stack): Stack => {
   return shuffledStack;
 };
 
+/**
+ * Performs an overhand shuffle on a card stack.
+ * Takes small chunks from top and places them on a new stack.
+ *
+ * @param stack - The card stack to shuffle
+ * @returns Shuffled card stack
+ */
 export const overhandShuffleStack = (stack: Stack): Stack => {
   let remainingStack = [...stack];
   const shuffledStack: Stack = [];
@@ -84,6 +114,14 @@ export const overhandShuffleStack = (stack: Stack): Stack => {
   return shuffledStack;
 };
 
+/**
+ * Performs a complete casino-style shuffle on a multi-deck shoe.
+ * Breaks shoe into deck-sized chunks, riffle shuffles each 3 times,
+ * overhand shuffles once, then reassembles and cuts.
+ *
+ * @param shoe - The complete shoe (multiple decks) to shuffle
+ * @returns Fully shuffled shoe ready for play
+ */
 export const shuffleShoe = (shoe: Stack): Stack => {
   // break the shoe into chunks of around 52 cards (1 deck) each, riffle shuffle each chunk 3 times, overhand shuffle each chunk once, then reassemble and cut the shoe at OPOSITE the desired penetration point, effectively achieving the desired penetration
 

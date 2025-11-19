@@ -107,6 +107,13 @@ export function getRuleBasedActions(
 
 /**
  * Check if doubling is allowed for the current hand
+ *
+ * @param rules - Map of active blackjack rules
+ * @param hand - The hand to check for double down eligibility
+ * @param handValue - Current value of the hand
+ * @returns true if double down is allowed, false otherwise
+ *
+ * @internal
  */
 function canDouble(
   rules: Map<string, BlackjackRule>,
@@ -158,6 +165,14 @@ function canDouble(
 
 /**
  * Check if splitting is allowed for the current hand
+ *
+ * @param rules - Map of active blackjack rules
+ * @param hand - The hand to check for split eligibility
+ * @param cards - Cards in the hand
+ * @param splitCount - Number of times already split in this round
+ * @returns true if split is allowed, false otherwise
+ *
+ * @internal
  */
 function canSplit(
   rules: Map<string, BlackjackRule>,
@@ -202,6 +217,13 @@ function canSplit(
 
 /**
  * Check if surrender is allowed for the current hand
+ *
+ * @param rules - Map of active blackjack rules
+ * @param hand - The hand to check for surrender eligibility
+ * @param _dealerUpCard - Dealer's visible card (reserved for future use)
+ * @returns true if surrender is allowed, false otherwise
+ *
+ * @internal
  */
 function canSurrender(
   rules: Map<string, BlackjackRule>,
