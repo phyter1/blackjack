@@ -151,21 +151,15 @@ export function BettingPhase({
       {/* Betting Circles - Casino Style Layout */}
       <div className="relative w-full max-w-4xl">
         <div className="flex items-center justify-center gap-4 mb-6">
-          {[0, 1, 2, 3, 4].map((positionIndex) => {
-            const isPlayable = playablePositions.includes(positionIndex);
+          {playablePositions.map((positionIndex, displayIndex) => {
             const bet = handBets[positionIndex];
             const hasChips = bet > 0;
 
             return (
               <div key={positionIndex} className="flex flex-col items-center">
                 {/* Position label */}
-                <div
-                  className={cn(
-                    "text-xs mb-2 font-serif",
-                    isPlayable ? "text-amber-400" : "text-gray-600",
-                  )}
-                >
-                  {isPlayable ? `Spot ${positionIndex + 1}` : "—"}
+                <div className="text-xs mb-2 font-serif text-amber-400">
+                  Spot {displayIndex + 1}
                 </div>
 
                 {/* Betting Circle */}
@@ -176,22 +170,16 @@ export function BettingPhase({
                     e.preventDefault();
                     handleClearPosition(positionIndex);
                   }}
-                  disabled={!isPlayable || selectedChipValue === null}
+                  disabled={selectedChipValue === null}
                   className={cn(
                     "relative w-24 h-24 rounded-full transition-all duration-200 flex items-center justify-center",
                     "border-4 font-serif font-bold",
-                    isPlayable
-                      ? selectedChipValue !== null
-                        ? "cursor-pointer hover:scale-105 hover:shadow-lg border-amber-500 bg-gradient-to-br from-green-900/80 to-green-950/80 hover:from-green-800/90 hover:to-green-900/90"
-                        : "border-amber-700/50 bg-gradient-to-br from-green-950/40 to-black/40"
-                      : "border-gray-800/30 bg-gray-900/20 cursor-not-allowed",
-                    hasChips && isPlayable && "ring-2 ring-yellow-400",
+                    selectedChipValue !== null
+                      ? "cursor-pointer hover:scale-105 hover:shadow-lg border-amber-500 bg-gradient-to-br from-green-900/80 to-green-950/80 hover:from-green-800/90 hover:to-green-900/90"
+                      : "border-amber-700/50 bg-gradient-to-br from-green-950/40 to-black/40",
+                    hasChips && "ring-2 ring-yellow-400",
                   )}
-                  title={
-                    isPlayable
-                      ? `Right-click to clear • Bet: $${bet}`
-                      : "Position locked"
-                  }
+                  title={`Right-click to clear • Bet: $${bet}`}
                 >
                   {/* Bet amount display */}
                   {hasChips ? (
@@ -200,15 +188,13 @@ export function BettingPhase({
                         ${bet}
                       </div>
                     </div>
-                  ) : isPlayable ? (
-                    <div className="text-amber-600/50 text-4xl">+</div>
                   ) : (
-                    <div className="text-gray-700 text-2xl">✕</div>
+                    <div className="text-amber-600/50 text-4xl">+</div>
                   )}
                 </button>
 
                 {/* Clear button for positions with bets */}
-                {hasChips && isPlayable && (
+                {hasChips && (
                   <button
                     type="button"
                     onClick={() => handleClearPosition(positionIndex)}
