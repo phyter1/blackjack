@@ -159,21 +159,21 @@ export function RulesSelector({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 overflow-y-auto">
-      <Card className="bg-gray-900 border-green-500 max-w-3xl w-full my-8">
-        <CardHeader>
-          <CardTitle className="text-green-500 text-2xl">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-2 sm:p-4">
+      <Card className="bg-gray-900 border-green-500 max-w-3xl w-full max-h-[100dvh] flex flex-col">
+        <CardHeader className="flex-shrink-0 pb-3 sm:pb-6">
+          <CardTitle className="text-green-500 text-xl sm:text-2xl">
             Table Rules Configuration
           </CardTitle>
-          <CardDescription className="text-lg">
+          <CardDescription className="text-sm sm:text-lg">
             Customize blackjack table rules for your game
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-3 sm:space-y-6 overflow-y-auto flex-1">
           {/* Preset Buttons */}
           <div>
-            <Label className="text-white mb-2 block">Quick Presets</Label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <Label className="text-white text-sm mb-1 sm:mb-2 block">Quick Presets</Label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 sm:gap-2">
               <Button
                 onClick={() => loadPreset("default")}
                 variant="outline"
@@ -210,11 +210,11 @@ export function RulesSelector({
           </div>
 
           {/* House Edge Display */}
-          <div className="p-4 bg-black rounded border border-gray-700">
+          <div className="p-2 sm:p-4 bg-black rounded border border-gray-700">
             <div className="flex justify-between items-center">
-              <span className="text-gray-400">House Edge:</span>
+              <span className="text-gray-400 text-sm sm:text-base">House Edge:</span>
               <span
-                className={`text-2xl font-bold ${
+                className={`text-xl sm:text-2xl font-bold ${
                   houseEdge <= 0.5
                     ? "text-green-500"
                     : houseEdge <= 1.0
@@ -225,7 +225,7 @@ export function RulesSelector({
                 {houseEdge.toFixed(2)}%
               </span>
             </div>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-500 mt-0.5 sm:mt-1">
               {houseEdge <= 0.5
                 ? "Excellent player odds"
                 : houseEdge <= 1.0
@@ -234,15 +234,15 @@ export function RulesSelector({
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-2 gap-3 sm:gap-6">
             {/* Basic Rules */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">
+            <div className="space-y-2 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-1 sm:pb-2">
                 Basic Rules
               </h3>
 
               <div>
-                <Label htmlFor="deckCount" className="text-white">
+                <Label htmlFor="deckCount" className="text-white text-sm">
                   Number of Decks
                 </Label>
                 <Select
@@ -268,7 +268,7 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="dealerStand" className="text-white">
+                <Label htmlFor="dealerStand" className="text-white text-sm">
                   Dealer Stand Rule
                 </Label>
                 <Select
@@ -291,7 +291,7 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="blackjackPayout" className="text-white">
+                <Label htmlFor="blackjackPayout" className="text-white text-sm">
                   Blackjack Payout
                 </Label>
                 <Select
@@ -314,7 +314,7 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="surrender" className="text-white">
+                <Label htmlFor="surrender" className="text-white text-sm">
                   Surrender
                 </Label>
                 <Select
@@ -339,13 +339,13 @@ export function RulesSelector({
             </div>
 
             {/* Advanced Rules */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white border-b border-gray-700 pb-2">
+            <div className="space-y-2 sm:space-y-4">
+              <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-1 sm:pb-2">
                 Advanced Rules
               </h3>
 
               <div>
-                <Label htmlFor="doubleRestriction" className="text-white">
+                <Label htmlFor="doubleRestriction" className="text-white text-sm">
                   Double Down Restriction
                 </Label>
                 <Select
@@ -370,7 +370,7 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="maxSplits" className="text-white">
+                <Label htmlFor="maxSplits" className="text-white text-sm">
                   Maximum Splits
                 </Label>
                 <Select
@@ -395,7 +395,7 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="maxPlayableHands" className="text-white">
+                <Label htmlFor="maxPlayableHands" className="text-white text-sm">
                   Max Playable Hands
                 </Label>
                 <Select
@@ -420,8 +420,8 @@ export function RulesSelector({
                 </Select>
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-black rounded">
-                <Label htmlFor="das" className="text-white">
+              <div className="flex items-center justify-between p-2 sm:p-3 bg-black rounded">
+                <Label htmlFor="das" className="text-white text-sm">
                   Double After Split (DAS)
                 </Label>
                 <Switch
@@ -433,8 +433,8 @@ export function RulesSelector({
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-black rounded">
-                <Label htmlFor="rsa" className="text-white">
+              <div className="flex items-center justify-between p-2 sm:p-3 bg-black rounded">
+                <Label htmlFor="rsa" className="text-white text-sm">
                   Resplit Aces
                 </Label>
                 <Switch
@@ -446,8 +446,8 @@ export function RulesSelector({
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 bg-black rounded">
-                <Label htmlFor="hsa" className="text-white">
+              <div className="flex items-center justify-between p-2 sm:p-3 bg-black rounded">
+                <Label htmlFor="hsa" className="text-white text-sm">
                   Hit Split Aces
                 </Label>
                 <Switch
@@ -462,7 +462,7 @@ export function RulesSelector({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3 pt-4 border-t border-gray-700">
+          <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
             <Button
               onClick={handleSave}
               className="flex-1 bg-green-600 hover:bg-green-700"
