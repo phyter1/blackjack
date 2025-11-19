@@ -1,7 +1,13 @@
 "use client";
 
 import { useTrainerMode } from "@/hooks/use-trainer-mode";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -12,7 +18,10 @@ export function TrainerStatsPanel() {
 
   if (!isActive || !stats) return null;
 
-  const shouldShowCounting = difficulty === "running_count" || difficulty === "true_count" || difficulty === "expert";
+  const shouldShowCounting =
+    difficulty === "running_count" ||
+    difficulty === "true_count" ||
+    difficulty === "expert";
 
   const getGradeColor = (grade: string) => {
     if (grade.startsWith("A")) return "bg-green-600";
@@ -39,7 +48,9 @@ export function TrainerStatsPanel() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Brain className="w-4 h-4 text-blue-400" />
-              <span className="text-sm font-medium text-slate-200">Strategy Accuracy</span>
+              <span className="text-sm font-medium text-slate-200">
+                Strategy Accuracy
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Badge className={getGradeColor(stats.grade)}>
@@ -64,7 +75,9 @@ export function TrainerStatsPanel() {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-green-400" />
-                  <span className="text-sm font-medium text-slate-200">Recent (Last 10)</span>
+                  <span className="text-sm font-medium text-slate-200">
+                    Recent (Last 10)
+                  </span>
                 </div>
                 <span className="text-sm font-bold text-slate-100">
                   {stats.recentAccuracy.toFixed(1)}%
@@ -80,7 +93,9 @@ export function TrainerStatsPanel() {
           <>
             <Separator className="bg-slate-700/50" />
             <div className="space-y-3">
-              <h4 className="text-sm font-medium text-slate-200">Accuracy by Hand Type</h4>
+              <h4 className="text-sm font-medium text-slate-200">
+                Accuracy by Hand Type
+              </h4>
 
               {/* Hard Hands */}
               <div className="space-y-1">
@@ -125,7 +140,9 @@ export function TrainerStatsPanel() {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Hash className="w-4 h-4 text-purple-400" />
-                <h4 className="text-sm font-medium text-slate-200">Counting Accuracy</h4>
+                <h4 className="text-sm font-medium text-slate-200">
+                  Counting Accuracy
+                </h4>
               </div>
 
               {/* Running Count */}
@@ -136,9 +153,13 @@ export function TrainerStatsPanel() {
                     {stats.runningCountAccuracy.toFixed(0)}%
                   </span>
                 </div>
-                <Progress value={stats.runningCountAccuracy} className="h-1.5" />
+                <Progress
+                  value={stats.runningCountAccuracy}
+                  className="h-1.5"
+                />
                 <div className="text-xs text-slate-400">
-                  {stats.correctRunningCounts} / {stats.totalCountGuesses} correct
+                  {stats.correctRunningCounts} / {stats.totalCountGuesses}{" "}
+                  correct
                 </div>
               </div>
 

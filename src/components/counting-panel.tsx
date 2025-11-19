@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { useTrainerMode } from "@/hooks/use-trainer-mode";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -11,18 +17,14 @@ import { Calculator, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function CountingPanel() {
-  const {
-    trainer,
-    isActive,
-    difficulty,
-    currentCountFeedback,
-    refreshStats,
-  } = useTrainerMode();
+  const { trainer, isActive, difficulty, currentCountFeedback, refreshStats } =
+    useTrainerMode();
 
   const [runningCount, setRunningCount] = useState("");
   const [trueCount, setTrueCount] = useState("");
 
-  const shouldShowTrueCount = difficulty === "true_count" || difficulty === "expert";
+  const shouldShowTrueCount =
+    difficulty === "true_count" || difficulty === "expert";
   const shouldTrackCounting = trainer?.shouldTrackCounting() ?? false;
 
   const handleSubmit = () => {
@@ -56,7 +58,9 @@ export function CountingPanel() {
     error: XCircle,
   };
 
-  const Icon = currentCountFeedback ? icons[currentCountFeedback.severity] : null;
+  const Icon = currentCountFeedback
+    ? icons[currentCountFeedback.severity]
+    : null;
 
   const colors = {
     success: "border-green-500/50 bg-green-950/50 text-green-200",
@@ -124,7 +128,12 @@ export function CountingPanel() {
 
       {/* Count Feedback */}
       {currentCountFeedback && Icon && (
-        <Alert className={cn("animate-in fade-in-50 duration-300", colors[currentCountFeedback.severity])}>
+        <Alert
+          className={cn(
+            "animate-in fade-in-50 duration-300",
+            colors[currentCountFeedback.severity],
+          )}
+        >
           <Icon className="h-4 w-4" />
           <AlertDescription className="text-sm opacity-90">
             {currentCountFeedback.message}

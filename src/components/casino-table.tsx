@@ -49,7 +49,9 @@ export function CasinoTable({
   const [roundsPlayed, setRoundsPlayed] = useState(0);
   const [totalWagered, setTotalWagered] = useState(0);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  const [handsPendingInsurance, setHandsPendingInsurance] = useState<number[]>([]);
+  const [handsPendingInsurance, setHandsPendingInsurance] = useState<number[]>(
+    [],
+  );
   const [insuranceHandIndex, setInsuranceHandIndex] = useState(0);
   const [countingEnabled, setCountingEnabled] = useState(true);
   const [showCount, setShowCount] = useState(true);
@@ -141,7 +143,14 @@ export function CasinoTable({
 
     // Store the original real balance
     originalBalanceRef.current = bank.balance;
-  }, [user.name, bank.balance, user.id, rules, searchParams, initializeTrainer]);
+  }, [
+    user.name,
+    bank.balance,
+    user.id,
+    rules,
+    searchParams,
+    initializeTrainer,
+  ]);
 
   // Update hand outcomes when settling phase is reached
   useEffect(() => {
@@ -211,7 +220,7 @@ export function CasinoTable({
 
     try {
       // Create PlayerBet array - one entry per hand
-      const playerBets = bets.map(amount => ({
+      const playerBets = bets.map((amount) => ({
         playerId: player.id,
         amount,
       }));
@@ -220,7 +229,9 @@ export function CasinoTable({
       if (isTrainerActive) {
         const totalBet = bets.reduce((sum, bet) => sum + bet, 0);
         if (totalBet > practiceBalance) {
-          console.error(`Insufficient practice balance. Bet: ${totalBet}, Balance: ${practiceBalance}`);
+          console.error(
+            `Insufficient practice balance. Bet: ${totalBet}, Balance: ${practiceBalance}`,
+          );
           return;
         }
       }
@@ -238,7 +249,7 @@ export function CasinoTable({
       setCurrentActions(game.getAvailableActions() ?? []);
       // Use roundVersion to trigger re-render
       // This is the key - incrementing version will cause useEffect in components to fire
-      setRoundVersion(v => v + 1);
+      setRoundVersion((v) => v + 1);
 
       setRoundsPlayed((prev) => prev + 1);
       setPhase("dealing");
@@ -429,7 +440,7 @@ export function CasinoTable({
             playerId: hand.playerId,
             canSplit: hand.canSplit,
             isDoubled: hand.isDoubled,
-            isSplit: hand.isSplit
+            isSplit: hand.isSplit,
           })),
           dealerHand: {
             ...newRound.dealerHand,
@@ -437,12 +448,12 @@ export function CasinoTable({
             handValue: newRound.dealerHand.handValue,
             hardValue: (newRound.dealerHand as any).hardValue,
             isSoft: newRound.dealerHand.isSoft,
-            upCard: newRound.dealerHand.upCard
+            upCard: newRound.dealerHand.upCard,
           },
           // Preserve other round properties
           state: newRound.state,
           id: newRound.id,
-          currentHandIndex: newRound.currentHandIndex
+          currentHandIndex: newRound.currentHandIndex,
         };
         setCurrentRound(clonedRound as any);
       } else {
@@ -451,7 +462,7 @@ export function CasinoTable({
       setCurrentActions(newActions);
       // Use roundVersion to trigger re-render
       // This is the key - incrementing version will cause useEffect in components to fire
-      setRoundVersion(v => v + 1);
+      setRoundVersion((v) => v + 1);
 
       // Check if we're still in player turn with actions available
       if (newActions.length > 0 && newRound?.state === "player_turn") {
@@ -589,31 +600,30 @@ export function CasinoTable({
 
       // Check round state after insurance resolution
       const round = game.getCurrentRound();
-      if (
-        round?.state === "settling" ||
-        round?.state === "complete"
-      ) {
+      if (round?.state === "settling" || round?.state === "complete") {
         // Dealer has blackjack - go directly to settling
         setTimeout(() => {
           setPhase("settling");
           const roundAfterInsurance = game.getCurrentRound();
           setCurrentRound(roundAfterInsurance);
           setCurrentActions(game.getAvailableActions() ?? []);
-          setRoundVersion(v => v + 1);
+          setRoundVersion((v) => v + 1);
         }, 500);
       } else {
         setPhase("playing");
         const roundAfterInsuranceDecline = game.getCurrentRound();
         setCurrentRound(roundAfterInsuranceDecline);
         setCurrentActions(game.getAvailableActions() ?? []);
-        setRoundVersion(v => v + 1);
+        setRoundVersion((v) => v + 1);
       }
     }
   };
 
   // Track round in state to ensure UI updates
   const [currentRound, setCurrentRound] = useState(game?.getCurrentRound());
-  const [currentActions, setCurrentActions] = useState(game?.getAvailableActions() ?? []);
+  const [currentActions, setCurrentActions] = useState(
+    game?.getAvailableActions() ?? [],
+  );
 
   // Use state-tracked values for rendering
   const round = currentRound;
@@ -645,7 +655,12 @@ export function CasinoTable({
         <DealerArea round={round} phase={phase} version={roundVersion} />
 
         {/* Player area */}
-        <PlayerArea round={round} phase={phase} userName={user.name} version={roundVersion} />
+        <PlayerArea
+          round={round}
+          phase={phase}
+          userName={user.name}
+          version={roundVersion}
+        />
       </div>
 
       {/* Action area */}

@@ -8,7 +8,10 @@ interface PlayingPhaseProps {
   onAction: (action: ActionType) => void;
 }
 
-export function PlayingPhase({ availableActions, onAction }: PlayingPhaseProps) {
+export function PlayingPhase({
+  availableActions,
+  onAction,
+}: PlayingPhaseProps) {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="text-amber-200 font-serif text-lg">Your Action</div>

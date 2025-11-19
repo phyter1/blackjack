@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { DEFAULT_SETTINGS, type GameSettings } from "@/types/settings";
 
 const SETTINGS_STORAGE_KEY = "blackjack-settings";
@@ -8,11 +14,15 @@ const SETTINGS_STORAGE_KEY = "blackjack-settings";
 interface SettingsContextValue {
   settings: GameSettings;
   updateSettings: (updates: Partial<GameSettings>) => void;
-  updateAnimationSettings: (updates: Partial<GameSettings["animations"]>) => void;
+  updateAnimationSettings: (
+    updates: Partial<GameSettings["animations"]>,
+  ) => void;
   resetSettings: () => void;
 }
 
-const SettingsContext = createContext<SettingsContextValue | undefined>(undefined);
+const SettingsContext = createContext<SettingsContextValue | undefined>(
+  undefined,
+);
 
 /**
  * Load settings from localStorage
@@ -70,14 +80,16 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   }, [settings]);
 
   const updateSettings = (updates: Partial<GameSettings>) => {
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
       ...updates,
     }));
   };
 
-  const updateAnimationSettings = (updates: Partial<GameSettings["animations"]>) => {
-    setSettings(prev => ({
+  const updateAnimationSettings = (
+    updates: Partial<GameSettings["animations"]>,
+  ) => {
+    setSettings((prev) => ({
       ...prev,
       animations: {
         ...prev.animations,

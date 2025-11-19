@@ -7,9 +7,16 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
-import { TrainerMode, type TrainerDifficulty } from "@/modules/strategy/trainer";
+import {
+  TrainerMode,
+  type TrainerDifficulty,
+} from "@/modules/strategy/trainer";
 import type { Game } from "@/modules/game/game";
-import type { ActionFeedback, CountFeedback, TrainerStats } from "@/modules/strategy/trainer";
+import type {
+  ActionFeedback,
+  CountFeedback,
+  TrainerStats,
+} from "@/modules/strategy/trainer";
 
 interface TrainerContextValue {
   trainer: TrainerMode | null;
@@ -38,17 +45,23 @@ const TrainerContext = createContext<TrainerContextValue | undefined>(
 export function TrainerModeProvider({ children }: { children: ReactNode }) {
   const [trainer, setTrainer] = useState<TrainerMode | null>(null);
   const [isActive, setIsActive] = useState(false);
-  const [difficulty, setDifficultyState] = useState<TrainerDifficulty>("beginner");
+  const [difficulty, setDifficultyState] =
+    useState<TrainerDifficulty>("beginner");
   const [practiceBalance, setPracticeBalance] = useState(10000);
   const [stats, setStats] = useState<TrainerStats | null>(null);
-  const [currentActionFeedback, setCurrentActionFeedback] = useState<ActionFeedback | null>(null);
-  const [currentCountFeedback, setCurrentCountFeedback] = useState<CountFeedback | null>(null);
+  const [currentActionFeedback, setCurrentActionFeedback] =
+    useState<ActionFeedback | null>(null);
+  const [currentCountFeedback, setCurrentCountFeedback] =
+    useState<CountFeedback | null>(null);
 
-  const initializeTrainer = useCallback((game: Game) => {
-    const newTrainer = new TrainerMode(game, difficulty, 10000);
-    setTrainer(newTrainer);
-    setPracticeBalance(newTrainer.getPracticeBalance());
-  }, [difficulty]);
+  const initializeTrainer = useCallback(
+    (game: Game) => {
+      const newTrainer = new TrainerMode(game, difficulty, 10000);
+      setTrainer(newTrainer);
+      setPracticeBalance(newTrainer.getPracticeBalance());
+    },
+    [difficulty],
+  );
 
   const activateTrainer = useCallback(() => {
     if (!trainer) return;
@@ -63,12 +76,15 @@ export function TrainerModeProvider({ children }: { children: ReactNode }) {
     setIsActive(false);
   }, [trainer]);
 
-  const setDifficulty = useCallback((newDifficulty: TrainerDifficulty) => {
-    setDifficultyState(newDifficulty);
-    if (trainer) {
-      trainer.setDifficulty(newDifficulty);
-    }
-  }, [trainer]);
+  const setDifficulty = useCallback(
+    (newDifficulty: TrainerDifficulty) => {
+      setDifficultyState(newDifficulty);
+      if (trainer) {
+        trainer.setDifficulty(newDifficulty);
+      }
+    },
+    [trainer],
+  );
 
   const resetTrainer = useCallback(() => {
     if (!trainer) return;

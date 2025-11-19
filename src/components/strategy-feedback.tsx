@@ -27,7 +27,9 @@ export function StrategyFeedback() {
   };
 
   return (
-    <Alert className={cn("animate-in fade-in-50 duration-300", colors[severity])}>
+    <Alert
+      className={cn("animate-in fade-in-50 duration-300", colors[severity])}
+    >
       <Icon className="h-4 w-4" />
       <AlertTitle className="font-semibold">
         {wasCorrect ? "Correct Play!" : "Incorrect Play"}

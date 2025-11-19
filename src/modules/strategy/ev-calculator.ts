@@ -275,11 +275,11 @@ export function formatMoney(value: number): string {
 // ============================================================================
 
 export type AdvantagePlayLevel =
-  | "house-edge"      // Raw house edge with no player skill
-  | "basic-strategy"  // Perfect basic strategy
+  | "house-edge" // Raw house edge with no player skill
+  | "basic-strategy" // Perfect basic strategy
   | "card-counting-conservative" // Basic + Hi-Lo with 1-4 spread
-  | "card-counting-aggressive"   // Basic + Hi-Lo with 1-8 or 1-12 spread
-  | "perfect-play";   // Theoretical maximum advantage
+  | "card-counting-aggressive" // Basic + Hi-Lo with 1-8 or 1-12 spread
+  | "perfect-play"; // Theoretical maximum advantage
 
 /**
  * Betting spread configuration for card counting
@@ -297,12 +297,12 @@ export const CONSERVATIVE_SPREAD: BettingSpread = {
   minBet: 1,
   maxBet: 4,
   spreadByCount: {
-    "-2": 1,  // TC <= -2: 1 unit
-    "-1": 1,  // TC -1: 1 unit
-    "0": 1,   // TC 0: 1 unit
-    "1": 2,   // TC +1: 2 units
-    "2": 3,   // TC +2: 3 units
-    "3": 4,   // TC >= +3: 4 units
+    "-2": 1, // TC <= -2: 1 unit
+    "-1": 1, // TC -1: 1 unit
+    "0": 1, // TC 0: 1 unit
+    "1": 2, // TC +1: 2 units
+    "2": 3, // TC +2: 3 units
+    "3": 4, // TC >= +3: 4 units
   },
 };
 
@@ -313,13 +313,13 @@ export const AGGRESSIVE_SPREAD: BettingSpread = {
   minBet: 1,
   maxBet: 8,
   spreadByCount: {
-    "-2": 1,   // TC <= -2: 1 unit
-    "-1": 1,   // TC -1: 1 unit
-    "0": 1,    // TC 0: 1 unit
-    "1": 2,    // TC +1: 2 units
-    "2": 4,    // TC +2: 4 units
-    "3": 6,    // TC +3: 6 units
-    "4": 8,    // TC >= +4: 8 units
+    "-2": 1, // TC <= -2: 1 unit
+    "-1": 1, // TC -1: 1 unit
+    "0": 1, // TC 0: 1 unit
+    "1": 2, // TC +1: 2 units
+    "2": 4, // TC +2: 4 units
+    "3": 6, // TC +3: 6 units
+    "4": 8, // TC >= +4: 8 units
   },
 };
 
@@ -372,7 +372,10 @@ export function calculateAdvantagePlayEV(params: {
 
     case "basic-strategy":
       // Perfect basic strategy (what the current calculator does)
-      adjustedHouseEdge = adjustForStrategyAccuracy(baseHouseEdge, strategyAccuracy);
+      adjustedHouseEdge = adjustForStrategyAccuracy(
+        baseHouseEdge,
+        strategyAccuracy,
+      );
       break;
 
     case "card-counting-conservative": {
@@ -383,7 +386,10 @@ export function calculateAdvantagePlayEV(params: {
 
       if (avgTrueCount !== null) {
         // We have actual count data - use it but ensure positive edge
-        const betMultiplier = getBetMultiplier(Math.round(avgTrueCount), CONSERVATIVE_SPREAD);
+        const betMultiplier = getBetMultiplier(
+          Math.round(avgTrueCount),
+          CONSERVATIVE_SPREAD,
+        );
         countAdvantage = (avgTrueCount * 0.5 * betMultiplier) / 2;
         // Account for cover play and heat avoidance (reduces edge by ~0.2%)
         countAdvantage -= 0.2;
@@ -416,7 +422,10 @@ export function calculateAdvantagePlayEV(params: {
 
       if (avgTrueCount !== null) {
         // We have actual count data - use it but ensure positive edge
-        const betMultiplier = getBetMultiplier(Math.round(avgTrueCount), AGGRESSIVE_SPREAD);
+        const betMultiplier = getBetMultiplier(
+          Math.round(avgTrueCount),
+          AGGRESSIVE_SPREAD,
+        );
         countAdvantage = (avgTrueCount * 0.5 * betMultiplier) / 1.5;
         // Less cover play needed (only reduces edge by ~0.1%)
         countAdvantage -= 0.1;

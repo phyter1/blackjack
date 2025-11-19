@@ -107,4 +107,29 @@ export class Shoe {
       roundCompleted: this.roundCompleted,
     };
   }
+
+  get discardedCards(): Stack {
+    return [...this.discardPile];
+  }
+
+  get totalCards(): number {
+    return this.deck.stack.length + this.discardPile.length;
+  }
+
+  get cutCardPosition(): number {
+    return this.stopPosition;
+  }
+
+  get detailedStats() {
+    return {
+      remainingCards: this.remainingCards,
+      discardedCards: this.discardPile.length,
+      totalCards: this.totalCards,
+      cutCardPosition: this.stopPosition,
+      penetration: this.deck.penetration,
+      isComplete: this.isComplete,
+      currentRound: this.currentRound,
+      discardPile: [...this.discardPile],
+    };
+  }
 }

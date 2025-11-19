@@ -16,7 +16,7 @@ export function BettingPhase({
   currentBalance,
   practiceBalance = 0,
   isTrainerActive,
-  onBet
+  onBet,
 }: BettingPhaseProps) {
   const [numHands, setNumHands] = useState(1);
   const [currentHandIndex, setCurrentHandIndex] = useState(0);
@@ -78,13 +78,12 @@ export function BettingPhase({
     <div className="flex flex-col items-center gap-4">
       {isTrainerActive && (
         <div className="px-4 py-2 bg-blue-950/80 border border-blue-500/50 rounded-lg text-blue-200 text-sm">
-          🎓 <strong>Practice Mode</strong> - Using virtual balance, real bankroll is safe
+          🎓 <strong>Practice Mode</strong> - Using virtual balance, real
+          bankroll is safe
         </div>
       )}
 
-      <div className="text-amber-200 font-serif text-lg">
-        Place Your Bet
-      </div>
+      <div className="text-amber-200 font-serif text-lg">Place Your Bet</div>
 
       {/* Number of hands selector */}
       <div className="flex gap-2">
@@ -202,17 +201,16 @@ export function BettingPhase({
         <Button
           onClick={handlePlaceBet}
           className="bg-green-800 hover:bg-green-700 text-white font-serif px-8"
-          disabled={
-            !handBets.every((bet) => bet >= 10) ||
-            totalBet === 0
-          }
+          disabled={!handBets.every((bet) => bet >= 10) || totalBet === 0}
         >
           Place Bet{numHands > 1 ? "s" : ""} ${totalBet.toFixed(0)}
         </Button>
       </div>
 
       {handBets.some((bet) => bet > 0 && bet < 10) && (
-        <div className="text-amber-400 text-sm">Minimum bet is $10 per hand</div>
+        <div className="text-amber-400 text-sm">
+          Minimum bet is $10 per hand
+        </div>
       )}
     </div>
   );

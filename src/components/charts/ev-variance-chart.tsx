@@ -28,7 +28,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { EVDataPoint } from "@/lib/chart-data-utils";
-import { formatCurrency, transformToAdvantagePlayEVData } from "@/lib/chart-data-utils";
+import {
+  formatCurrency,
+  transformToAdvantagePlayEVData,
+} from "@/lib/chart-data-utils";
 import type { GameSession } from "@/types/user";
 import type { AdvantagePlayLevel } from "@/modules/strategy/ev-calculator";
 import { getAdvantagePlayDescription } from "@/modules/strategy/ev-calculator";
@@ -39,9 +42,14 @@ interface EVVarianceChartProps {
   sessions: GameSession[];
 }
 
-export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EVVarianceChartProps) {
+export function EVVarianceChart({
+  perSessionData,
+  cumulativeData,
+  sessions,
+}: EVVarianceChartProps) {
   const [mode, setMode] = useState<"per-session" | "cumulative">("cumulative");
-  const [advantageLevel, setAdvantageLevel] = useState<AdvantagePlayLevel>("basic-strategy");
+  const [advantageLevel, setAdvantageLevel] =
+    useState<AdvantagePlayLevel>("basic-strategy");
 
   // Calculate data for all advantage play levels
   const advantagePlayData = useMemo(() => {
@@ -53,10 +61,13 @@ export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EV
       "perfect-play",
     ];
 
-    const dataByLevel: Record<AdvantagePlayLevel, {
-      perSession: EVDataPoint[];
-      cumulative: EVDataPoint[];
-    }> = {} as any;
+    const dataByLevel: Record<
+      AdvantagePlayLevel,
+      {
+        perSession: EVDataPoint[];
+        cumulative: EVDataPoint[];
+      }
+    > = {} as any;
 
     for (const level of levels) {
       dataByLevel[level] = {
@@ -69,11 +80,14 @@ export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EV
   }, [sessions]);
 
   // Use appropriate data based on selected level
-  const data = advantageLevel === "basic-strategy"
-    ? (mode === "cumulative" ? cumulativeData : perSessionData)
-    : (mode === "cumulative"
+  const data =
+    advantageLevel === "basic-strategy"
+      ? mode === "cumulative"
+        ? cumulativeData
+        : perSessionData
+      : mode === "cumulative"
         ? advantagePlayData[advantageLevel]?.cumulative || []
-        : advantagePlayData[advantageLevel]?.perSession || []);
+        : advantagePlayData[advantageLevel]?.perSession || [];
 
   if (data.length === 0) {
     return (
@@ -114,7 +128,9 @@ export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EV
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
+              <CardTitle className="text-white">
+                Expected vs Actual Value
+              </CardTitle>
               <CardDescription>
                 Variance:
                 <span
@@ -128,7 +144,10 @@ export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EV
                 </span>
                 <span className="text-gray-400 ml-2">
                   ({variance >= 0 ? "+" : ""}
-                  {totalEV !== 0 ? ((variance / Math.abs(totalEV)) * 100).toFixed(1) : "0.0"}% vs EV)
+                  {totalEV !== 0
+                    ? ((variance / Math.abs(totalEV)) * 100).toFixed(1)
+                    : "0.0"}
+                  % vs EV)
                 </span>
               </CardDescription>
             </div>
@@ -157,7 +176,9 @@ export function EVVarianceChart({ perSessionData, cumulativeData, sessions }: EV
             <span className="text-gray-400 text-sm">Advantage Play:</span>
             <Select
               value={advantageLevel}
-              onValueChange={(value) => setAdvantageLevel(value as AdvantagePlayLevel)}
+              onValueChange={(value) =>
+                setAdvantageLevel(value as AdvantagePlayLevel)
+              }
             >
               <SelectTrigger className="w-64">
                 <SelectValue />

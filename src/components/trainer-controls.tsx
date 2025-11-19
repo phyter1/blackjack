@@ -1,10 +1,22 @@
 "use client";
 
 import { useTrainerMode } from "@/hooks/use-trainer-mode";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { GraduationCap, RotateCcw } from "lucide-react";
 import type { TrainerDifficulty } from "@/modules/strategy/trainer";
@@ -64,7 +76,10 @@ export function TrainerControls() {
                 Difficulty
               </Label>
               <Select value={difficulty} onValueChange={handleDifficultyChange}>
-                <SelectTrigger id="difficulty" className="bg-blue-950/50 border-blue-500/30 text-blue-100">
+                <SelectTrigger
+                  id="difficulty"
+                  className="bg-blue-950/50 border-blue-500/30 text-blue-100"
+                >
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-blue-950 border-blue-500/30">

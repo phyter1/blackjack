@@ -277,9 +277,7 @@ export class TrainerMode {
     const actual = this.counter.getSnapshot();
     const guess = this.counter.recordGuess(playerRunningCount, playerTrueCount);
 
-    const runningCountDiff = Math.abs(
-      playerRunningCount - actual.runningCount,
-    );
+    const runningCountDiff = Math.abs(playerRunningCount - actual.runningCount);
     const trueCountDiff =
       playerTrueCount !== undefined
         ? Math.abs(playerTrueCount - actual.trueCount)
@@ -380,9 +378,13 @@ export class TrainerMode {
 
       // Counting stats
       totalCountGuesses: this.counter.getGuesses().length,
-      correctRunningCounts: this.counter.getGuesses().filter((g) => g.isRunningCountCorrect).length,
+      correctRunningCounts: this.counter
+        .getGuesses()
+        .filter((g) => g.isRunningCountCorrect).length,
       runningCountAccuracy: this.counter.getRunningCountAccuracy(),
-      correctTrueCounts: this.counter.getGuesses().filter((g) => g.isTrueCountCorrect).length,
+      correctTrueCounts: this.counter
+        .getGuesses()
+        .filter((g) => g.isTrueCountCorrect).length,
       trueCountAccuracy: this.counter.getTrueCountAccuracy(),
 
       // By hand type

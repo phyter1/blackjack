@@ -14,9 +14,14 @@ interface PlayerAreaProps {
   version?: number;
 }
 
-export function PlayerArea({ round, phase, userName, version }: PlayerAreaProps) {
+export function PlayerArea({
+  round,
+  phase,
+  userName,
+  version,
+}: PlayerAreaProps) {
   const { settings } = useSettings();
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   React.useEffect(() => {
     forceUpdate();
@@ -46,7 +51,11 @@ export function PlayerArea({ round, phase, userName, version }: PlayerAreaProps)
               </div>
             )}
 
-            <div className="relative flex" style={{ minHeight: "146px" }} key={`hand-${handIdx}`}>
+            <div
+              className="relative flex"
+              style={{ minHeight: "146px" }}
+              key={`hand-${handIdx}`}
+            >
               {hand.cards.map((card, cardIdx) => (
                 <div
                   key={`card-${cardIdx}-${card.rank}-${card.suit}`}
@@ -59,7 +68,11 @@ export function PlayerArea({ round, phase, userName, version }: PlayerAreaProps)
                   <AnimatedCard
                     card={card}
                     size="xl"
-                    dealDelay={settings.animations.enableAnimations ? cardIdx * settings.animations.dealingSpeed + 100 : 0}
+                    dealDelay={
+                      settings.animations.enableAnimations
+                        ? cardIdx * settings.animations.dealingSpeed + 100
+                        : 0
+                    }
                   />
                 </div>
               ))}

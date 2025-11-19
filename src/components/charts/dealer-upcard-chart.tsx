@@ -151,9 +151,7 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
 
       <Card className="bg-gray-900 border-gray-700">
         <CardHeader>
-          <CardTitle className="text-white">
-            Profit vs Dealer Upcard
-          </CardTitle>
+          <CardTitle className="text-white">Profit vs Dealer Upcard</CardTitle>
           <CardDescription>
             Shows average profit per hand against each dealer upcard
           </CardDescription>
@@ -206,11 +204,7 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
                 {data.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={
-                      entry.avgProfit >= 0
-                        ? "#10B981"
-                        : "#EF4444"
-                    }
+                    fill={entry.avgProfit >= 0 ? "#10B981" : "#EF4444"}
                   />
                 ))}
               </Bar>

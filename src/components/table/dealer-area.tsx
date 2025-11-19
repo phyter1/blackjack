@@ -14,7 +14,7 @@ interface DealerAreaProps {
 
 export function DealerArea({ round, phase, version }: DealerAreaProps) {
   const { settings } = useSettings();
-  const [, forceUpdate] = React.useReducer(x => x + 1, 0);
+  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   React.useEffect(() => {
     forceUpdate();
@@ -22,9 +22,10 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
 
   if (!round) return null;
 
-  const showingText = phase === "dealing" || phase === "playing" || phase === "insurance"
-    ? `Showing: ${round.dealerHand.upCard?.rank || round.dealerHand.cards[0]?.rank || ''}`
-    : `Total: ${round.dealerHand.handValue}`;
+  const showingText =
+    phase === "dealing" || phase === "playing" || phase === "insurance"
+      ? `Showing: ${round.dealerHand.upCard?.rank || round.dealerHand.cards[0]?.rank || ""}`
+      : `Total: ${round.dealerHand.handValue}`;
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -49,16 +50,18 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
                   phase === "insurance")
               }
               size="xl"
-              dealDelay={settings.animations.enableAnimations ? idx * settings.animations.dealingSpeed : 0}
+              dealDelay={
+                settings.animations.enableAnimations
+                  ? idx * settings.animations.dealingSpeed
+                  : 0
+              }
             />
           </div>
         ))}
       </div>
 
       {phase !== "betting" && (
-        <div className="text-amber-400 font-serif">
-          {showingText}
-        </div>
+        <div className="text-amber-400 font-serif">{showingText}</div>
       )}
     </div>
   );

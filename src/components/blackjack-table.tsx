@@ -7,6 +7,8 @@ import { BettingControls } from "./betting-controls";
 import { ActionButtons } from "./action-buttons";
 import { InsuranceDialog } from "./insurance-dialog";
 import { GameStats } from "./game-stats";
+import { ShoeIndicator } from "./shoe-indicator";
+import { DiscardPile } from "./discard-pile";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import {
@@ -23,6 +25,7 @@ export function BlackjackTable() {
     currentPlayer,
     currentRound,
     gameState,
+    shoeDetails,
     startGame,
     placeBet,
     playAction,
@@ -150,73 +153,92 @@ export function BlackjackTable() {
           currentBet={currentBet}
         />
 
-        {/* Game Table */}
-        <div className="bg-green-700 rounded-3xl p-8 shadow-2xl border-8 border-amber-900">
-          {/* Dealer's Hand */}
-          <div className="flex justify-center mb-16">
-            {currentRound && (
-              <HandDisplay
-                cards={currentRound.dealerHand.cards}
-                hideFirstCard={
-                  currentRound.state !== "settling" &&
-                  currentRound.state !== "complete"
-                }
-                value={
-                  currentRound.state === "settling" ||
-                  currentRound.state === "complete"
-                    ? currentRound.dealerHand.value
-                    : undefined
-                }
-                label="Dealer"
-                isSoft={currentRound.dealerHand.isSoft}
-              />
-            )}
+        {/* Main game area with shoe and discard indicators on the sides */}
+        <div className="flex gap-4">
+          {/* Shoe indicator (left side) */}
+          <div className="w-64">
+            <ShoeIndicator
+              remainingCards={shoeDetails.remainingCards}
+              totalCards={shoeDetails.totalCards}
+              cutCardPosition={shoeDetails.cutCardPosition}
+              penetration={shoeDetails.penetration}
+              isComplete={shoeDetails.isComplete}
+            />
           </div>
 
-          {/* Center Area - Actions or Betting */}
-          <div className="flex justify-center mb-16">
-            {gameState === "waiting_for_bets" && (
-              <BettingControls balance={balance} onPlaceBet={placeBet} />
-            )}
-
-            {gameState === "in_round" &&
-              currentRound?.state === "player_turn" && (
-                <ActionButtons
-                  availableActions={getAvailableActions()}
-                  onAction={handleAction}
+          {/* Game Table (center) */}
+          <div className="flex-1 bg-green-700 rounded-3xl p-8 shadow-2xl border-8 border-amber-900">
+            {/* Dealer's Hand */}
+            <div className="flex justify-center mb-16">
+              {currentRound && (
+                <HandDisplay
+                  cards={currentRound.dealerHand.cards}
+                  hideFirstCard={
+                    currentRound.state !== "settling" &&
+                    currentRound.state !== "complete"
+                  }
+                  value={
+                    currentRound.state === "settling" ||
+                    currentRound.state === "complete"
+                      ? currentRound.dealerHand.value
+                      : undefined
+                  }
+                  label="Dealer"
+                  isSoft={currentRound.dealerHand.isSoft}
                 />
               )}
+            </div>
 
-            {gameState === "round_complete" && (
-              <div className="flex flex-col items-center gap-4">
-                <Button
-                  onClick={handleNextRound}
-                  size="lg"
-                  className="bg-blue-600 hover:bg-blue-700"
-                >
-                  Next Round
-                </Button>
-              </div>
-            )}
+            {/* Center Area - Actions or Betting */}
+            <div className="flex justify-center mb-16">
+              {gameState === "waiting_for_bets" && (
+                <BettingControls balance={balance} onPlaceBet={placeBet} />
+              )}
+
+              {gameState === "in_round" &&
+                currentRound?.state === "player_turn" && (
+                  <ActionButtons
+                    availableActions={getAvailableActions()}
+                    onAction={handleAction}
+                  />
+                )}
+
+              {gameState === "round_complete" && (
+                <div className="flex flex-col items-center gap-4">
+                  <Button
+                    onClick={handleNextRound}
+                    size="lg"
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    Next Round
+                  </Button>
+                </div>
+              )}
+            </div>
+
+            {/* Player's Hand(s) */}
+            <div className="flex justify-center gap-8">
+              {currentRound?.playerHands.map((hand, index) => (
+                <HandDisplay
+                  key={hand.id}
+                  cards={hand.hand}
+                  value={hand.value}
+                  label={`${currentPlayer.name}${
+                    currentRound.playerHands.length > 1
+                      ? ` (Hand ${index + 1})`
+                      : ""
+                  }`}
+                  isSoft={hand.isSoft}
+                  state={hand.state}
+                  betAmount={hand.betAmount}
+                />
+              ))}
+            </div>
           </div>
 
-          {/* Player's Hand(s) */}
-          <div className="flex justify-center gap-8">
-            {currentRound?.playerHands.map((hand, index) => (
-              <HandDisplay
-                key={hand.id}
-                cards={hand.hand}
-                value={hand.value}
-                label={`${currentPlayer.name}${
-                  currentRound.playerHands.length > 1
-                    ? ` (Hand ${index + 1})`
-                    : ""
-                }`}
-                isSoft={hand.isSoft}
-                state={hand.state}
-                betAmount={hand.betAmount}
-              />
-            ))}
+          {/* Discard pile (right side) */}
+          <div className="w-64">
+            <DiscardPile discardPile={shoeDetails.discardPile} />
           </div>
         </div>
 

@@ -36,8 +36,7 @@ export function BetSizeChart({ data }: BetSizeChartProps) {
     );
   }
 
-  const avgOfAvg =
-    data.reduce((sum, d) => sum + d.avgBetSize, 0) / data.length;
+  const avgOfAvg = data.reduce((sum, d) => sum + d.avgBetSize, 0) / data.length;
 
   return (
     <Card className="bg-gray-900 border-gray-700">

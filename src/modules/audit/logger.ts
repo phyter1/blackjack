@@ -22,7 +22,7 @@ export class AuditLogger {
   constructor(options: AuditLoggerOptions = {}) {
     this.sessionId = options.sessionId ?? `session-${crypto.randomUUID()}`;
     this.enableConsoleLog = options.enableConsoleLog ?? false;
-    this.enableFileLog = false //  options.enableFileLog ?? false;
+    this.enableFileLog = false; //  options.enableFileLog ?? false;
     this.logFilePath = options.logFilePath;
     // this.initLogFile();
   }

@@ -85,9 +85,9 @@ if (round.state === "player_turn") {
       if (currentHand.state === "active") {
         console.log(`  New value: ${currentHand.handValue}`);
         console.log(
-          `  New cards: ${
-            currentHand.cards.map((c) => `${c.rank}${c.suit}`).join(", ")
-          }`,
+          `  New cards: ${currentHand.cards
+            .map((c) => `${c.rank}${c.suit}`)
+            .join(", ")}`,
         );
       } else {
         console.log(`  Hand state: ${currentHand.state}`);
@@ -100,9 +100,9 @@ if (round.state === "player_turn") {
 // Display dealer's hand
 console.log("--- Dealer's Turn ---\n");
 console.log(
-  `Dealer's final hand: ${
-    round.dealerHand.cards.map((c) => `${c.rank}${c.suit}`).join(", ")
-  }`,
+  `Dealer's final hand: ${round.dealerHand.cards
+    .map((c) => `${c.rank}${c.suit}`)
+    .join(", ")}`,
 );
 console.log(`Dealer's value: ${round.dealerHand.handValue}`);
 console.log(`Dealer's state: ${round.dealerHand.state}\n`);
@@ -133,9 +133,9 @@ const round2 = game.startRound(singleBet);
 
 console.log(`Round started with ${round2.playerHands.length} hand(s)`);
 console.log(
-  `Hand 1 (Index ${round2.playerHands[0].originalHandIndex}): ${
-    round2.playerHands[0].cards.map((c) => `${c.rank}${c.suit}`).join(", ")
-  }\n`,
+  `Hand 1 (Index ${round2.playerHands[0].originalHandIndex}): ${round2.playerHands[0].cards
+    .map((c) => `${c.rank}${c.suit}`)
+    .join(", ")}\n`,
 );
 
 // Play out the round quickly

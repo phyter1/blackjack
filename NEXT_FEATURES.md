@@ -7,7 +7,7 @@
 ## **Proposed Features:**
 
 1. Visual Enancement: Add chip stacks and betting animations to improve user experience. Use the common stacking patters for various bet types - eg: center of the circle for even money bets, horizontal stacks for splits, vertical stacks for double downs, etc.
-2. Visual Enhancement: Add visual indicators for
+2. Visual Enhancement: Add visual indicators for the shoe and discard pile to enhance realism. Should be realistic, show where the cut card is, and the discard pile should show an accurate representation of the cards that have been played.
 3. Persistent Game State: Implement a feature to save and load game states to the database, allowing players to resume their games later.
 4. Multi-Player Support: Introduce a multi-player mode where multiple users can join the same game session and play against the dealer.
    * Chat Functionality: Add a chat feature for players to communicate during multi-player games.

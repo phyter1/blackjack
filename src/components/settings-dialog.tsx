@@ -39,15 +39,15 @@ export function SettingsDialog() {
 
   const handleDealingSpeedChange = (value: number[]) => {
     const newSpeed = value[0];
-    setLocalSettings(prev => ({ ...prev, dealingSpeed: newSpeed }));
+    setLocalSettings((prev) => ({ ...prev, dealingSpeed: newSpeed }));
     // Trigger preview re-render
-    setPreviewKey(prev => prev + 1);
+    setPreviewKey((prev) => prev + 1);
   };
 
   const handleEnableAnimationsChange = (checked: boolean) => {
-    setLocalSettings(prev => ({ ...prev, enableAnimations: checked }));
+    setLocalSettings((prev) => ({ ...prev, enableAnimations: checked }));
     // Trigger preview re-render
-    setPreviewKey(prev => prev + 1);
+    setPreviewKey((prev) => prev + 1);
   };
 
   const handleSave = () => {
@@ -68,7 +68,11 @@ export function SettingsDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" className="fixed top-4 right-4 z-50">
+        <Button
+          variant="outline"
+          size="icon"
+          className="fixed top-4 right-4 z-50"
+        >
           <Settings className="h-4 w-4" />
         </Button>
       </DialogTrigger>
@@ -148,7 +152,8 @@ export function SettingsDialog() {
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground text-center">
-                  Cards will appear with a {localSettings.dealingSpeed}ms delay between each
+                  Cards will appear with a {localSettings.dealingSpeed}ms delay
+                  between each
                 </p>
               </div>
             )}

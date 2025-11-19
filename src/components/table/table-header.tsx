@@ -80,18 +80,19 @@ export function TableHeader({
           <div className="text-sm text-amber-400">
             {isTrainerActive ? "Practice Balance" : "Balance"}
           </div>
-          <div className={cn(
-            "text-xl font-bold",
-            isTrainerActive ? "text-blue-400" : "text-green-400"
-          )}>
-            ${isTrainerActive
+          <div
+            className={cn(
+              "text-xl font-bold",
+              isTrainerActive ? "text-blue-400" : "text-green-400",
+            )}
+          >
+            $
+            {isTrainerActive
               ? practiceBalance.toLocaleString()
               : currentBalance.toFixed(2)}
           </div>
           {isTrainerActive && (
-            <div className="text-xs text-blue-300">
-              (Training Mode)
-            </div>
+            <div className="text-xs text-blue-300">(Training Mode)</div>
           )}
         </div>
 
@@ -111,7 +112,7 @@ export function TableHeader({
           size="sm"
           className={cn(
             "border-blue-700 text-blue-200 hover:bg-blue-900",
-            showTrainerSidebar ? "bg-blue-800/80" : "bg-blue-950/50"
+            showTrainerSidebar ? "bg-blue-800/80" : "bg-blue-950/50",
           )}
         >
           <GraduationCap className="w-4 h-4 mr-2" />

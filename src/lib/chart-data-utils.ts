@@ -127,7 +127,9 @@ export function transformToEVData(sessions: GameSession[]): EVDataPoint[] {
 /**
  * Transform sessions into cumulative EV/AV chart data
  */
-export function transformToCumulativeEVData(sessions: GameSession[]): EVDataPoint[] {
+export function transformToCumulativeEVData(
+  sessions: GameSession[],
+): EVDataPoint[] {
   const sortedSessions = [...sessions].sort(
     (a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime(),
   );
@@ -190,9 +192,10 @@ export function transformToAdvantagePlayEVData(
       level,
       strategyAccuracy: session.strategyAccuracy,
       decisionsData: session.decisionsData,
-      averageBetSize: session.roundsPlayed > 0
-        ? session.totalWagered / session.roundsPlayed
-        : session.totalWagered / 100,
+      averageBetSize:
+        session.roundsPlayed > 0
+          ? session.totalWagered / session.roundsPlayed
+          : session.totalWagered / 100,
     });
 
     if (cumulative) {
@@ -401,8 +404,7 @@ export function analyzeStreaks(sessions: GameSession[]): StreakData {
   }
 
   // Current streak is the last one
-  currentStreak =
-    currentStreakType === "win" ? tempWinStreak : -tempLossStreak;
+  currentStreak = currentStreakType === "win" ? tempWinStreak : -tempLossStreak;
 
   return {
     currentStreak,
@@ -454,7 +456,9 @@ export function analyzeDealerUpcards(
 
   for (const [upcard, decisions] of byUpcard.entries()) {
     // Only count decisions where we have outcome data (one decision per hand)
-    const decisionsWithOutcome = decisions.filter((d) => d.outcome !== undefined);
+    const decisionsWithOutcome = decisions.filter(
+      (d) => d.outcome !== undefined,
+    );
 
     if (decisionsWithOutcome.length === 0) {
       continue;
@@ -472,13 +476,19 @@ export function analyzeDealerUpcards(
 
     const totalHands = uniqueHands.length;
     const wins = uniqueHands.filter(
-      (d) => d.outcome === "win" || d.outcome === "blackjack" || d.outcome === "charlie",
+      (d) =>
+        d.outcome === "win" ||
+        d.outcome === "blackjack" ||
+        d.outcome === "charlie",
     ).length;
     const losses = uniqueHands.filter(
       (d) => d.outcome === "lose" || (d.profit && d.profit < 0),
     ).length;
     const pushes = uniqueHands.filter((d) => d.outcome === "push").length;
-    const totalProfit = uniqueHands.reduce((sum, d) => sum + (d.profit || 0), 0);
+    const totalProfit = uniqueHands.reduce(
+      (sum, d) => sum + (d.profit || 0),
+      0,
+    );
 
     stats.push({
       upcard,

@@ -28,6 +28,7 @@ class GameStore {
     playerBalance: number;
     roundNumber: number;
     currentBet: number | undefined;
+    shoeDetails: ReturnType<Game["getShoeDetails"]>;
     version: number;
   } | null = null;
 
@@ -73,6 +74,7 @@ class GameStore {
       playerBalance: this.player?.bank.balance ?? 0,
       roundNumber: this.game.getStats().roundNumber,
       currentBet: currentRound?.playerHands[0]?.betAmount,
+      shoeDetails: this.game.getShoeDetails(),
       version: this.version,
     };
   };
@@ -175,6 +177,7 @@ export function useBlackjackGame() {
     currentPlayer: snapshot.currentPlayer,
     currentRound: snapshot.currentRound,
     gameState: snapshot.gameState,
+    shoeDetails: snapshot.shoeDetails,
 
     // Actions
     startGame: (playerName: string, bankroll: number) =>

@@ -44,9 +44,7 @@ export function RulesSelector({
   onSave,
   onCancel,
 }: RulesSelectorProps) {
-  const [rules, setRules] = useState<TableRules>(
-    initialRules || DEFAULT_RULES,
-  );
+  const [rules, setRules] = useState<TableRules>(initialRules || DEFAULT_RULES);
 
   // Calculate house edge whenever rules change
   const calculateHouseEdge = (currentRules: TableRules): number => {
@@ -281,9 +279,7 @@ export function RulesSelector({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="s17">
-                      S17 (Stand on Soft 17)
-                    </SelectItem>
+                    <SelectItem value="s17">S17 (Stand on Soft 17)</SelectItem>
                     <SelectItem value="h17">H17 (Hit on Soft 17)</SelectItem>
                   </SelectContent>
                 </Select>
@@ -349,9 +345,9 @@ export function RulesSelector({
                 </Label>
                 <Select
                   value={rules.doubleRestriction}
-                  onValueChange={(
-                    value: "any" | "9-11" | "10-11" | "11",
-                  ) => updateRule("doubleRestriction", value)}
+                  onValueChange={(value: "any" | "9-11" | "10-11" | "11") =>
+                    updateRule("doubleRestriction", value)
+                  }
                 >
                   <SelectTrigger
                     id="doubleRestriction"

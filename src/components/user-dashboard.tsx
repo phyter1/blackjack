@@ -262,7 +262,9 @@ export function UserDashboard({
             {currentRules && (
               <div className="mt-2 p-2 bg-black rounded border border-gray-700">
                 <p className="text-xs text-gray-400">Current table rules:</p>
-                <p className="text-sm text-white">{formatRules(currentRules)}</p>
+                <p className="text-sm text-white">
+                  {formatRules(currentRules)}
+                </p>
                 <p className="text-xs text-green-400">
                   House Edge: {currentRules.houseEdge?.toFixed(2)}%
                 </p>
@@ -522,7 +524,9 @@ export function UserDashboard({
             {viewMode === "all" && allSessions.length > sessionsPerPage && (
               <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-800">
                 <Button
-                  onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(1, prev - 1))
+                  }
                   disabled={currentPage === 1}
                   variant="outline"
                   className="border-gray-700 text-gray-400 hover:text-white disabled:opacity-30"

@@ -9,7 +9,13 @@ import { ActionButtons } from "./action-buttons";
 import { GameStats } from "./game-stats";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
 import { TrainerControls } from "./trainer-controls";
 import { StrategyFeedback } from "./strategy-feedback";
 import { CountingPanel } from "./counting-panel";
@@ -176,7 +182,7 @@ export function TrainerPage() {
         {/* Header with back button */}
         <div className="mb-4 flex items-center justify-between">
           <Button
-            onClick={() => window.location.href = '/'}
+            onClick={() => (window.location.href = "/")}
             variant="outline"
             className="bg-black/30 border-amber-600/30 text-amber-200 hover:bg-black/50"
           >
@@ -214,7 +220,9 @@ export function TrainerPage() {
                   {/* Dealer */}
                   {currentRound && (
                     <div className="text-center space-y-4">
-                      <h3 className="text-amber-200 font-serif text-xl">Dealer</h3>
+                      <h3 className="text-amber-200 font-serif text-xl">
+                        Dealer
+                      </h3>
                       <HandDisplay
                         cards={currentRound.dealerHand.cards}
                         value={currentRound.dealerHand.handValue}

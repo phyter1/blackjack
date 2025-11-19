@@ -54,7 +54,11 @@ export class Game {
     this.shoe = new Shoe(numDecks, penetration, testStack);
 
     // Initialize audit logger for this session
-    const logger = initAuditLogger({ enableFileLog: true, enableConsoleLog: true, logFilePath: "./audit_log.csv" });
+    const logger = initAuditLogger({
+      enableFileLog: true,
+      enableConsoleLog: true,
+      logFilePath: "./audit_log.csv",
+    });
     this.sessionId = logger.getSessionId();
 
     // Audit log session start
@@ -338,6 +342,17 @@ export class Game {
       throw new Error("Round is not complete");
     }
 
+    // Discard all cards from the completed round to the shoe's discard pile
+    if (this.currentRound) {
+      // Collect all cards from player hands
+      for (const playerHand of this.currentRound.playerHands) {
+        this.shoe.discard(playerHand.hand);
+      }
+
+      // Collect cards from dealer hand
+      this.shoe.discard(this.currentRound.dealerHand.cards);
+    }
+
     // Clear the current round from audit logger
     getAuditLogger().clearCurrentRound();
 
@@ -359,6 +374,13 @@ export class Game {
       shoeComplete: this.shoe.isComplete,
       state: this.state,
     };
+  }
+
+  /**
+   * Get detailed shoe information for visualization
+   */
+  getShoeDetails() {
+    return this.shoe.detailedStats;
   }
 
   /**
