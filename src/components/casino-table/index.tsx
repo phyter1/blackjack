@@ -90,15 +90,14 @@ export function CasinoTable({
   );
 
   // Insurance hook
-  const { insuranceHandIndex, handleInsuranceAction } =
-    useInsurance({
-      game,
-      phase,
-      setPhase,
-      setCurrentRound,
-      setCurrentActions,
-      setRoundVersion,
-    });
+  const { insuranceHandIndex, handleInsuranceAction } = useInsurance({
+    game,
+    phase,
+    setPhase,
+    setCurrentRound,
+    setCurrentActions,
+    setRoundVersion,
+  });
 
   // Update hand outcomes when settling phase is reached
   useEffect(() => {
@@ -237,6 +236,7 @@ export function CasinoTable({
             currentBalance={currentBalance}
             practiceBalance={practiceBalance}
             isTrainerActive={isTrainerActive}
+            maxPlayableHands={rules?.maxPlayableHands || 5}
             onBet={onBet}
           />
         )}
@@ -251,10 +251,7 @@ export function CasinoTable({
         )}
 
         {phase === "playing" && currentActions.length > 0 && (
-          <PlayingPhase
-            availableActions={currentActions}
-            onAction={onAction}
-          />
+          <PlayingPhase availableActions={currentActions} onAction={onAction} />
         )}
 
         {phase === "settling" && (
