@@ -417,7 +417,7 @@ export function CasinoTable({
         // We need to preserve ALL properties including betAmount, handValue, etc.
         const clonedRound = {
           ...newRound,
-          playerHands: newRound.playerHands.map(hand => ({
+          playerHands: newRound.playerHands.map((hand: any) => ({
             ...hand,
             cards: [...hand.cards], // Create new array reference for cards
             betAmount: hand.betAmount,
@@ -435,7 +435,7 @@ export function CasinoTable({
             ...newRound.dealerHand,
             cards: [...newRound.dealerHand.cards],
             handValue: newRound.dealerHand.handValue,
-            hardValue: newRound.dealerHand.hardValue,
+            hardValue: (newRound.dealerHand as any).hardValue,
             isSoft: newRound.dealerHand.isSoft,
             upCard: newRound.dealerHand.upCard
           },
