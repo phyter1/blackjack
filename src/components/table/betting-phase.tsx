@@ -210,18 +210,35 @@ export function BettingPhase({
       </div>
 
       {/* Chips */}
-      <div className="grid grid-cols-4 gap-2 items-center justify-items-center max-w-xs">
-        {CHIP_VALUES.map((chip) => (
-          <CasinoChip
-            key={chip.value}
-            value={chip.value}
-            color={chip.color}
-            accentColor={chip.accentColor}
-            onClick={() => handleChipClick(chip.value)}
-            disabled={chip.value > availableBalance}
-            selected={selectedChipValue === chip.value}
-          />
-        ))}
+      <div className="flex flex-col items-center gap-2">
+        {/* Top row - 3 chips */}
+        <div className="flex gap-2 justify-center">
+          {CHIP_VALUES.slice(0, 3).map((chip) => (
+            <CasinoChip
+              key={chip.value}
+              value={chip.value}
+              color={chip.color}
+              accentColor={chip.accentColor}
+              onClick={() => handleChipClick(chip.value)}
+              disabled={chip.value > availableBalance}
+              selected={selectedChipValue === chip.value}
+            />
+          ))}
+        </div>
+        {/* Bottom row - 4 chips */}
+        <div className="flex gap-2 justify-center">
+          {CHIP_VALUES.slice(3, 7).map((chip) => (
+            <CasinoChip
+              key={chip.value}
+              value={chip.value}
+              color={chip.color}
+              accentColor={chip.accentColor}
+              onClick={() => handleChipClick(chip.value)}
+              disabled={chip.value > availableBalance}
+              selected={selectedChipValue === chip.value}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Action buttons */}
