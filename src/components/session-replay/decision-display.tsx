@@ -18,7 +18,11 @@ interface DecisionDisplayProps {
   total: number;
 }
 
-export function DecisionDisplay({ decision, index, total }: DecisionDisplayProps) {
+export function DecisionDisplay({
+  decision,
+  index,
+  total,
+}: DecisionDisplayProps) {
   const formatTimestamp = (timestamp: string) => {
     return new Date(timestamp).toLocaleTimeString();
   };
@@ -52,7 +56,9 @@ export function DecisionDisplay({ decision, index, total }: DecisionDisplayProps
             <CardTitle className="text-white">
               Decision {index + 1} of {total}
             </CardTitle>
-            <CardDescription>{formatTimestamp(decision.timestamp)}</CardDescription>
+            <CardDescription>
+              {formatTimestamp(decision.timestamp)}
+            </CardDescription>
           </div>
           <div className="flex items-center gap-2">
             {decision.isCorrect ? (

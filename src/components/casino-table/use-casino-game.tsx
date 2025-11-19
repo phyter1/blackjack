@@ -105,7 +105,14 @@ export function useCasinoGame({
 
     // Store the original real balance
     originalBalanceRef.current = bank.balance;
-  }, [user.name, bank.balance, user.id, rules, searchParams, initializeTrainer]);
+  }, [
+    user.name,
+    bank.balance,
+    user.id,
+    rules,
+    searchParams,
+    initializeTrainer,
+  ]);
 
   return {
     // State

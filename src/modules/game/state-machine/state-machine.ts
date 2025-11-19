@@ -37,7 +37,9 @@ export class BaseStateMachine<S extends string, E extends { type: string }>
    * Build a map of transitions for efficient lookup
    */
   private buildTransitionMap(): void {
-    for (const [stateName, stateConfig] of Object.entries(this.config.states) as [S, typeof this.config.states[S]][]) {
+    for (const [stateName, stateConfig] of Object.entries(
+      this.config.states,
+    ) as [S, (typeof this.config.states)[S]][]) {
       if (stateConfig.on) {
         for (const [eventType, targetState] of Object.entries(stateConfig.on)) {
           const key = `${stateName}-${eventType}`;
@@ -195,7 +197,9 @@ export class BaseStateMachine<S extends string, E extends { type: string }>
     lines.push(`  Current State: ${this._currentState}`);
     lines.push("  Transitions:");
 
-    for (const [stateName, stateConfig] of Object.entries(this.config.states) as [S, typeof this.config.states[S]][]) {
+    for (const [stateName, stateConfig] of Object.entries(
+      this.config.states,
+    ) as [S, (typeof this.config.states)[S]][]) {
       if (stateConfig.on) {
         for (const [eventType, targetState] of Object.entries(stateConfig.on)) {
           const current = stateName === this._currentState ? "→" : " ";
