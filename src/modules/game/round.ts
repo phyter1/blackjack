@@ -9,7 +9,7 @@ import {
 import { type Bank, type House } from "./bank";
 import { DealerHand } from "./dealer-hand";
 import { Hand } from "./hand";
-import type { RuleSet } from "./rules";
+import type { RuleSet } from "./rules/index";
 import { type SettlementResult, settleRound } from "./settlement";
 import type { Shoe } from "./shoe";
 

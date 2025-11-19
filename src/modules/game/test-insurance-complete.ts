@@ -1,6 +1,6 @@
 import { Bank, House } from "./bank";
 import { Round, type PlayerRoundInfo } from "./round";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import { Shoe } from "./shoe";
 
 console.log("=== Complete Insurance Flow Test ===\n");

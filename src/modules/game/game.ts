@@ -3,7 +3,7 @@ import { House } from "./bank";
 import type { Player } from "./player";
 import { PlayerManager } from "./player";
 import { Round, type PlayerRoundInfo } from "./round";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import type { SettlementResult } from "./settlement";
 import { Shoe } from "./shoe";
 import type { Stack } from "./cards";
@@ -13,12 +13,17 @@ import type {
   SessionEndEvent,
   PlayerJoinEvent,
   PlayerLeaveEvent,
-  GameStateChangeEvent,
   RoundStartEvent,
   RoundCompleteEvent,
 } from "../audit/types";
+import {
+  GameStateMachine,
+  createGameStateMachine,
+  gameStateValidation,
+  type GameState
+} from "./state-machine/index";
 
-export type GameState = "waiting_for_bets" | "in_round" | "round_complete";
+export type { GameState } from "./state-machine/index";
 
 export type PlayerBet = {
   playerId: string;
@@ -31,7 +36,7 @@ export class Game {
   private shoe: Shoe;
   private currentRound?: Round;
   private roundNumber: number = 0;
-  private state: GameState = "waiting_for_bets";
+  private stateMachine: GameStateMachine;
   private rules: RuleSet;
   private numDecks: number;
   private penetration: number;
@@ -52,6 +57,7 @@ export class Game {
     this.house = new House(houseInitialBankroll);
     this.testStack = testStack;
     this.shoe = new Shoe(numDecks, penetration, testStack);
+    this.stateMachine = createGameStateMachine();
 
     // Initialize audit logger for this session
     const logger = initAuditLogger({
@@ -74,7 +80,7 @@ export class Game {
    * Add a player to the game
    */
   addPlayer(name: string, bankroll: number): Player {
-    if (this.state === "in_round") {
+    if (!gameStateValidation.canAddPlayer(this.stateMachine.currentState)) {
       throw new Error("Cannot add players during a round");
     }
     const player = this.playerManager.addPlayer(name, bankroll);
@@ -93,7 +99,7 @@ export class Game {
    * Remove a player from the game
    */
   removePlayer(playerId: string): boolean {
-    if (this.state === "in_round") {
+    if (!gameStateValidation.canRemovePlayer(this.stateMachine.currentState)) {
       throw new Error("Cannot remove players during a round");
     }
 
@@ -128,7 +134,7 @@ export class Game {
    * Start a new round with player bets
    */
   startRound(bets: PlayerBet[]): Round {
-    if (this.state === "in_round") {
+    if (!this.stateMachine.canStartRound()) {
       throw new Error("Cannot start a new round while one is in progress");
     }
 
@@ -189,8 +195,8 @@ export class Game {
       this.rules,
     );
 
-    // Set state and log state change
-    this.setState("in_round");
+    // Transition state machine to in_round
+    this.stateMachine.startRound(bets);
 
     // Check if round auto-progressed to settling (e.g., all players have blackjack)
     if (this.currentRound.state === "settling") {
@@ -208,7 +214,7 @@ export class Game {
       throw new Error("No active round");
     }
 
-    if (this.state !== "in_round") {
+    if (!this.stateMachine.isRoundActive()) {
       throw new Error("Cannot play action - not in a round");
     }
 
@@ -273,21 +279,6 @@ export class Game {
     return results;
   }
 
-  /**
-   * Set the game state and log the change
-   */
-  private setState(newState: GameState): void {
-    const oldState = this.state;
-    this.state = newState;
-
-    if (oldState !== newState) {
-      // Audit log state change
-      getAuditLogger().log<GameStateChangeEvent>("game_state_change", {
-        fromState: oldState,
-        toState: newState,
-      });
-    }
-  }
 
   /**
    * Settle the current round
@@ -303,8 +294,8 @@ export class Game {
     const totalPayout = results.reduce((sum, r) => sum + r.payout, 0);
     const houseProfit = results.reduce((sum, r) => sum - r.payout, 0);
 
-    // Set state and log state change
-    this.setState("round_complete");
+    // Transition state machine to round_complete
+    this.stateMachine.settleRound(results);
 
     // Audit log round complete
     getAuditLogger().log<RoundCompleteEvent>("round_complete", {
@@ -338,7 +329,7 @@ export class Game {
    * Complete the current round and prepare for the next one
    */
   completeRound(): void {
-    if (this.state !== "round_complete") {
+    if (!this.stateMachine.canCompleteRound()) {
       throw new Error("Round is not complete");
     }
 
@@ -356,8 +347,8 @@ export class Game {
     // Clear the current round from audit logger
     getAuditLogger().clearCurrentRound();
 
-    // Set state and log state change
-    this.setState("waiting_for_bets");
+    // Transition state machine back to waiting_for_bets
+    this.stateMachine.completeRound();
     this.currentRound = undefined;
   }
 
@@ -372,7 +363,7 @@ export class Game {
       houseBankroll: this.house.balance,
       shoeRemainingCards: this.shoe.remainingCards,
       shoeComplete: this.shoe.isComplete,
-      state: this.state,
+      state: this.stateMachine.currentState,
     };
   }
 
@@ -387,7 +378,7 @@ export class Game {
    * Get the current game state
    */
   getState(): GameState {
-    return this.state;
+    return this.stateMachine.currentState;
   }
 
   /**

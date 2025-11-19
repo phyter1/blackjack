@@ -1,5 +1,5 @@
 import type { Card, Stack } from "./cards";
-import type { CompleteRuleSet, RuleSet } from "./rules";
+import type { CompleteRuleSet, RuleSet } from "./rules/index";
 
 export class DealerHand {
   state: "active" | "busted" | "stood" | "blackjack" = "active";

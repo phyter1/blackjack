@@ -2,7 +2,7 @@ import { Bank, House } from "./bank";
 import { newDeck } from "./cards";
 import { DealerHand } from "./dealer-hand";
 import { Hand } from "./hand";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import { settleHand } from "./settlement";
 
 // Create a standard ruleset

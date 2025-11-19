@@ -4,7 +4,7 @@
  */
 
 import { Game } from "./game";
-import { RuleSet } from "./rules";
+import { RuleSet } from "./rules/index";
 import { ACTION_HIT, ACTION_STAND } from "./action";
 
 console.log("=== Multi-Hand Blackjack Test ===\n");
