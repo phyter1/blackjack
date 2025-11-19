@@ -147,9 +147,7 @@ export function handleEndGame(params: EndGameHandlerParams): void {
  * Update hand outcomes when settling phase is reached
  * This should be called in a useEffect
  */
-export function updateSettlementOutcomes(
-  params: SettlementEffectParams,
-): void {
+export function updateSettlementOutcomes(params: SettlementEffectParams): void {
   const {
     phase,
     game,

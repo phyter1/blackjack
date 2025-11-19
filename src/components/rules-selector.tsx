@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { RuleSet } from "@/modules/game/rules";
+import type { TableRules } from "@/types/user";
+import { Button } from "./ui/button";
 import {
   Card,
   CardContent,
@@ -8,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 import {
   Select,
@@ -18,8 +20,6 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Switch } from "./ui/switch";
-import type { TableRules } from "@/types/user";
-import { RuleSet } from "@/modules/game/rules";
 
 interface RulesSelectorProps {
   initialRules?: TableRules;
@@ -37,6 +37,7 @@ const DEFAULT_RULES: TableRules = {
   resplitAces: false,
   hitSplitAces: false,
   maxSplits: 3,
+  maxPlayableHands: 5,
 };
 
 export function RulesSelector({
@@ -103,6 +104,7 @@ export function RulesSelector({
           resplitAces: false,
           hitSplitAces: false,
           maxSplits: 3,
+          maxPlayableHands: 5,
         });
         break;
       case "atlantic-city":
@@ -116,6 +118,7 @@ export function RulesSelector({
           resplitAces: false,
           hitSplitAces: false,
           maxSplits: 3,
+          maxPlayableHands: 5,
         });
         break;
       case "single-deck":
@@ -129,6 +132,7 @@ export function RulesSelector({
           resplitAces: false,
           hitSplitAces: false,
           maxSplits: 3,
+          maxPlayableHands: 5,
         });
         break;
       case "liberal":
@@ -142,6 +146,7 @@ export function RulesSelector({
           resplitAces: true,
           hitSplitAces: false,
           maxSplits: 3,
+          maxPlayableHands: 5,
         });
         break;
       default:
@@ -243,7 +248,7 @@ export function RulesSelector({
                 <Select
                   value={rules.deckCount.toString()}
                   onValueChange={(value) =>
-                    updateRule("deckCount", parseInt(value))
+                    updateRule("deckCount", parseInt(value, 10))
                   }
                 >
                   <SelectTrigger
@@ -371,7 +376,7 @@ export function RulesSelector({
                 <Select
                   value={rules.maxSplits.toString()}
                   onValueChange={(value) =>
-                    updateRule("maxSplits", parseInt(value))
+                    updateRule("maxSplits", parseInt(value, 10))
                   }
                 >
                   <SelectTrigger
@@ -385,6 +390,32 @@ export function RulesSelector({
                     <SelectItem value="2">2 Splits (3 hands)</SelectItem>
                     <SelectItem value="3">3 Splits (4 hands)</SelectItem>
                     <SelectItem value="4">4 Splits (5 hands)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="maxPlayableHands" className="text-white">
+                  Max Playable Hands
+                </Label>
+                <Select
+                  value={(rules.maxPlayableHands || 5).toString()}
+                  onValueChange={(value) =>
+                    updateRule("maxPlayableHands", parseInt(value, 10))
+                  }
+                >
+                  <SelectTrigger
+                    id="maxPlayableHands"
+                    className="bg-gray-800 text-white border-gray-700"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="1">1 Hand</SelectItem>
+                    <SelectItem value="2">2 Hands</SelectItem>
+                    <SelectItem value="3">3 Hands</SelectItem>
+                    <SelectItem value="4">4 Hands</SelectItem>
+                    <SelectItem value="5">5 Hands</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

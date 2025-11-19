@@ -25,6 +25,7 @@ export interface TableRules {
   resplitAces: boolean;
   hitSplitAces: boolean;
   maxSplits: number;
+  maxPlayableHands?: number; // 1-5, defaults to 5
   houseEdge?: number;
 }
 

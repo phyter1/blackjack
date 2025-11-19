@@ -20,7 +20,7 @@ import {
   GameStateMachine,
   createGameStateMachine,
   gameStateValidation,
-  type GameState
+  type GameState,
 } from "./state-machine/index";
 
 export type { GameState } from "./state-machine/index";
@@ -278,7 +278,6 @@ export class Game {
 
     return results;
   }
-
 
   /**
    * Settle the current round

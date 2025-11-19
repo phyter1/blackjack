@@ -18,7 +18,10 @@ interface SessionsPanelProps {
   onSessionSelect: (session: GameSession) => void;
 }
 
-export function SessionsPanel({ allSessions, onSessionSelect }: SessionsPanelProps) {
+export function SessionsPanel({
+  allSessions,
+  onSessionSelect,
+}: SessionsPanelProps) {
   const [sessions, setSessions] = useState<GameSession[]>([]);
   const [viewMode, setViewMode] = useState<"recent" | "all">("recent");
   const [currentPage, setCurrentPage] = useState(1);

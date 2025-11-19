@@ -136,8 +136,7 @@ export function FinancialMetrics({ decision }: FinancialMetricsProps) {
               evCalc.variance >= 0 ? "text-green-500" : "text-red-500",
             )}
           >
-            {evCalc.variance >= 0 ? "+" : ""}$
-            {evCalc.variance.toFixed(2)}
+            {evCalc.variance >= 0 ? "+" : ""}${evCalc.variance.toFixed(2)}
           </p>
           <p className="text-xs text-gray-500">
             {evCalc.variance >= 0 ? "Lucky" : "Unlucky"}

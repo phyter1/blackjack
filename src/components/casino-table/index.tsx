@@ -49,6 +49,8 @@ export function CasinoTable({
 }: CasinoTableProps) {
   const { settings } = useSettings();
   const [showTrainerSidebar, setShowTrainerSidebar] = useState(false);
+  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
+  const [previousBets, setPreviousBets] = useState<number[] | null>(null);
 
   // Trainer mode hook
   const {
@@ -90,15 +92,14 @@ export function CasinoTable({
   );
 
   // Insurance hook
-  const { insuranceHandIndex, handleInsuranceAction } =
-    useInsurance({
-      game,
-      phase,
-      setPhase,
-      setCurrentRound,
-      setCurrentActions,
-      setRoundVersion,
-    });
+  const { insuranceHandIndex, handleInsuranceAction } = useInsurance({
+    game,
+    phase,
+    setPhase,
+    setCurrentRound,
+    setCurrentActions,
+    setRoundVersion,
+  });
 
   // Update hand outcomes when settling phase is reached
   useEffect(() => {
@@ -207,12 +208,7 @@ export function CasinoTable({
         currentBalance={currentBalance}
         practiceBalance={practiceBalance}
         isTrainerActive={isTrainerActive}
-        countingEnabled={countingEnabled}
-        showCount={showCount}
-        cardCounter={cardCounter}
-        showTrainerSidebar={showTrainerSidebar}
-        onToggleCount={() => setShowCount(!showCount)}
-        onToggleTrainer={() => setShowTrainerSidebar(!showTrainerSidebar)}
+        onOpenSettings={() => setShowSettingsDialog(true)}
         onEndGame={onEndGame}
       />
 
@@ -237,7 +233,10 @@ export function CasinoTable({
             currentBalance={currentBalance}
             practiceBalance={practiceBalance}
             isTrainerActive={isTrainerActive}
+            maxPlayableHands={rules?.maxPlayableHands || 5}
+            previousBets={previousBets}
             onBet={onBet}
+            onSetPreviousBets={setPreviousBets}
           />
         )}
 
@@ -251,10 +250,7 @@ export function CasinoTable({
         )}
 
         {phase === "playing" && currentActions.length > 0 && (
-          <PlayingPhase
-            availableActions={currentActions}
-            onAction={onAction}
-          />
+          <PlayingPhase availableActions={currentActions} onAction={onAction} />
         )}
 
         {phase === "settling" && (
@@ -275,7 +271,14 @@ export function CasinoTable({
       )}
 
       {/* Settings Dialog */}
-      <SettingsDialog />
+      <SettingsDialog
+        open={showSettingsDialog}
+        onOpenChange={setShowSettingsDialog}
+        showTrainerSidebar={showTrainerSidebar}
+        onToggleTrainer={() => setShowTrainerSidebar(!showTrainerSidebar)}
+        showCount={showCount}
+        onToggleCount={() => setShowCount(!showCount)}
+      />
     </div>
   );
 }
