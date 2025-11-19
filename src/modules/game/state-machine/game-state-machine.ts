@@ -154,7 +154,27 @@ export const gameStateValidation: StateValidation = {
 };
 
 /**
- * Create a new game state machine instance
+ * Creates a new game state machine instance for managing game flow.
+ *
+ * The game state machine manages three states:
+ * - `waiting_for_bets`: Ready to accept bets for a new round
+ * - `in_round`: Round is active with players making decisions
+ * - `round_complete`: Round finished, awaiting cleanup
+ *
+ * @returns {GameStateMachine} A new game state machine instance
+ *
+ * @example
+ * ```typescript
+ * const stateMachine = createGameStateMachine();
+ *
+ * // Check current state
+ * console.log(stateMachine.currentState); // "waiting_for_bets"
+ *
+ * // Start a round
+ * if (stateMachine.canStartRound()) {
+ *   stateMachine.startRound(bets);
+ * }
+ * ```
  */
 export function createGameStateMachine(): GameStateMachine {
   return new GameStateMachine();
