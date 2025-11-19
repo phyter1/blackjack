@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from "bun:test";
+import { describe, expect, test } from "bun:test";
 import { Shoe, newShoeStack } from "./shoe";
 import type { Card, Stack } from "./cards";
 
