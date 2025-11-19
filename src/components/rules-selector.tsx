@@ -159,8 +159,8 @@ export function RulesSelector({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-2 sm:p-4">
-      <Card className="bg-gray-900 border-green-500 max-w-3xl w-full max-h-[100dvh] flex flex-col">
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-0 sm:p-4">
+      <Card className="bg-gray-900 border-green-500 max-w-3xl w-full h-full sm:h-auto sm:max-h-[90vh] flex flex-col sm:rounded-lg rounded-none border-0 sm:border">
         <CardHeader className="flex-shrink-0 pb-3 sm:pb-6">
           <CardTitle className="text-green-500 text-xl sm:text-2xl">
             Table Rules Configuration
