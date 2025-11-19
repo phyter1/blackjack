@@ -13,7 +13,7 @@ export function PlayingPhase({
   onAction,
 }: PlayingPhaseProps) {
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-4 pb-20">
       <div className="text-amber-200 font-serif text-lg">Your Action</div>
 
       <div className="flex gap-2">

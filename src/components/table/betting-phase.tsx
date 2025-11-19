@@ -116,7 +116,7 @@ export function BettingPhase({
   const hasInvalidBets = handBets.some((bet) => bet > 0 && bet < 10);
 
   return (
-    <div className="flex flex-col items-center gap-6">
+    <div className="flex flex-col items-center gap-6 pb-20">
       {isTrainerActive && (
         <div className="px-4 py-2 bg-blue-950/80 border border-blue-500/50 rounded-lg text-blue-200 text-sm">
           🎓 <strong>Practice Mode</strong> - Using virtual balance, real
@@ -210,22 +210,39 @@ export function BettingPhase({
       </div>
 
       {/* Chips */}
-      <div className="flex gap-3 items-center">
-        {CHIP_VALUES.map((chip) => (
-          <CasinoChip
-            key={chip.value}
-            value={chip.value}
-            color={chip.color}
-            accentColor={chip.accentColor}
-            onClick={() => handleChipClick(chip.value)}
-            disabled={chip.value > availableBalance}
-            selected={selectedChipValue === chip.value}
-          />
-        ))}
+      <div className="flex flex-col items-center gap-2">
+        {/* Top row - 3 chips */}
+        <div className="flex gap-2 justify-center">
+          {CHIP_VALUES.slice(0, 3).map((chip) => (
+            <CasinoChip
+              key={chip.value}
+              value={chip.value}
+              color={chip.color}
+              accentColor={chip.accentColor}
+              onClick={() => handleChipClick(chip.value)}
+              disabled={chip.value > availableBalance}
+              selected={selectedChipValue === chip.value}
+            />
+          ))}
+        </div>
+        {/* Bottom row - 4 chips */}
+        <div className="flex gap-2 justify-center">
+          {CHIP_VALUES.slice(3).map((chip) => (
+            <CasinoChip
+              key={chip.value}
+              value={chip.value}
+              color={chip.color}
+              accentColor={chip.accentColor}
+              onClick={() => handleChipClick(chip.value)}
+              disabled={chip.value > availableBalance}
+              selected={selectedChipValue === chip.value}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-3">
+      <div className="flex flex-wrap gap-2 w-full max-w-md justify-center">
         {previousBets && (
           <>
             <Button
