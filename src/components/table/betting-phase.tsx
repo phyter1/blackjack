@@ -210,7 +210,7 @@ export function BettingPhase({
       </div>
 
       {/* Chips */}
-      <div className="flex gap-3 items-center">
+      <div className="grid grid-cols-4 gap-2 items-center justify-items-center max-w-xs">
         {CHIP_VALUES.map((chip) => (
           <CasinoChip
             key={chip.value}
@@ -225,7 +225,7 @@ export function BettingPhase({
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-3">
+      <div className="grid grid-cols-2 gap-2 w-full max-w-md">
         {previousBets && (
           <>
             <Button
