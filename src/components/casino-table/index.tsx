@@ -32,6 +32,7 @@ import { SettlingPhase } from "../table/settling-phase";
 import { TrainerSidebar } from "../table/trainer-sidebar";
 import { SettingsDialog } from "../settings-dialog";
 import { ShoeDisplay } from "../table/shoe-display";
+import { DiscardTray } from "../table/discard-tray";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -114,6 +115,7 @@ export function CasinoTable({
       trainer: getTrainer(),
       refreshTrainerStats: refreshStats,
       setCurrentBalance,
+      setRoundVersion,
     });
   }, [
     phase,
@@ -123,6 +125,7 @@ export function CasinoTable({
     refreshStats,
     player,
     decisionTracker,
+    setRoundVersion,
   ]);
 
   // Handler wrappers
@@ -214,14 +217,22 @@ export function CasinoTable({
         onEndGame={onEndGame}
       />
 
-      {/* Shoe Display - Left Side */}
+      {/* Shoe Display - Right Side */}
       {shoeDetails && (
         <ShoeDisplay
           remainingCards={shoeDetails.remainingCards}
-          totalCards={shoeDetails.totalCards}
+          totalCards={shoeDetails.initialCardCount}
           cutCardPosition={shoeDetails.cutCardPosition}
           penetration={shoeDetails.penetration}
           isComplete={shoeDetails.isComplete}
+        />
+      )}
+
+      {/* Discard Tray - Left Side */}
+      {shoeDetails && (
+        <DiscardTray
+          discardedCards={shoeDetails.initialCardCount - shoeDetails.remainingCards}
+          totalCards={shoeDetails.initialCardCount}
         />
       )}
 

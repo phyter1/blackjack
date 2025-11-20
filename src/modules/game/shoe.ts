@@ -48,10 +48,12 @@ export class Shoe {
   private state: "in progress" | "complete" = "in progress";
   private roundCompleted: number | null = null;
   private currentRound: number;
+  private initialCardCount: number;
 
   constructor(numDecks: number, penetration: number = 0.1, testStack?: Stack) {
     this.deck = newShoeStack(numDecks, penetration, testStack);
     this.discardPile = [];
+    this.initialCardCount = this.deck.stack.length; // Store initial count
     this.stopPosition = Math.floor(
       this.deck.stack.length * (1 - this.deck.penetration),
     );
@@ -125,6 +127,7 @@ export class Shoe {
       remainingCards: this.remainingCards,
       discardedCards: this.discardPile.length,
       totalCards: this.totalCards,
+      initialCardCount: this.initialCardCount,
       cutCardPosition: this.stopPosition,
       penetration: this.deck.penetration,
       isComplete: this.isComplete,

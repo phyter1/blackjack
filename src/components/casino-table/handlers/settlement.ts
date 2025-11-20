@@ -35,6 +35,7 @@ export interface SettlementEffectParams {
   trainer: TrainerMode | null;
   refreshTrainerStats: () => void;
   setCurrentBalance: (balance: number) => void;
+  setRoundVersion: (updater: (v: number) => number) => void;
 }
 
 /**
@@ -157,6 +158,7 @@ export function updateSettlementOutcomes(params: SettlementEffectParams): void {
     trainer,
     refreshTrainerStats,
     setCurrentBalance,
+    setRoundVersion,
   } = params;
 
   if (phase === "settling" && game && decisionTracker) {
@@ -194,6 +196,9 @@ export function updateSettlementOutcomes(params: SettlementEffectParams): void {
       if (player) {
         setCurrentBalance(player.bank.balance);
       }
+
+      // Trigger round version update to refresh shoe details
+      setRoundVersion((v) => v + 1);
     }
   }
 }
