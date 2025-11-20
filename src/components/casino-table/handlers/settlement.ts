@@ -12,6 +12,7 @@ export interface NextRoundHandlerParams {
   setTotalWagered: (updater: (prev: number) => number) => void;
   setCurrentRound: (round: any) => void;
   setCurrentActions: (actions: any[]) => void;
+  setRoundVersion: (updater: (v: number) => number) => void;
   handleEndGame: () => void;
 }
 
@@ -49,6 +50,7 @@ export function handleNextRound(params: NextRoundHandlerParams): void {
     setTotalWagered,
     setCurrentRound,
     setCurrentActions,
+    setRoundVersion,
     handleEndGame,
   } = params;
 
@@ -69,6 +71,10 @@ export function handleNextRound(params: NextRoundHandlerParams): void {
   }
 
   game.completeRound();
+
+  // Trigger round version update to refresh shoe details (including discard pile)
+  setRoundVersion((v) => v + 1);
+
   setPhase("betting");
   // Reset round state for next round
   setCurrentRound(undefined);

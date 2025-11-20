@@ -183,6 +183,7 @@ export function CasinoTable({
       setTotalWagered,
       setCurrentRound,
       setCurrentActions,
+      setRoundVersion,
       handleEndGame: onEndGame,
     });
   };
@@ -231,7 +232,7 @@ export function CasinoTable({
       {/* Discard Tray - Left Side */}
       {shoeDetails && (
         <DiscardTray
-          discardedCards={shoeDetails.initialCardCount - shoeDetails.remainingCards}
+          discardedCards={shoeDetails.discardedCards}
           totalCards={shoeDetails.initialCardCount}
         />
       )}
