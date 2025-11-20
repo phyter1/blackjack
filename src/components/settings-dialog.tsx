@@ -48,38 +48,43 @@ export function SettingsDialog({
   const [previewKey, setPreviewKey] = useState(0);
 
   // State for local changes before saving
-  const [localSettings, setLocalSettings] = useState(settings.animations);
+  const [localAnimationSettings, setLocalAnimationSettings] = useState(
+    settings.animations,
+  );
 
   useEffect(() => {
-    setLocalSettings(settings.animations);
+    setLocalAnimationSettings(settings.animations);
   }, [settings.animations]);
 
   const handleDealingSpeedChange = (value: number[]) => {
     const newSpeed = value[0];
-    setLocalSettings((prev) => ({ ...prev, dealingSpeed: newSpeed }));
+    setLocalAnimationSettings((prev) => ({ ...prev, dealingSpeed: newSpeed }));
     // Trigger preview re-render
     setPreviewKey((prev) => prev + 1);
   };
 
   const handleEnableAnimationsChange = (checked: boolean) => {
-    setLocalSettings((prev) => ({ ...prev, enableAnimations: checked }));
+    setLocalAnimationSettings((prev) => ({
+      ...prev,
+      enableAnimations: checked,
+    }));
     // Trigger preview re-render
     setPreviewKey((prev) => prev + 1);
   };
 
   const handleSave = () => {
-    updateAnimationSettings(localSettings);
+    updateAnimationSettings(localAnimationSettings);
     onOpenChange(false);
   };
 
   const handleCancel = () => {
-    setLocalSettings(settings.animations);
+    setLocalAnimationSettings(settings.animations);
     onOpenChange(false);
   };
 
   const handleReset = () => {
     resetSettings();
-    setLocalSettings(settings.animations);
+    setLocalAnimationSettings(settings.animations);
   };
 
   return (
@@ -134,7 +139,7 @@ export function SettingsDialog({
               </div>
               <Switch
                 id="enable-animations"
-                checked={localSettings.enableAnimations}
+                checked={localAnimationSettings.enableAnimations}
                 onCheckedChange={handleEnableAnimationsChange}
               />
             </div>
@@ -144,7 +149,7 @@ export function SettingsDialog({
               <div className="flex items-center justify-between">
                 <Label htmlFor="dealing-speed">Dealing Speed</Label>
                 <span className="text-sm text-muted-foreground">
-                  {localSettings.dealingSpeed}ms per card
+                  {localAnimationSettings.dealingSpeed}ms per card
                 </span>
               </div>
               <Slider
@@ -152,9 +157,9 @@ export function SettingsDialog({
                 min={SETTINGS_CONSTRAINTS.animations.dealingSpeed.min}
                 max={SETTINGS_CONSTRAINTS.animations.dealingSpeed.max}
                 step={SETTINGS_CONSTRAINTS.animations.dealingSpeed.step}
-                value={[localSettings.dealingSpeed]}
+                value={[localAnimationSettings.dealingSpeed]}
                 onValueChange={handleDealingSpeedChange}
-                disabled={!localSettings.enableAnimations}
+                disabled={!localAnimationSettings.enableAnimations}
                 className="w-full"
               />
               <div className="flex justify-between text-xs text-muted-foreground">
@@ -164,7 +169,7 @@ export function SettingsDialog({
             </div>
 
             {/* Preview Section */}
-            {localSettings.enableAnimations && (
+            {localAnimationSettings.enableAnimations && (
               <div className="space-y-2">
                 <Label>Preview</Label>
                 <div className="bg-green-900 rounded-lg p-4 flex justify-center items-center h-32">
@@ -180,15 +185,15 @@ export function SettingsDialog({
                         <AnimatedCard
                           card={card}
                           size="sm"
-                          dealDelay={idx * localSettings.dealingSpeed}
+                          dealDelay={idx * localAnimationSettings.dealingSpeed}
                         />
                       </div>
                     ))}
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground text-center">
-                  Cards will appear with a {localSettings.dealingSpeed}ms delay
-                  between each
+                  Cards will appear with a {localAnimationSettings.dealingSpeed}
+                  ms delay between each
                 </p>
               </div>
             )}

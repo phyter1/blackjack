@@ -30,10 +30,10 @@
 export { getRuleBasedActions } from "./action-validator";
 // Export bet validation utilities
 export {
+  type BetValidationResult,
   getBettingLimits,
   isValidBet,
   validateBet,
-  type BetValidationResult,
 } from "./bet-validator";
 // Export builder class
 export { RuleSet } from "./builder";
@@ -71,8 +71,6 @@ export {
   BET_UNIT_RULE,
   BLACKJACK_PAYOUT_RULE,
   BLACKJACK_TIE_RULE,
-  TABLE_MAX_BET_RULE,
-  TABLE_MIN_BET_RULE,
   betUnitRule,
   blackjackPayoutRule,
   blackjackTieRule,
@@ -100,6 +98,8 @@ export {
   maxSplitRule,
   RSA_RULE,
   rsaRule,
+  TABLE_MAX_BET_RULE,
+  TABLE_MIN_BET_RULE,
   tableMaxBetRule,
   tableMinBetRule,
 } from "./types";

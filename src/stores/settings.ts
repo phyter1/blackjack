@@ -14,6 +14,7 @@ export interface SettingsActions {
   updateAnimationSettings: (
     updates: Partial<GameSettings["animations"]>,
   ) => void;
+  updateTableLimits: (updates: Partial<GameSettings["tableLimits"]>) => void;
   resetSettings: () => void;
 }
 
@@ -46,6 +47,14 @@ export const useSettingsStore = create<SettingsStore>()(
           };
         }),
 
+      updateTableLimits: (updates) =>
+        set((state) => {
+          state.settings.tableLimits = {
+            ...state.settings.tableLimits,
+            ...updates,
+          };
+        }),
+
       resetSettings: () =>
         set((state) => {
           state.settings = DEFAULT_SETTINGS;
@@ -57,6 +66,24 @@ export const useSettingsStore = create<SettingsStore>()(
       partialize: (state) => ({
         settings: state.settings,
       }),
+      // Migration function to handle old settings without tableLimits
+      migrate: (persistedState: unknown, version: number) => {
+        const state = persistedState as SettingsState;
+
+        // If tableLimits is missing, add it from defaults
+        if (state?.settings && !state.settings.tableLimits) {
+          return {
+            ...state,
+            settings: {
+              ...state.settings,
+              tableLimits: DEFAULT_SETTINGS.tableLimits,
+            },
+          };
+        }
+
+        return state as SettingsState;
+      },
+      version: 1,
     },
   ),
 );
@@ -69,3 +96,5 @@ export const selectEnableAnimations = (state: SettingsStore) =>
   state.settings.animations.enableAnimations;
 export const selectDealingSpeed = (state: SettingsStore) =>
   state.settings.animations.dealingSpeed;
+export const selectTableLimits = (state: SettingsStore) =>
+  state.settings.tableLimits;

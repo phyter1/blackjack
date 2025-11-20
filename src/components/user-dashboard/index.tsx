@@ -11,6 +11,7 @@ import type {
   UserStats,
 } from "@/types/user";
 import { LifetimeStatsCharts } from "../lifetime-stats-charts";
+import { PresetSelector } from "../preset-selector";
 import { RulesSelector } from "../rules-selector";
 import { SessionReplay } from "../session-replay";
 import { Button } from "../ui/button";
@@ -38,6 +39,7 @@ export function UserDashboard({
   const [selectedSession, setSelectedSession] = useState<GameSession | null>(
     null,
   );
+  const [showPresetSelector, setShowPresetSelector] = useState(false);
   const [showRulesSelector, setShowRulesSelector] = useState(false);
   const [currentRules, setCurrentRules] = useState<TableRules | undefined>(
     undefined,
@@ -65,6 +67,20 @@ export function UserDashboard({
 
   const handleStartGame = (mode: "terminal" | "graphical") => {
     setPendingGameMode(mode);
+    setShowPresetSelector(true);
+  };
+
+  const handleSelectPreset = (rules: TableRules) => {
+    setCurrentRules(rules);
+    setShowPresetSelector(false);
+    if (pendingGameMode) {
+      onStartGame(pendingGameMode, rules);
+      setPendingGameMode(undefined);
+    }
+  };
+
+  const handleCustomGame = () => {
+    setShowPresetSelector(false);
     setShowRulesSelector(true);
   };
 
@@ -77,9 +93,14 @@ export function UserDashboard({
     }
   };
 
+  const handleCancelPresetSelector = () => {
+    setShowPresetSelector(false);
+    setPendingGameMode(undefined);
+  };
+
   const handleCancelRules = () => {
     setShowRulesSelector(false);
-    setPendingGameMode(undefined);
+    setShowPresetSelector(true); // Go back to preset selector
   };
 
   return (
@@ -134,12 +155,22 @@ export function UserDashboard({
         />
       )}
 
+      {/* Preset Selector Modal */}
+      {showPresetSelector && (
+        <PresetSelector
+          onSelectPreset={handleSelectPreset}
+          onCustomGame={handleCustomGame}
+          onCancel={handleCancelPresetSelector}
+        />
+      )}
+
       {/* Rules Selector Modal */}
       {showRulesSelector && (
         <RulesSelector
           initialRules={currentRules}
           onSave={handleSaveRules}
           onCancel={handleCancelRules}
+          allowSaveAsPreset={true}
         />
       )}
     </div>

@@ -26,6 +26,9 @@ export interface TableRules {
   hitSplitAces: boolean;
   maxSplits: number;
   maxPlayableHands?: number; // 1-5, defaults to 5
+  minBet?: number; // Minimum bet allowed (defaults to 5)
+  maxBet?: number; // Maximum bet allowed (defaults to 1000)
+  betUnit?: number; // Bet unit/chip denomination (defaults to 5)
   houseEdge?: number;
 }
 

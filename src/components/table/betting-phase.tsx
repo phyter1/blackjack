@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CasinoChip, CHIP_VALUES } from "@/components/casino-chip";
 import { cn } from "@/lib/utils";
 import { RoundActionButton } from "./round-action-button";
@@ -10,6 +10,9 @@ interface BettingPhaseProps {
   practiceBalance?: number;
   isTrainerActive: boolean;
   maxPlayableHands?: number; // 1-5, defaults to 5
+  minBet?: number; // Minimum bet allowed at the table
+  maxBet?: number; // Maximum bet allowed at the table
+  betUnit?: number; // Bet unit/chip denomination
   previousBets: number[] | null;
   onBet: (bets: number[]) => void;
   onSetPreviousBets: (bets: number[] | null) => void;
@@ -20,6 +23,9 @@ export function BettingPhase({
   practiceBalance = 0,
   isTrainerActive,
   maxPlayableHands = 5,
+  minBet = 5,
+  maxBet = 10000,
+  betUnit = 1,
   previousBets,
   onBet,
   onSetPreviousBets,
@@ -29,9 +35,18 @@ export function BettingPhase({
   const [selectedChipValue, setSelectedChipValue] = useState<number | null>(
     null,
   );
+  const [betError, setBetError] = useState<string | null>(null);
 
   const availableBalance = isTrainerActive ? practiceBalance : currentBalance;
   const totalBet = handBets.reduce((sum, bet) => sum + bet, 0);
+
+  // Clear error when bets change
+  useEffect(() => {
+    if (betError) {
+      setBetError(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handBets]);
 
   // Calculate which positions are playable based on maxPlayableHands
   const getPlayablePositions = (): number[] => {
@@ -50,14 +65,40 @@ export function BettingPhase({
   const playablePositions = getPlayablePositions();
 
   const handlePlaceBet = () => {
-    // Filter only hands with bets >= 10
-    const validBets = handBets.filter((bet) => bet >= 10);
-    if (validBets.length > 0 && totalBet > 0) {
-      onSetPreviousBets([...handBets]);
-      onBet(validBets);
-      setHandBets([0, 0, 0, 0, 0]);
-      setSelectedChipValue(null);
+    // Clear any previous errors
+    setBetError(null);
+
+    // Filter only hands with bets > 0
+    const activeBets = handBets.filter((bet) => bet > 0);
+
+    if (activeBets.length === 0) {
+      return;
     }
+
+    // Validate each bet against table rules
+    for (const bet of activeBets) {
+      if (bet < minBet) {
+        setBetError(`All bets must be at least $${minBet} (table minimum)`);
+        return;
+      }
+      if (bet > maxBet) {
+        setBetError(`All bets must not exceed $${maxBet} (table maximum)`);
+        return;
+      }
+      // Check if bet is a multiple of betUnit
+      const remainder = bet % betUnit;
+      const tolerance = 0.0001;
+      if (remainder > tolerance && remainder < betUnit - tolerance) {
+        setBetError(`All bets must be multiples of $${betUnit}`);
+        return;
+      }
+    }
+
+    // All bets are valid
+    onSetPreviousBets([...handBets]);
+    onBet(activeBets);
+    setHandBets([0, 0, 0, 0, 0]);
+    setSelectedChipValue(null);
   };
 
   const handleReBet = () => {
@@ -112,8 +153,8 @@ export function BettingPhase({
     setHandBets([0, 0, 0, 0, 0]);
   };
 
-  const activeBetsCount = handBets.filter((bet) => bet >= 10).length;
-  const hasInvalidBets = handBets.some((bet) => bet > 0 && bet < 10);
+  const activeBetsCount = handBets.filter((bet) => bet >= minBet).length;
+  const hasInvalidBets = handBets.some((bet) => bet > 0 && bet < minBet);
 
   return (
     <div className="flex flex-col items-center gap-6 pb-20">
@@ -132,6 +173,13 @@ export function BettingPhase({
           ? "Click a chip to select it, then click a betting circle to place bet"
           : `Selected: $${selectedChipValue} - Click a betting circle to add`}
       </div>
+
+      {/* Error message */}
+      {betError && (
+        <div className="bg-red-950/80 border-2 border-red-500 px-6 py-3 rounded-lg text-red-200 text-sm font-medium">
+          ⚠️ {betError}
+        </div>
+      )}
 
       {/* Total bet display - MOVED HERE ABOVE CIRCLES */}
       {totalBet > 0 && (
@@ -288,7 +336,7 @@ export function BettingPhase({
 
       {hasInvalidBets && (
         <div className="text-amber-400 text-sm">
-          Minimum bet is $10 per hand
+          Minimum bet is ${minBet} per hand
         </div>
       )}
     </div>

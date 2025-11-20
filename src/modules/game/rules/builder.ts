@@ -14,15 +14,11 @@ import { calculateHouseEdge } from "./house-edge";
 import type { BlackjackRule, CompleteRuleSet } from "./types";
 import {
   BET_UNIT_RULE,
+  type BetUnitRule,
   BLACKJACK_PAYOUT_RULE,
   BLACKJACK_TIE_RULE,
-  TABLE_MAX_BET_RULE,
-  TABLE_MIN_BET_RULE,
-  type BetUnitRule,
   type BlackjackPayoutRule,
   type BlackjackTieRule,
-  type TableMaxBetRule,
-  type TableMinBetRule,
   betUnitRule,
   blackjackPayoutRule,
   CHARLIE_RULE,
@@ -55,6 +51,10 @@ import {
   type MaxSplitRule,
   RSA_RULE,
   type RSARule,
+  TABLE_MAX_BET_RULE,
+  TABLE_MIN_BET_RULE,
+  type TableMaxBetRule,
+  type TableMinBetRule,
   tableMaxBetRule,
   tableMinBetRule,
 } from "./types";

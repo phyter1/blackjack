@@ -67,7 +67,7 @@ export interface GameActions {
     bank: UserBank,
     rules: TableRules | undefined,
     searchParamsString?: string,
-  ) => void;
+  ) => Promise<void>;
   cleanup: () => void;
 
   // Game actions (converted from handlers)
@@ -126,7 +126,7 @@ export const useGameStore = create<GameStore>()(
     unsubscribe: null,
 
     // Initialization
-    initializeGame: (user, bank, rules, searchParamsString) => {
+    initializeGame: async (user, bank, rules, searchParamsString) => {
       const state = get();
 
       // Cleanup existing subscription
@@ -179,6 +179,15 @@ export const useGameStore = create<GameStore>()(
           ruleSet.setRule({ type: "hit_split_aces", allowed: true });
         }
         ruleSet.setRule({ type: "max_split", times: rules.maxSplits });
+
+        // Apply table limits from rules if provided
+        if (rules.minBet !== undefined && rules.maxBet !== undefined && rules.betUnit !== undefined) {
+          ruleSet.setTableLimits(
+            rules.minBet,
+            rules.maxBet,
+            rules.betUnit,
+          );
+        }
       }
 
       // Initialize ObservableGame

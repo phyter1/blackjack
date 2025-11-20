@@ -10,8 +10,6 @@ import {
   BET_UNIT_RULE,
   BLACKJACK_PAYOUT_RULE,
   BLACKJACK_TIE_RULE,
-  TABLE_MAX_BET_RULE,
-  TABLE_MIN_BET_RULE,
   betUnitRule,
   blackjackPayoutRule,
   blackjackTieRule,
@@ -39,6 +37,8 @@ import {
   maxSplitRule,
   RSA_RULE,
   rsaRule,
+  TABLE_MAX_BET_RULE,
+  TABLE_MIN_BET_RULE,
   tableMaxBetRule,
   tableMinBetRule,
 } from "./types";

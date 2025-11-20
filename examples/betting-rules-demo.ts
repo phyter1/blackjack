@@ -12,7 +12,6 @@ console.log("=== Betting Rules Demo ===\n");
 
 // Example 1: Default table limits
 console.log("1. Default Table ($5-$10,000, $1 units):");
-const defaultGame = new Game();
 const defaultRules = new RuleSet().build();
 const defaultLimits = getBettingLimits(defaultRules);
 console.log(`   Min: $${defaultLimits.min}`);

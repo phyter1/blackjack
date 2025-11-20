@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { RuleSet } from "@/modules/game/rules";
+import { PresetService } from "@/services/preset-service";
 import type { TableRules } from "@/types/user";
 import { Button } from "./ui/button";
 import {
@@ -11,6 +12,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
+import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import {
   Select,
@@ -25,6 +27,7 @@ interface RulesSelectorProps {
   initialRules?: TableRules;
   onSave: (rules: TableRules) => void;
   onCancel: () => void;
+  allowSaveAsPreset?: boolean; // Allow saving configuration as a preset
 }
 
 const DEFAULT_RULES: TableRules = {
@@ -38,14 +41,21 @@ const DEFAULT_RULES: TableRules = {
   hitSplitAces: false,
   maxSplits: 3,
   maxPlayableHands: 5,
+  minBet: 5,
+  maxBet: 1000,
+  betUnit: 5,
 };
 
 export function RulesSelector({
   initialRules,
   onSave,
   onCancel,
+  allowSaveAsPreset = false,
 }: RulesSelectorProps) {
   const [rules, setRules] = useState<TableRules>(initialRules || DEFAULT_RULES);
+  const [showSavePreset, setShowSavePreset] = useState(false);
+  const [presetName, setPresetName] = useState("");
+  const [presetDescription, setPresetDescription] = useState("");
 
   // Calculate house edge whenever rules change
   const calculateHouseEdge = (currentRules: TableRules): number => {
@@ -105,6 +115,9 @@ export function RulesSelector({
           hitSplitAces: false,
           maxSplits: 3,
           maxPlayableHands: 5,
+          minBet: 25,
+          maxBet: 5000,
+          betUnit: 25,
         });
         break;
       case "atlantic-city":
@@ -119,6 +132,9 @@ export function RulesSelector({
           hitSplitAces: false,
           maxSplits: 3,
           maxPlayableHands: 5,
+          minBet: 10,
+          maxBet: 2000,
+          betUnit: 10,
         });
         break;
       case "single-deck":
@@ -133,6 +149,9 @@ export function RulesSelector({
           hitSplitAces: false,
           maxSplits: 3,
           maxPlayableHands: 5,
+          minBet: 5,
+          maxBet: 500,
+          betUnit: 5,
         });
         break;
       case "liberal":
@@ -147,6 +166,9 @@ export function RulesSelector({
           hitSplitAces: false,
           maxSplits: 3,
           maxPlayableHands: 5,
+          minBet: 5,
+          maxBet: 1000,
+          betUnit: 5,
         });
         break;
       default:
@@ -156,6 +178,28 @@ export function RulesSelector({
 
   const handleSave = () => {
     onSave({ ...rules, houseEdge });
+  };
+
+  const handleSaveAsPreset = () => {
+    if (!presetName.trim()) {
+      alert("Please enter a preset name");
+      return;
+    }
+
+    if (PresetService.presetNameExists(presetName.trim())) {
+      alert("A preset with this name already exists");
+      return;
+    }
+
+    PresetService.savePreset({
+      name: presetName.trim(),
+      description: presetDescription.trim() || "Custom table configuration",
+      rules: { ...rules, houseEdge },
+      isBuiltIn: false,
+    });
+
+    // Proceed with saving the rules and starting the game
+    handleSave();
   };
 
   return (
@@ -235,6 +279,77 @@ export function RulesSelector({
                 : houseEdge <= 1.0
                   ? "Good player odds"
                   : "Unfavorable player odds"}
+            </p>
+          </div>
+
+          {/* Table Limits */}
+          <div className="space-y-2 sm:space-y-4">
+            <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-1 sm:pb-2">
+              Table Limits
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
+              <div>
+                <Label htmlFor="minBet" className="text-white text-sm">
+                  Minimum Bet
+                </Label>
+                <div className="flex items-center gap-1">
+                  <span className="text-white text-sm">$</span>
+                  <Input
+                    id="minBet"
+                    type="number"
+                    min={1}
+                    max={10000}
+                    value={rules.minBet || 5}
+                    onChange={(e) =>
+                      updateRule("minBet", parseInt(e.target.value, 10) || 5)
+                    }
+                    className="bg-gray-800 text-white border-gray-700"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="maxBet" className="text-white text-sm">
+                  Maximum Bet
+                </Label>
+                <div className="flex items-center gap-1">
+                  <span className="text-white text-sm">$</span>
+                  <Input
+                    id="maxBet"
+                    type="number"
+                    min={10}
+                    max={1000000}
+                    value={rules.maxBet || 1000}
+                    onChange={(e) =>
+                      updateRule("maxBet", parseInt(e.target.value, 10) || 1000)
+                    }
+                    className="bg-gray-800 text-white border-gray-700"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <Label htmlFor="betUnit" className="text-white text-sm">
+                  Bet Unit
+                </Label>
+                <div className="flex items-center gap-1">
+                  <span className="text-white text-sm">$</span>
+                  <Input
+                    id="betUnit"
+                    type="number"
+                    min={1}
+                    max={1000}
+                    value={rules.betUnit || 5}
+                    onChange={(e) =>
+                      updateRule("betUnit", parseInt(e.target.value, 10) || 5)
+                    }
+                    className="bg-gray-800 text-white border-gray-700"
+                  />
+                </div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500">
+              All bets must be multiples of the bet unit and within the table limits
             </p>
           </div>
 
@@ -471,14 +586,76 @@ export function RulesSelector({
             </div>
           </div>
 
+          {/* Save as Preset Section */}
+          {allowSaveAsPreset && (
+            <div className="space-y-3 pt-3 border-t border-gray-700">
+              <div className="flex items-center justify-between">
+                <h3 className="text-base font-semibold text-white">
+                  Save as Preset (Optional)
+                </h3>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setShowSavePreset(!showSavePreset)}
+                  className="text-cyan-400 hover:text-cyan-300"
+                >
+                  {showSavePreset ? "Hide" : "Show"}
+                </Button>
+              </div>
+
+              {showSavePreset && (
+                <div className="space-y-3 p-3 bg-cyan-950/20 rounded border border-cyan-800">
+                  <div>
+                    <Label htmlFor="presetName" className="text-white text-sm">
+                      Preset Name *
+                    </Label>
+                    <Input
+                      id="presetName"
+                      value={presetName}
+                      onChange={(e) => setPresetName(e.target.value)}
+                      placeholder="e.g., My Favorite Table"
+                      className="bg-gray-800 text-white border-gray-700"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="presetDesc" className="text-white text-sm">
+                      Description
+                    </Label>
+                    <Input
+                      id="presetDesc"
+                      value={presetDescription}
+                      onChange={(e) => setPresetDescription(e.target.value)}
+                      placeholder="e.g., Player-friendly rules with low house edge"
+                      className="bg-gray-800 text-white border-gray-700"
+                    />
+                  </div>
+                  <p className="text-xs text-cyan-300">
+                    This preset will be saved and available for quick-start in
+                    future games
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-gray-700 flex-shrink-0">
-            <Button
-              onClick={handleSave}
-              className="flex-1 bg-green-600 hover:bg-green-700"
-            >
-              Save Rules
-            </Button>
+            {allowSaveAsPreset && showSavePreset && presetName.trim() ? (
+              <Button
+                onClick={handleSaveAsPreset}
+                className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+              >
+                Save Preset & Start Game
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSave}
+                className="flex-1 bg-green-600 hover:bg-green-700"
+              >
+                {allowSaveAsPreset ? "Start Game" : "Save Rules"}
+              </Button>
+            )}
             <Button
               onClick={onCancel}
               variant="outline"

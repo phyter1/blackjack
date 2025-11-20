@@ -193,6 +193,9 @@ export function CasinoTable({
             practiceBalance={practiceBalance}
             isTrainerActive={isTrainerActive}
             maxPlayableHands={rules?.maxPlayableHands || 5}
+            minBet={rules?.minBet}
+            maxBet={rules?.maxBet}
+            betUnit={rules?.betUnit}
             previousBets={previousBets}
             onBet={onBet}
             onSetPreviousBets={setPreviousBets}
