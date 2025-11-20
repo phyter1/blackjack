@@ -1,24 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import type { ActionType } from "@/modules/game/action";
 import type { UserBank, UserProfile } from "@/types/user";
-import { useTrainerMode } from "@/hooks/use-trainer-mode";
-import { useSettings } from "@/hooks/use-settings";
-
-// Import custom hooks
-import { useCasinoGame } from "./use-casino-game";
-import { useInsurance } from "./use-insurance";
-import { useCounting } from "./use-counting";
-
-// Import handler functions
-import { handleBet } from "./handlers/betting";
-import { handleAction } from "./handlers/actions";
-import {
-  handleNextRound,
-  handleEndGame,
-  updateSettlementOutcomes,
-} from "./handlers/settlement";
+import { selectSettings, useSettingsStore } from "@/stores/settings";
+import { useTrainerStore } from "@/stores/trainer";
+import { useUIStore } from "@/stores/ui";
+import { useGameStore } from "@/stores/game";
+import { useAppStore } from "@/stores/app";
 
 // Import UI components
 import { TableBackground } from "../table/table-background";
@@ -49,158 +39,95 @@ export function CasinoTable({
   onGameEnd,
   onBackToDashboard,
 }: CasinoTableProps) {
-  const { settings } = useSettings();
-  const [showTrainerSidebar, setShowTrainerSidebar] = useState(false);
-  const [showSettingsDialog, setShowSettingsDialog] = useState(false);
-  const [previousBets, setPreviousBets] = useState<number[] | null>(null);
+  const settings = useSettingsStore(selectSettings);
+  const searchParams = useSearchParams();
 
-  // Trainer mode hook
-  const {
-    initializeTrainer,
-    isActive: isTrainerActive,
-    refreshStats,
-    clearFeedback,
-    getTrainer,
-    practiceBalance,
-  } = useTrainerMode();
-
-  // Game state management hook
-  const {
-    game,
-    player,
-    phase,
-    roundsPlayed,
-    totalWagered,
-    sessionId,
-    currentBalance,
-    roundVersion,
-    currentRound,
-    currentActions,
-    shoeDetails,
-    decisionTracker,
-    setPhase,
-    setRoundsPlayed,
-    setTotalWagered,
-    setCurrentBalance,
-    setRoundVersion,
-    setCurrentRound,
-    setCurrentActions,
-  } = useCasinoGame({ user, bank, rules, initializeTrainer });
-
-  // Card counting hook
-  const { countingEnabled, showCount, cardCounter, setShowCount } = useCounting(
-    {
-      deckCount: rules?.deckCount || 6,
-    },
+  // UI state from store
+  const showTrainerSidebar = useUIStore((state) => state.showTrainerSidebar);
+  const setShowTrainerSidebar = useUIStore((state) =>
+    state.setShowTrainerSidebar
   );
+  const showSettingsDialog = useUIStore((state) => state.showSettingsDialog);
+  const setShowSettingsDialog = useUIStore((state) =>
+    state.setShowSettingsDialog
+  );
+  const previousBets = useUIStore((state) => state.previousBets);
+  const setPreviousBets = useUIStore((state) => state.setPreviousBets);
 
-  // Insurance hook
-  const { insuranceHandIndex, handleInsuranceAction } = useInsurance({
-    game,
-    phase,
-    setPhase,
-    setCurrentRound,
-    setCurrentActions,
-    setRoundVersion,
-  });
+  // Trainer mode store
+  const initializeTrainer = useTrainerStore((state) => state.initializeTrainer);
+  const isTrainerActive = useTrainerStore((state) => state.isActive);
+  const practiceBalance = useTrainerStore((state) => state.practiceBalance);
 
-  // Update hand outcomes when settling phase is reached
+  // Game state from store
+  const game = useGameStore((state) => state.game);
+  const player = useGameStore((state) => state.player);
+  const phase = useGameStore((state) => state.phase);
+  const currentBalance = useGameStore((state) => state.currentBalance);
+  const currentRound = useGameStore((state) => state.currentRound);
+  const currentActions = useGameStore((state) => state.currentActions);
+  const shoeDetails = useGameStore((state) => state.shoeDetails);
+  const showCount = useGameStore((state) => state.showCount);
+  const insuranceHandIndex = useGameStore((state) => state.insuranceHandIndex);
+  const roundVersion = useGameStore((state) => state.roundVersion);
+
+  // Game actions from store
+  const initializeGame = useGameStore((state) => state.initializeGame);
+  const cleanup = useGameStore((state) => state.cleanup);
+  const placeBets = useGameStore((state) => state.placeBets);
+  const playAction = useGameStore((state) => state.playAction);
+  const handleInsuranceAction = useGameStore((state) =>
+    state.handleInsuranceAction
+  );
+  const handleNextRound = useGameStore((state) => state.handleNextRound);
+  const handleEndGame = useGameStore((state) => state.handleEndGame);
+  const setShowCount = useGameStore((state) => state.setShowCount);
+
+  // Initialize game on mount
   useEffect(() => {
-    updateSettlementOutcomes({
-      phase,
-      game,
-      player,
-      decisionTracker: decisionTracker.current,
-      isTrainerActive,
-      trainer: getTrainer(),
-      refreshTrainerStats: refreshStats,
-      setCurrentBalance,
-      setRoundVersion,
-    });
-  }, [
-    phase,
-    game,
-    isTrainerActive,
-    getTrainer,
-    refreshStats,
-    player,
-    decisionTracker,
-    setRoundVersion,
-  ]);
+    initializeGame(user, bank, rules, searchParams.toString());
 
-  // Handler wrappers
+    // Cleanup on unmount
+    return () => {
+      cleanup();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.id, bank.balance]);
+
+  // Initialize trainer when game is ready
+  useEffect(() => {
+    if (game) {
+      initializeTrainer(game.getGameInstance());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [game]);
+
+  // Trigger settlement outcomes update when phase changes to settling
+  useEffect(() => {
+    if (phase === "settling") {
+      const updateSettlementOutcomes =
+        useGameStore.getState().updateSettlementOutcomes;
+      updateSettlementOutcomes();
+    }
+  }, [phase]);
+
+  // Handler wrappers - delegate to store actions
   const onBet = (bets: number[]) => {
-    if (!game || !player) return;
-
-    handleBet({
-      game,
-      player,
-      bets,
-      isTrainerActive,
-      practiceBalance,
-      countingEnabled,
-      cardCounter,
-      trainer: getTrainer(),
-      settings,
-      setCurrentBalance,
-      setCurrentRound,
-      setCurrentActions,
-      setRoundVersion,
-      setRoundsPlayed,
-      setPhase,
-      clearTrainerFeedback: clearFeedback,
-    });
+    placeBets(bets);
   };
 
   const onAction = (action: ActionType) => {
-    if (!game || !player) return;
-
-    handleAction({
-      game,
-      player,
-      action,
-      decisionTracker: decisionTracker.current,
-      countingEnabled,
-      cardCounter,
-      isTrainerActive,
-      trainer: getTrainer(),
-      setCurrentBalance,
-      setCurrentRound,
-      setCurrentActions,
-      setRoundVersion,
-      setPhase,
-      refreshTrainerStats: refreshStats,
-    });
+    playAction(action);
   };
 
   const onNextRound = () => {
     if (!game || !player) return;
-
-    handleNextRound({
-      game,
-      player,
-      setPhase,
-      setTotalWagered,
-      setCurrentRound,
-      setCurrentActions,
-      setRoundVersion,
-      handleEndGame: onEndGame,
-    });
+    handleNextRound();
   };
 
   const onEndGame = () => {
-    if (!game || !player || !sessionId) return;
-
-    handleEndGame({
-      game,
-      player,
-      sessionId,
-      roundsPlayed,
-      totalWagered,
-      decisionTracker: decisionTracker.current,
-      onGameEnd,
-      onBackToDashboard,
-    });
+    handleEndGame(user.id, onGameEnd);
+    onBackToDashboard();
   };
 
   return (
@@ -240,7 +167,7 @@ export function CasinoTable({
       {/* Main playing area */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-12 p-8">
         {/* Dealer area */}
-        <DealerArea round={currentRound} phase={phase} version={roundVersion} />
+        <DealerArea round={currentRound} phase={phase} />
 
         {/* Player area */}
         <PlayerArea

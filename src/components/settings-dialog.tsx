@@ -12,7 +12,10 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { useSettings } from "@/hooks/use-settings";
+import {
+  useSettingsStore,
+  selectSettings,
+} from "@/stores/settings";
 import { SETTINGS_CONSTRAINTS } from "@/types/settings";
 import { AnimatedCard } from "./animated-card";
 import type { Card } from "@/modules/game/cards";
@@ -40,7 +43,11 @@ export function SettingsDialog({
   showCount,
   onToggleCount,
 }: SettingsDialogProps) {
-  const { settings, updateAnimationSettings, resetSettings } = useSettings();
+  const settings = useSettingsStore(selectSettings);
+  const updateAnimationSettings = useSettingsStore(
+    (state) => state.updateAnimationSettings,
+  );
+  const resetSettings = useSettingsStore((state) => state.resetSettings);
   const [previewKey, setPreviewKey] = useState(0);
 
   // State for local changes before saving

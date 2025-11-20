@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useBlackjackGame } from "@/hooks/use-blackjack-game";
-import { useTrainerMode } from "@/hooks/use-trainer-mode";
+import { useTrainerStore } from "@/stores/trainer";
 import { HandDisplay } from "./hand-display";
 import { BettingControls } from "./betting-controls";
 import { ActionButtons } from "./action-buttons";
@@ -38,14 +38,12 @@ export function TrainerPage() {
     getCurrentBet,
   } = useBlackjackGame();
 
-  const {
-    initializeTrainer,
-    isActive,
-    difficulty,
-    refreshStats,
-    clearFeedback,
-    getTrainer,
-  } = useTrainerMode();
+  const initializeTrainer = useTrainerStore((state) => state.initializeTrainer);
+  const isActive = useTrainerStore((state) => state.isActive);
+  const difficulty = useTrainerStore((state) => state.difficulty);
+  const refreshStats = useTrainerStore((state) => state.refreshStats);
+  const clearFeedback = useTrainerStore((state) => state.clearFeedback);
+  const getTrainer = useTrainerStore((state) => state.getTrainer);
 
   const [playerName, setPlayerName] = useState("");
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTrainerMode } from "@/hooks/use-trainer-mode";
+import { useTrainerStore } from "@/stores/trainer";
 import {
   Card,
   CardContent,
@@ -14,7 +14,9 @@ import { Separator } from "@/components/ui/separator";
 import { BarChart3, TrendingUp, Brain, Hash } from "lucide-react";
 
 export function TrainerStatsPanel() {
-  const { stats, isActive, difficulty } = useTrainerMode();
+  const stats = useTrainerStore((state) => state.stats);
+  const isActive = useTrainerStore((state) => state.isActive);
+  const difficulty = useTrainerStore((state) => state.difficulty);
 
   if (!isActive || !stats) return null;
 

@@ -194,8 +194,35 @@ export function updateSettlementOutcomes(params: SettlementEffectParams): void {
       });
 
       // Refresh trainer stats after settlement
-      if (isTrainerActive) {
+      if (isTrainerActive && trainer && player) {
         refreshTrainerStats();
+
+        // In trainer mode, restore the original balance to prevent
+        // the real bank from being modified
+        // We need to undo all the game's bank modifications
+        const round = game.getCurrentRound();
+        if (round) {
+          // Calculate total bet for this round
+          const totalBet = round.playerHands.reduce(
+            (sum, hand) => sum + hand.betAmount,
+            0,
+          );
+          // Calculate total payout from settlement
+          const totalPayout = round.settlementResults?.reduce(
+            (sum, result) => sum + result.payout,
+            0,
+          ) || 0;
+
+          // Reverse the game's bank operations:
+          // The game debited totalBet and credited totalPayout
+          // We need to undo this: debit payout, credit bet back
+          if (totalPayout > 0) {
+            player.bank.debit(totalPayout, "trainer-reversal");
+          }
+          if (totalBet > 0) {
+            player.bank.credit(totalBet, "trainer-reversal");
+          }
+        }
       }
 
       // Update UI balance after settlement
