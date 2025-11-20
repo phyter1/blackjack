@@ -1,6 +1,6 @@
 "use client";
 
-import { useTrainerMode } from "@/hooks/use-trainer-mode";
+import { useTrainerStore } from "@/stores/trainer";
 import {
   Card,
   CardContent,
@@ -22,15 +22,13 @@ import { GraduationCap, RotateCcw } from "lucide-react";
 import type { TrainerDifficulty } from "@/modules/strategy/trainer";
 
 export function TrainerControls() {
-  const {
-    isActive,
-    difficulty,
-    practiceBalance,
-    activateTrainer,
-    deactivateTrainer,
-    setDifficulty,
-    resetTrainer,
-  } = useTrainerMode();
+  const isActive = useTrainerStore((state) => state.isActive);
+  const difficulty = useTrainerStore((state) => state.difficulty);
+  const practiceBalance = useTrainerStore((state) => state.practiceBalance);
+  const activateTrainer = useTrainerStore((state) => state.activateTrainer);
+  const deactivateTrainer = useTrainerStore((state) => state.deactivateTrainer);
+  const setDifficulty = useTrainerStore((state) => state.setDifficulty);
+  const resetTrainer = useTrainerStore((state) => state.resetTrainer);
 
   const handleToggle = (checked: boolean) => {
     if (checked) {

@@ -1,10 +1,10 @@
 "use client";
 
-import type { Round } from "@/modules/game/round";
+import type { SerializedRound } from "@/stores/game";
 import { Button } from "@/components/ui/button";
 
 interface InsurancePhaseProps {
-  round: Round | undefined;
+  round: SerializedRound | undefined;
   insuranceHandIndex: number;
   onTakeInsurance: () => void;
   onDeclineInsurance: () => void;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTrainerMode } from "@/hooks/use-trainer-mode";
+import { useTrainerStore } from "@/stores/trainer";
 import {
   Card,
   CardContent,
@@ -17,8 +17,11 @@ import { Calculator, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function CountingPanel() {
-  const { trainer, isActive, difficulty, currentCountFeedback, refreshStats } =
-    useTrainerMode();
+  const trainer = useTrainerStore((state) => state.trainer);
+  const isActive = useTrainerStore((state) => state.isActive);
+  const difficulty = useTrainerStore((state) => state.difficulty);
+  const currentCountFeedback = useTrainerStore((state) => state.currentCountFeedback);
+  const refreshStats = useTrainerStore((state) => state.refreshStats);
 
   const [runningCount, setRunningCount] = useState("");
   const [trueCount, setTrueCount] = useState("");
