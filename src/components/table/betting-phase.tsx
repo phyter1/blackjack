@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { CasinoChip, CHIP_VALUES } from "@/components/casino-chip";
-import { Button } from "@/components/ui/button";
+import { RoundActionButton } from "./round-action-button";
 import { cn } from "@/lib/utils";
 
 interface BettingPhaseProps {
@@ -242,55 +242,48 @@ export function BettingPhase({
       </div>
 
       {/* Action buttons */}
-      <div className="flex flex-wrap gap-2 w-full max-w-md justify-center">
+      <div className="flex flex-wrap gap-3 w-full max-w-md justify-center">
         {previousBets && (
           <>
-            <Button
+            <RoundActionButton
+              label={`Re-bet $${previousBets.reduce((sum, bet) => sum + bet, 0).toFixed(0)}`}
               onClick={handleReBet}
-              variant="outline"
-              className="border-blue-700 bg-blue-950/50 text-blue-200 hover:bg-blue-900 font-serif"
+              color="#2563EB"
+              accentColor="#1E40AF"
               disabled={
                 previousBets.reduce((sum, bet) => sum + bet, 0) >
                   availableBalance
               }
-            >
-              Re-bet $
-              {previousBets.reduce((sum, bet) => sum + bet, 0).toFixed(0)}
-            </Button>
+            />
 
-            <Button
+            <RoundActionButton
+              label={`2x $${(previousBets.reduce((sum, bet) => sum + bet, 0) * 2).toFixed(0)}`}
               onClick={handleReBetAndDouble}
-              variant="outline"
-              className="border-purple-700 bg-purple-950/50 text-purple-200 hover:bg-purple-900 font-serif"
+              color="#8B5CF6"
+              accentColor="#6D28D9"
               disabled={
                 previousBets.reduce((sum, bet) => sum + bet, 0) * 2 >
                   availableBalance
               }
-            >
-              Re-bet & Double $
-              {(previousBets.reduce((sum, bet) => sum + bet, 0) * 2).toFixed(0)}
-            </Button>
+            />
           </>
         )}
 
-        <Button
+        <RoundActionButton
+          label="Clear All"
           onClick={handleClearAllBets}
-          variant="outline"
-          className="border-red-700 bg-red-950/50 text-red-200 hover:bg-red-900 font-serif"
+          color="#DC2626"
+          accentColor="#991B1B"
           disabled={handBets.every((bet) => bet === 0)}
-        >
-          Clear All
-        </Button>
+        />
 
-        <Button
+        <RoundActionButton
+          label={`Deal${activeBetsCount > 0 ? ` (${activeBetsCount})` : ""}`}
           onClick={handlePlaceBet}
-          className="bg-green-800 hover:bg-green-700 text-white font-serif px-8"
+          color="#16A34A"
+          accentColor="#15803D"
           disabled={activeBetsCount === 0 || hasInvalidBets}
-        >
-          Deal Cards
-          {activeBetsCount > 0 &&
-            ` (${activeBetsCount} hand${activeBetsCount > 1 ? "s" : ""})`}
-        </Button>
+        />
       </div>
 
       {hasInvalidBets && (

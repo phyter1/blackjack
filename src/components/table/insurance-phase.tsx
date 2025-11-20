@@ -1,7 +1,7 @@
 "use client";
 
 import type { SerializedRound } from "@/stores/game";
-import { Button } from "@/components/ui/button";
+import { RoundActionButton } from "./round-action-button";
 
 interface InsurancePhaseProps {
   round: SerializedRound | undefined;
@@ -21,8 +21,8 @@ export function InsurancePhase({
     : "0";
 
   return (
-    <div className="flex flex-col items-center gap-4 pb-20">
-      <div className="text-amber-200 font-serif text-lg">
+    <div className="flex flex-col items-center gap-6 pb-20">
+      <div className="text-amber-200 font-serif text-lg text-center">
         Dealer shows Ace - Take Insurance?
         {round && round.playerHands.length > 1 && (
           <span className="text-amber-400 ml-2">
@@ -32,19 +32,19 @@ export function InsurancePhase({
       </div>
 
       <div className="flex gap-4">
-        <Button
+        <RoundActionButton
+          label={`Yes $${insuranceCost}`}
           onClick={onTakeInsurance}
-          className="bg-green-800 hover:bg-green-700 text-white font-serif"
-        >
-          Yes (costs ${insuranceCost})
-        </Button>
+          color="#16A34A"
+          accentColor="#15803D"
+        />
 
-        <Button
+        <RoundActionButton
+          label="No"
           onClick={onDeclineInsurance}
-          className="bg-red-800 hover:bg-red-700 text-white font-serif"
-        >
-          No
-        </Button>
+          color="#DC2626"
+          accentColor="#991B1B"
+        />
       </div>
     </div>
   );

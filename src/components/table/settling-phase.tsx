@@ -2,7 +2,7 @@
 
 import type { Player } from "@/modules/game/player";
 import type { SerializedRound } from "@/stores/game";
-import { Button } from "@/components/ui/button";
+import { RoundActionButton } from "./round-action-button";
 
 interface SettlingPhaseProps {
   round: SerializedRound | undefined;
@@ -36,15 +36,15 @@ export function SettlingPhase({
     player && player.bank.balance < 10 ? "Cash Out" : "Next Round";
 
   return (
-    <div className="flex flex-col items-center gap-4 pb-20">
+    <div className="flex flex-col items-center gap-6 pb-20">
       <div className="text-amber-200 font-serif text-xl">{getResultText()}</div>
 
-      <Button
+      <RoundActionButton
+        label={buttonText}
         onClick={onNextRound}
-        className="bg-green-800 hover:bg-green-700 text-white font-serif text-lg px-8"
-      >
-        {buttonText}
-      </Button>
+        color="#16A34A"
+        accentColor="#15803D"
+      />
     </div>
   );
 }
