@@ -1,8 +1,10 @@
+import type { ActionType } from "@/modules/game/action";
 import type { Game } from "@/modules/game/game";
 import type { Player } from "@/modules/game/player";
 import type { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import type { TrainerMode } from "@/modules/strategy/trainer";
 import { UserService } from "@/services/user-service";
+import type { SerializedRound } from "@/stores/game";
 import type { GamePhase } from "../../table/types";
 
 export interface NextRoundHandlerParams {
@@ -10,8 +12,8 @@ export interface NextRoundHandlerParams {
   player: Player;
   setPhase: (phase: GamePhase) => void;
   setTotalWagered: (updater: (prev: number) => number) => void;
-  setCurrentRound: (round: any) => void;
-  setCurrentActions: (actions: any[]) => void;
+  setCurrentRound: (round: SerializedRound | undefined) => void;
+  setCurrentActions: (actions: ActionType[]) => void;
   setRoundVersion: (updater: (v: number) => number) => void;
   handleEndGame: () => void;
 }

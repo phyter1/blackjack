@@ -7,7 +7,7 @@ import type { ActionType } from "@/modules/game/action";
 import type { Hand } from "@/modules/game/hand";
 import type { Player } from "@/modules/game/player";
 import type { Round } from "@/modules/game/round";
-import { RuleSet } from "@/modules/game/rules";
+import { RuleSet, type ShoeDetails } from "@/modules/game";
 import { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import { UserService } from "@/services/user-service";
@@ -44,7 +44,7 @@ export interface GameState {
   currentBalance: number;
   currentRound: SerializedRound | undefined;
   currentActions: ActionType[];
-  shoeDetails: any;
+  shoeDetails: ShoeDetails | null;
   originalBalance: number;
   roundVersion: number;
 

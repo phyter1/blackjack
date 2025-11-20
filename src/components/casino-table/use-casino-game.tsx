@@ -2,12 +2,18 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { createTestDeck, parseTestScenario } from "@/modules/game";
+import {
+  createTestDeck,
+  parseTestScenario,
+  type ShoeDetails,
+} from "@/modules/game";
+import type { ActionType } from "@/modules/game/action";
 import { Game } from "@/modules/game/game";
 import type { Player } from "@/modules/game/player";
 import { RuleSet } from "@/modules/game/rules";
 import { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import { UserService } from "@/services/user-service";
+import type { SerializedRound } from "@/stores/game";
 import type { UserBank, UserProfile } from "@/types/user";
 import type { GamePhase } from "../table/types";
 
@@ -32,9 +38,11 @@ export function useCasinoGame({
   const [sessionId, setSessionId] = useState<string | null>(null);
   const [currentBalance, setCurrentBalance] = useState(0);
   const [roundVersion, setRoundVersion] = useState(0);
-  const [currentRound, setCurrentRound] = useState<any>(undefined);
-  const [currentActions, setCurrentActions] = useState<any[]>([]);
-  const [shoeDetails, setShoeDetails] = useState<any>(null);
+  const [currentRound, setCurrentRound] = useState<SerializedRound | undefined>(
+    undefined,
+  );
+  const [currentActions, setCurrentActions] = useState<ActionType[]>([]);
+  const [shoeDetails, setShoeDetails] = useState<ShoeDetails | null>(null);
   const decisionTracker = useRef<DecisionTracker | null>(null);
   const originalBalanceRef = useRef<number>(0);
   const searchParams = useSearchParams();

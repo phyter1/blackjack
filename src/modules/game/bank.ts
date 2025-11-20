@@ -1,5 +1,10 @@
 import { getAuditLogger } from "../audit/logger";
-import type { BankCreditEvent, BankDebitEvent } from "../audit/types";
+import type {
+  BankCreditEvent,
+  BankDebitEvent,
+  EscrowCreditEvent,
+  EscrowDebitEvent,
+} from "../audit/types";
 
 interface Transaction {
   amount: number;
@@ -116,7 +121,7 @@ export class Escrow extends Bank {
     super.credit(amount, from);
 
     // Log escrow-specific event
-    getAuditLogger().log("escrow_credit", <any>{
+    getAuditLogger().log<EscrowCreditEvent>("escrow_credit", {
       escrowId: this.escrowId,
       fromId: from ?? "unknown",
       amount,
@@ -130,7 +135,7 @@ export class Escrow extends Bank {
     super.debit(amount, to);
 
     // Log escrow-specific event
-    getAuditLogger().log("escrow_debit", <any>{
+    getAuditLogger().log<EscrowDebitEvent>("escrow_debit", {
       escrowId: this.escrowId,
       toId: to ?? "unknown",
       amount,

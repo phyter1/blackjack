@@ -265,13 +265,8 @@ describe("shuffleShoe", () => {
         differentPositions++;
       }
     }
-    // Expect at least 80% of cards to be in different positions
-    expect(differentPositions).toBeGreaterThan(41 * 6);
-
-    // Expect first few cards to not be aces (very high probability)
-    const firstFew = shuffled.slice(0, 5);
-    const aceInFirstFew = firstFew.some((c) => c.rank === "A");
-    expect(aceInFirstFew).toBe(false);
+    // Expect at least 90% of cards to be in different positions
+    expect(differentPositions).toBeGreaterThan(47 * 6);
   });
 
   test("should handle 8-deck shoe", () => {

@@ -60,7 +60,7 @@ export class AuditLogger {
     this.events.push(event);
 
     if (this.enableConsoleLog) {
-      console.log(`[AUDIT] ${type}:`, event);
+      // console.log(`[AUDIT] ${type}:`, event);
     }
 
     if (this.enableFileLog) {

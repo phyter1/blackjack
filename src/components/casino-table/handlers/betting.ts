@@ -1,7 +1,9 @@
+import type { ActionType } from "@/modules/game/action";
 import type { Game } from "@/modules/game/game";
 import type { Player } from "@/modules/game/player";
 import type { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import type { TrainerMode } from "@/modules/strategy/trainer";
+import type { SerializedRound } from "@/stores/game";
 import type { GameSettings } from "@/types/settings";
 import type { GamePhase } from "../../table/types";
 
@@ -16,8 +18,8 @@ export interface BettingHandlerParams {
   trainer: TrainerMode | null;
   settings: GameSettings;
   setCurrentBalance: (balance: number) => void;
-  setCurrentRound: (round: any) => void;
-  setCurrentActions: (actions: any[]) => void;
+  setCurrentRound: (round: SerializedRound | undefined) => void;
+  setCurrentActions: (actions: ActionType[]) => void;
   setRoundVersion: (updater: (v: number) => number) => void;
   setRoundsPlayed: (updater: (prev: number) => number) => void;
   setPhase: (phase: GamePhase) => void;

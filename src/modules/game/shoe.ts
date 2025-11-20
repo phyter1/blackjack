@@ -122,7 +122,7 @@ export class Shoe {
     return this.stopPosition;
   }
 
-  get detailedStats() {
+  get detailedStats(): ShoeDetails {
     return {
       remainingCards: this.remainingCards,
       discardedCards: this.discardPile.length,
@@ -135,4 +135,19 @@ export class Shoe {
       discardPile: [...this.discardPile],
     };
   }
+}
+
+/**
+ * Detailed shoe statistics for UI display
+ */
+export interface ShoeDetails {
+  remainingCards: number;
+  discardedCards: number;
+  totalCards: number;
+  initialCardCount: number;
+  cutCardPosition: number;
+  penetration: number;
+  isComplete: boolean;
+  currentRound: number;
+  discardPile: Stack;
 }

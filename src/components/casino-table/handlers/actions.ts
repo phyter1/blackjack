@@ -5,6 +5,7 @@ import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
 import type { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import type { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import type { TrainerMode } from "@/modules/strategy/trainer";
+import type { SerializedRound } from "@/stores/game";
 import type { GamePhase } from "../../table/types";
 
 export interface ActionHandlerParams {
@@ -17,8 +18,8 @@ export interface ActionHandlerParams {
   isTrainerActive: boolean;
   trainer: TrainerMode | null;
   setCurrentBalance: (balance: number) => void;
-  setCurrentRound: (round: any) => void;
-  setCurrentActions: (actions: any[]) => void;
+  setCurrentRound: (round: SerializedRound | undefined) => void;
+  setCurrentActions: (actions: ActionType[]) => void;
   setRoundVersion: (updater: (v: number) => number) => void;
   setPhase: (phase: GamePhase) => void;
   refreshTrainerStats: () => void;

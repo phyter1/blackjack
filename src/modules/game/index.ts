@@ -69,7 +69,7 @@ export {
   settleHand,
   settleRound,
 } from "./settlement";
-export type { ShoeDeck } from "./shoe";
+export type { ShoeDeck, ShoeDetails } from "./shoe";
 // Shoe & Cards
 // Re-export newShoeStack for convenience
 export { newShoeStack, Shoe } from "./shoe";

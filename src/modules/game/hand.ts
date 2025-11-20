@@ -3,6 +3,10 @@ import type {
   BetPlacedEvent,
   HandActionEvent,
   HandCreatedEvent,
+  HandDealtEvent,
+  HandSplitEvent,
+  InsuranceDeclinedEvent,
+  InsuranceTakenEvent,
 } from "../audit/types";
 import type { ActionType } from "./action";
 import { type Bank, Escrow } from "./bank";
@@ -103,7 +107,7 @@ export class Hand {
     }
 
     // Audit log hand dealt
-    getAuditLogger().log("hand_dealt", <any>{
+    getAuditLogger().log<HandDealtEvent>("hand_dealt", {
       handId: this.id,
       cards: this.hand.map((c) => ({ rank: c.rank, suit: c.suit })),
       value: this.handValue,
@@ -229,7 +233,7 @@ export class Hand {
       newHandId: splitHand.id,
     });
 
-    getAuditLogger().log("hand_split", <any>{
+    getAuditLogger().log<HandSplitEvent>("hand_split", {
       originalHandId: this.id,
       newHandId: splitHand.id,
       playerId: this.userId,
@@ -290,7 +294,7 @@ export class Hand {
     this.insuranceBet.credit(insuranceAmount, this.userId);
 
     // Audit log insurance taken
-    getAuditLogger().log("insurance_taken", <any>{
+    getAuditLogger().log<InsuranceTakenEvent>("insurance_taken", {
       playerId: this.userId,
       handId: this.id,
       amount: insuranceAmount,
@@ -304,7 +308,7 @@ export class Hand {
     this.insuranceOffered = false;
 
     // Audit log insurance declined
-    getAuditLogger().log("insurance_declined", <any>{
+    getAuditLogger().log<InsuranceDeclinedEvent>("insurance_declined", {
       playerId: this.userId,
       handId: this.id,
     });
