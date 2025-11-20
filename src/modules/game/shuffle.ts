@@ -116,14 +116,33 @@ export const overhandShuffleStack = (stack: Stack): Stack => {
 
 /**
  * Performs a complete casino-style shuffle on a multi-deck shoe.
- * Breaks shoe into deck-sized chunks, riffle shuffles each 3 times,
- * overhand shuffles once, then reassembles and cuts.
+ * Breaks shoe into deck-sized chunks, riffle shuffles each 5 times,
+ * overhand shuffles once, then mixes chunks together and cuts.
  *
  * @param shoe - The complete shoe (multiple decks) to shuffle
  * @returns Fully shuffled shoe ready for play
  */
+/**
+ * Performs a Fisher-Yates (Knuth) shuffle for perfect randomization.
+ * This is the gold standard for unbiased shuffling.
+ *
+ * @param stack - The card stack to shuffle
+ * @returns Perfectly randomized stack
+ */
+export const fisherYatesShuffle = (stack: Stack): Stack => {
+  const shuffled = [...stack];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
+
 export const shuffleShoe = (shoe: Stack): Stack => {
-  // break the shoe into chunks of around 52 cards (1 deck) each, riffle shuffle each chunk 3 times, overhand shuffle each chunk once, then reassemble and cut the shoe at OPPOSITE the desired penetration point, effectively achieving the desired penetration
+  // Break the shoe into chunks of around 52 cards (1 deck) each,
+  // riffle shuffle each chunk 5 times, overhand shuffle each chunk once,
+  // then riffle shuffle chunks together to achieve cross-deck mixing,
+  // and finally cut the shoe at opposite the desired penetration point
 
   const deckSize = 52;
   const numDecks = Math.ceil(shoe.length / deckSize);
@@ -131,14 +150,24 @@ export const shuffleShoe = (shoe: Stack): Stack => {
   for (let i = 0; i < numDecks; i++) {
     const chunk = shoe.slice(i * deckSize, (i + 1) * deckSize);
     let shuffledChunk = chunk;
-    for (let j = 0; j < 3; j++) {
+    for (let j = 0; j < 5; j++) {
       shuffledChunk = riffleShuffleStack(shuffledChunk);
     }
     shuffledChunk = overhandShuffleStack(shuffledChunk);
     chunks.push(shuffledChunk);
   }
 
-  const reassembledShoe = chunks.flat();
+  // Mix chunks together using multiple riffle shuffles to achieve cross-deck mixing
+  let reassembledShoe = chunks[0];
+  for (let i = 1; i < chunks.length; i++) {
+    // Combine current accumulated shoe with next chunk and riffle shuffle multiple times
+    let combined = [...reassembledShoe, ...chunks[i]];
+    // Do 3 riffle shuffles when combining to ensure thorough mixing
+    for (let j = 0; j < 3; j++) {
+      combined = riffleShuffleStack(combined);
+    }
+    reassembledShoe = combined;
+  }
 
   // Now cut the shoe at opposite the desired penetration point
   const desiredPenetration = 75; // default desired penetration
