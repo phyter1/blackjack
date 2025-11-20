@@ -1,11 +1,11 @@
 "use client";
 
 import type { Player } from "@/modules/game/player";
-import type { Round } from "@/modules/game/round";
+import type { SerializedRound } from "@/stores/game";
 import { Button } from "@/components/ui/button";
 
 interface SettlingPhaseProps {
-  round: Round | undefined;
+  round: SerializedRound | undefined;
   player: Player | null;
   onNextRound: () => void;
 }

@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import type { Round } from "@/modules/game/round";
+import type { SerializedRound } from "@/stores/game";
 import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
 import { cn } from "@/lib/utils";
 import { useSettingsStore, selectSettings } from "@/stores/settings";
 
 interface PlayerAreaProps {
-  round: Round | undefined;
+  round: SerializedRound | undefined;
   phase: GamePhase;
   userName: string;
   version?: number;

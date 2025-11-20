@@ -8,9 +8,26 @@ import { UserService } from "@/services/user-service";
 import { createTestDeck, parseTestScenario } from "@/modules/game";
 import type { Player } from "@/modules/game/player";
 import type { Round } from "@/modules/game/round";
+import type { Hand } from "@/modules/game/hand";
 import type { ActionType } from "@/modules/game/action";
 import type { UserProfile, UserBank, TableRules } from "@/types/user";
 import type { GamePhase } from "@/components/table/types";
+import { useAppStore } from "./app";
+import { useTrainerStore } from "./trainer";
+
+// Serialized hand type for UI (plain object, not class instance)
+type SerializedHand = ReturnType<Hand["toObject"]>;
+
+// Serialized round type for UI (only data properties, no methods/getters)
+export type SerializedRound = {
+  id: string;
+  dealerHand: Round["dealerHand"];
+  playerHands: SerializedHand[];
+  state: Round["state"];
+  currentHandIndex: number;
+  settlementResults?: Round["settlementResults"];
+  roundNumber: number;
+};
 
 export interface GameState {
   // Core game instances
@@ -25,7 +42,7 @@ export interface GameState {
   totalWagered: number;
   sessionId: string | null;
   currentBalance: number;
-  currentRound: Round | undefined;
+  currentRound: SerializedRound | undefined;
   currentActions: ActionType[];
   shoeDetails: any;
   originalBalance: number;
@@ -356,7 +373,6 @@ export const useGameStore = create<GameStore>()(
 
       try {
         // Get trainer store
-        const { useTrainerStore } = await import("./trainer");
         const trainerState = useTrainerStore.getState();
         const isTrainerActive = trainerState.isActive;
         const trainer = trainerState.trainer;
@@ -568,7 +584,7 @@ export const useGameStore = create<GameStore>()(
       // Check actual player balance
       if (player.bank.balance < 10) {
         // End game if out of money
-        const { useAppStore } = require("./app");
+
         const userId = useAppStore.getState().user?.id;
         const onGameEnd = useAppStore.getState().handleGameEnd;
         if (userId && onGameEnd) {
