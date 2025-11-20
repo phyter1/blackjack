@@ -1,19 +1,19 @@
 "use client";
 
-import type {
-  UserProfile,
-  UserBank,
-  GameSession,
-  Transaction,
-  UserStats,
-} from "@/types/user";
 import {
-  UserStorage,
   BankStorage,
   SessionStorage,
   TransactionStorage,
+  UserStorage,
 } from "@/lib/storage";
 import { calculateSessionEV } from "@/modules/strategy/ev-calculator";
+import type {
+  GameSession,
+  Transaction,
+  UserBank,
+  UserProfile,
+  UserStats,
+} from "@/types/user";
 
 export class UserService {
   /**
@@ -53,7 +53,7 @@ export class UserService {
     BankStorage.save(bank);
 
     // Log initial deposit
-    this.addTransaction({
+    UserService.addTransaction({
       userId: user.id,
       type: "deposit",
       amount: initialBalance,
@@ -136,7 +136,7 @@ export class UserService {
 
     BankStorage.save(bank);
 
-    this.addTransaction({
+    UserService.addTransaction({
       userId,
       type: "deposit",
       amount,
@@ -161,7 +161,9 @@ export class UserService {
 
     if (bank.balance < amount) {
       throw new Error(
-        `Insufficient funds. Balance: $${bank.balance.toFixed(2)}, Requested: $${amount.toFixed(2)}`,
+        `Insufficient funds. Balance: $${
+          bank.balance.toFixed(2)
+        }, Requested: $${amount.toFixed(2)}`,
       );
     }
 
@@ -171,7 +173,7 @@ export class UserService {
 
     BankStorage.save(bank);
 
-    this.addTransaction({
+    UserService.addTransaction({
       userId,
       type: "withdrawal",
       amount,
@@ -278,14 +280,13 @@ export class UserService {
 
     // Log transaction
     if (netProfit !== 0) {
-      this.addTransaction({
+      UserService.addTransaction({
         userId: session.userId,
         type: netProfit > 0 ? "game_win" : "game_loss",
         amount: Math.abs(netProfit),
-        description:
-          netProfit > 0
-            ? `Won $${netProfit.toFixed(2)} in session`
-            : `Lost $${Math.abs(netProfit).toFixed(2)} in session`,
+        description: netProfit > 0
+          ? `Won $${netProfit.toFixed(2)} in session`
+          : `Lost $${Math.abs(netProfit).toFixed(2)} in session`,
         sessionId,
       });
     }
@@ -307,8 +308,9 @@ export class UserService {
     const totalSessionsPlayed = completedSessions.length;
 
     const wins = completedSessions.filter((s) => s.netProfit > 0).length;
-    const winRate =
-      totalSessionsPlayed > 0 ? (wins / totalSessionsPlayed) * 100 : 0;
+    const winRate = totalSessionsPlayed > 0
+      ? (wins / totalSessionsPlayed) * 100
+      : 0;
 
     const biggestWin = Math.max(
       ...completedSessions.map((s) => s.netProfit),
@@ -323,8 +325,9 @@ export class UserService {
       (sum, s) => sum + s.netProfit,
       0,
     );
-    const averageSessionProfit =
-      totalSessionsPlayed > 0 ? totalProfit / totalSessionsPlayed : 0;
+    const averageSessionProfit = totalSessionsPlayed > 0
+      ? totalProfit / totalSessionsPlayed
+      : 0;
 
     const totalTimePlayedMs = completedSessions.reduce((sum, s) => {
       if (s.endTime) {
@@ -376,11 +379,15 @@ export class UserService {
 
     // Delete sessions
     const sessions = SessionStorage.getByUserId(userId);
-    sessions.forEach((s) => SessionStorage.delete(s.id));
+    sessions.forEach((s) => {
+      SessionStorage.delete(s.id);
+    });
 
     // Delete transactions
     const transactions = TransactionStorage.getByUserId(userId);
-    transactions.forEach((t) => TransactionStorage.delete(t.id));
+    transactions.forEach((t) => {
+      TransactionStorage.delete(t.id);
+    });
 
     // Logout if current user
     const current = UserStorage.getCurrentUser();
