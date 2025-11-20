@@ -13,10 +13,17 @@ import { DEFAULT_RULES } from "./defaults";
 import { calculateHouseEdge } from "./house-edge";
 import type { BlackjackRule, CompleteRuleSet } from "./types";
 import {
+  BET_UNIT_RULE,
   BLACKJACK_PAYOUT_RULE,
   BLACKJACK_TIE_RULE,
+  TABLE_MAX_BET_RULE,
+  TABLE_MIN_BET_RULE,
+  type BetUnitRule,
   type BlackjackPayoutRule,
   type BlackjackTieRule,
+  type TableMaxBetRule,
+  type TableMinBetRule,
+  betUnitRule,
   blackjackPayoutRule,
   CHARLIE_RULE,
   type CharlieRule,
@@ -48,6 +55,8 @@ import {
   type MaxSplitRule,
   RSA_RULE,
   type RSARule,
+  tableMaxBetRule,
+  tableMinBetRule,
 } from "./types";
 
 /**
@@ -145,6 +154,47 @@ export class RuleSet {
   }
 
   /**
+   * Set table minimum bet
+   *
+   * @param amount - Minimum bet amount in dollars
+   */
+  setTableMinBet(amount: number): this {
+    return this.setRule(tableMinBetRule(amount));
+  }
+
+  /**
+   * Set table maximum bet
+   *
+   * @param amount - Maximum bet amount in dollars
+   */
+  setTableMaxBet(amount: number): this {
+    return this.setRule(tableMaxBetRule(amount));
+  }
+
+  /**
+   * Set bet unit/denomination
+   *
+   * @param unit - Minimum bet unit (bets must be multiples of this)
+   */
+  setBetUnit(unit: number): this {
+    return this.setRule(betUnitRule(unit));
+  }
+
+  /**
+   * Set table betting limits (min, max, and unit)
+   *
+   * @param min - Minimum bet amount
+   * @param max - Maximum bet amount
+   * @param unit - Bet unit (default: 1)
+   */
+  setTableLimits(min: number, max: number, unit = 1): this {
+    this.setTableMinBet(min);
+    this.setTableMaxBet(max);
+    this.setBetUnit(unit);
+    return this;
+  }
+
+  /**
    * Reset all rules to defaults
    */
   reset(): this {
@@ -184,6 +234,9 @@ export class RuleSet {
       blackjackTie: this.rules.get(BLACKJACK_TIE_RULE) as BlackjackTieRule,
       charlie: this.rules.get(CHARLIE_RULE) as CharlieRule,
       dealer22Push: this.rules.get(DEALER_22_PUSH_RULE) as Dealer22PushRule,
+      tableMinBet: this.rules.get(TABLE_MIN_BET_RULE) as TableMinBetRule,
+      tableMaxBet: this.rules.get(TABLE_MAX_BET_RULE) as TableMaxBetRule,
+      betUnit: this.rules.get(BET_UNIT_RULE) as BetUnitRule,
       houseEdge,
     };
   }

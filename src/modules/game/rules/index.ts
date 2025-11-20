@@ -28,6 +28,13 @@
  */
 
 export { getRuleBasedActions } from "./action-validator";
+// Export bet validation utilities
+export {
+  getBettingLimits,
+  isValidBet,
+  validateBet,
+  type BetValidationResult,
+} from "./bet-validator";
 // Export builder class
 export { RuleSet } from "./builder";
 // Export default rules
@@ -38,6 +45,7 @@ export { calculateHouseEdge } from "./house-edge";
 export { COMMON_RULESETS } from "./presets";
 // Export types
 export type {
+  BetUnitRule,
   BlackjackPayoutRule,
   BlackjackRule,
   BlackjackTieRule,
@@ -54,12 +62,18 @@ export type {
   LateSurrenderRule,
   MaxSplitRule,
   RSARule,
+  TableMaxBetRule,
+  TableMinBetRule,
 } from "./types";
 // Export rule constants for external use
 // Export factory functions for creating rules
 export {
+  BET_UNIT_RULE,
   BLACKJACK_PAYOUT_RULE,
   BLACKJACK_TIE_RULE,
+  TABLE_MAX_BET_RULE,
+  TABLE_MIN_BET_RULE,
+  betUnitRule,
   blackjackPayoutRule,
   blackjackTieRule,
   CHARLIE_RULE,
@@ -86,4 +100,6 @@ export {
   maxSplitRule,
   RSA_RULE,
   rsaRule,
+  tableMaxBetRule,
+  tableMinBetRule,
 } from "./types";

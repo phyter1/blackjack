@@ -142,7 +142,9 @@ describe("Game Integration", () => {
       const testGame = new Game(6, 0.75, 1000000, undefined, testStack);
       const testPlayer = testGame.addPlayer("Test", 1000);
 
-      const round = testGame.startRound([{ playerId: testPlayer.id, amount: 100 }]);
+      const round = testGame.startRound([
+        { playerId: testPlayer.id, amount: 100 },
+      ]);
 
       expect(round).toBeDefined();
       expect(testGame.getStats().roundNumber).toBe(1);
@@ -280,7 +282,9 @@ describe("Game Integration", () => {
 
       testGame.playAction(ACTION_HIT);
 
-      expect(round?.playerHands[0].cards.length).toBe((initialHandSize ?? 0) + 1);
+      expect(round?.playerHands[0].cards.length).toBe(
+        (initialHandSize ?? 0) + 1,
+      );
     });
 
     test("should throw error when playing action with no active round", () => {

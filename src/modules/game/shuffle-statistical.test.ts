@@ -299,14 +299,15 @@ describe("Shuffle Statistical Analysis", () => {
       console.log("Distribution of original decks in first 20 cards:");
       for (let i = 1; i <= 6; i++) {
         const count = deckCountDistribution[i] || 0;
-        console.log(`  ${i} decks: ${count} times (${(count / trials) * 100}%)`);
+        console.log(
+          `  ${i} decks: ${count} times (${(count / trials) * 100}%)`,
+        );
       }
 
       // First 20 cards should come from at least 2 different original decks most of the time
-      const goodMixing =
-        Object.entries(deckCountDistribution)
-          .filter(([numDecks]) => Number.parseInt(numDecks) >= 2)
-          .reduce((sum, [, count]) => sum + count, 0);
+      const goodMixing = Object.entries(deckCountDistribution)
+        .filter(([numDecks]) => Number.parseInt(numDecks) >= 2)
+        .reduce((sum, [, count]) => sum + count, 0);
 
       expect(goodMixing).toBeGreaterThanOrEqual(trials * 0.8); // 80% should have 2+ decks
     });
@@ -343,7 +344,7 @@ describe("Shuffle Statistical Analysis", () => {
         let chiSquare = 0;
         for (const suit of ["hearts", "diamonds", "clubs", "spades"]) {
           const observed = suitCounts[suit];
-          chiSquare += ((observed - expected) ** 2) / expected;
+          chiSquare += (observed - expected) ** 2 / expected;
         }
 
         chiSquareSum += chiSquare;

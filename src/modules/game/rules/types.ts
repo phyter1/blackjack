@@ -187,6 +187,39 @@ export const dealer22PushRule = (enabled: boolean) => ({
   enabled,
 });
 
+// Table Minimum Bet Rule
+export const TABLE_MIN_BET_RULE = "table_min_bet" as const;
+export type TableMinBetRule = {
+  type: typeof TABLE_MIN_BET_RULE;
+  amount: number;
+};
+export const tableMinBetRule = (amount: number) => ({
+  type: TABLE_MIN_BET_RULE,
+  amount,
+});
+
+// Table Maximum Bet Rule
+export const TABLE_MAX_BET_RULE = "table_max_bet" as const;
+export type TableMaxBetRule = {
+  type: typeof TABLE_MAX_BET_RULE;
+  amount: number;
+};
+export const tableMaxBetRule = (amount: number) => ({
+  type: TABLE_MAX_BET_RULE,
+  amount,
+});
+
+// Bet Unit Rule (minimum denomination)
+export const BET_UNIT_RULE = "bet_unit" as const;
+export type BetUnitRule = {
+  type: typeof BET_UNIT_RULE;
+  unit: number;
+};
+export const betUnitRule = (unit: number) => ({
+  type: BET_UNIT_RULE,
+  unit,
+});
+
 /**
  * Union type for all possible blackjack rules
  */
@@ -204,7 +237,10 @@ export type BlackjackRule =
   | DeckCountRule
   | BlackjackTieRule
   | CharlieRule
-  | Dealer22PushRule;
+  | Dealer22PushRule
+  | TableMinBetRule
+  | TableMaxBetRule
+  | BetUnitRule;
 
 /**
  * Complete ruleset type containing all rules and house edge calculation
@@ -224,5 +260,8 @@ export type CompleteRuleSet = {
   blackjackTie: BlackjackTieRule;
   charlie: CharlieRule;
   dealer22Push: Dealer22PushRule;
+  tableMinBet: TableMinBetRule;
+  tableMaxBet: TableMaxBetRule;
+  betUnit: BetUnitRule;
   houseEdge: number;
 };

@@ -13,7 +13,7 @@ import type { Stack } from "./cards";
 import type { Player } from "./player";
 import { PlayerManager } from "./player";
 import { type PlayerRoundInfo, Round } from "./round";
-import { RuleSet } from "./rules/index";
+import { RuleSet, validateBet } from "./rules/index";
 import type { SettlementResult } from "./settlement";
 import { Shoe } from "./shoe";
 import {
@@ -138,6 +138,9 @@ export class Game {
       throw new Error("Cannot start a new round while one is in progress");
     }
 
+    // Build the complete ruleset for validation
+    const completeRules = this.rules.build();
+
     // Validate all bets
     const playerInfo: PlayerRoundInfo[] = [];
 
@@ -147,8 +150,12 @@ export class Game {
         throw new Error(`Player ${bet.playerId} not found`);
       }
 
-      if (bet.amount <= 0) {
-        throw new Error(`Invalid bet amount: ${bet.amount}`);
+      // Validate bet against table rules
+      const validation = validateBet(bet.amount, completeRules);
+      if (!validation.valid) {
+        throw new Error(
+          `Invalid bet for player ${player.name}: ${validation.error}`,
+        );
       }
 
       if (bet.amount > player.bank.balance) {

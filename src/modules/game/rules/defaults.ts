@@ -7,8 +7,12 @@
 
 import type { BlackjackRule } from "./types";
 import {
+  BET_UNIT_RULE,
   BLACKJACK_PAYOUT_RULE,
   BLACKJACK_TIE_RULE,
+  TABLE_MAX_BET_RULE,
+  TABLE_MIN_BET_RULE,
+  betUnitRule,
   blackjackPayoutRule,
   blackjackTieRule,
   CHARLIE_RULE,
@@ -35,6 +39,8 @@ import {
   maxSplitRule,
   RSA_RULE,
   rsaRule,
+  tableMaxBetRule,
+  tableMinBetRule,
 } from "./types";
 
 /**
@@ -52,6 +58,9 @@ import {
  * - Blackjack tie pushes
  * - No charlie rule
  * - Dealer 22 does not push
+ * - Table minimum: $5
+ * - Table maximum: $10,000
+ * - Bet unit: $1 (any dollar amount allowed)
  */
 export const DEFAULT_RULES: Record<string, BlackjackRule> = {
   [DEALER_STAND_RULE]: dealerStandRule("s17"),
@@ -68,4 +77,7 @@ export const DEFAULT_RULES: Record<string, BlackjackRule> = {
   [BLACKJACK_TIE_RULE]: blackjackTieRule("push"),
   [CHARLIE_RULE]: charlieRule(null), // no charlie rule
   [DEALER_22_PUSH_RULE]: dealer22PushRule(false),
+  [TABLE_MIN_BET_RULE]: tableMinBetRule(5),
+  [TABLE_MAX_BET_RULE]: tableMaxBetRule(10000),
+  [BET_UNIT_RULE]: betUnitRule(1),
 };

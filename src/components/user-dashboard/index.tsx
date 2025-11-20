@@ -88,9 +88,7 @@ export function UserDashboard({
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-green-500">
-              ♠ 21 ♠
-            </h1>
+            <h1 className="text-3xl font-bold text-green-500">♠ 21 ♠</h1>
             <p className="text-gray-400">Welcome back, {user.name}!</p>
           </div>
           <Button
