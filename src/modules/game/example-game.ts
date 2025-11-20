@@ -126,7 +126,7 @@ for (let i = 1; i <= 3; i++) {
 }
 
 // Final summary
-console.log("\n\n" + "=".repeat(60));
+console.log(`\n\n${"=".repeat(60)}`);
 console.log("FINAL SUMMARY");
 console.log("=".repeat(60));
 

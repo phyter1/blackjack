@@ -22,10 +22,10 @@ export function ShoeDisplay({
     2: 94,
     4: 146,
     6: 198,
-    8: 250
-  }
-  const containerHeight =  deckHeights[deckCount as keyof typeof deckHeights] 
-  const containerHeightClass = `h-[${containerHeight}px]`;
+    8: 250,
+  };
+  const containerHeight = deckHeights[deckCount as keyof typeof deckHeights];
+  const _containerHeightClass = `h-[${containerHeight}px]`;
 
   // Calculate percentages for visual representation
   const remainingPercentage = (remainingCards / totalCards) * 100;
@@ -44,7 +44,8 @@ export function ShoeDisplay({
   // Calculate cut card layer position from the bottom of current stack
   // cutCardPosition is the number of cards remaining when cut card is reached
   // We need to find which layer from the bottom of the current stack
-  const cutCardLayer = currentLayers - Math.ceil(cutCardPosition / cardsPerLayer);
+  const cutCardLayer =
+    currentLayers - Math.ceil(cutCardPosition / cardsPerLayer);
 
   return (
     <div className="fixed right-4 top-1/2 -translate-y-1/2 z-20">
@@ -55,12 +56,18 @@ export function ShoeDisplay({
         </div>
 
         {/* Shoe container with stacked cards */}
-        <div className="relative w-20" style={{ height: `${containerHeight}px` }}>
+        <div
+          className="relative w-20"
+          style={{ height: `${containerHeight}px` }}
+        >
           {/* Shoe base/holder */}
           <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 rounded-lg border-2 border-amber-900/50 shadow-lg" />
 
           {/* Stacked cards visualization - from top down */}
-          <div className="absolute top-2 left-1/2 -translate-x-1/2 w-16" style={{ height: `calc(${containerHeight}px - 1rem)` }}>
+          <div
+            className="absolute top-2 left-1/2 -translate-x-1/2 w-16"
+            style={{ height: `calc(${containerHeight}px - 1rem)` }}
+          >
             {Array.from({ length: maxVisibleLayers }).map((_, index) => {
               // Only show cards that are still in the shoe
               if (index >= currentLayers) return null;
@@ -82,14 +89,14 @@ export function ShoeDisplay({
                   style={{
                     top: `${baseOffset}px`,
                     zIndex: maxVisibleLayers - cardIndex,
-                    opacity: Math.max(0.8, 1 - (cardIndex * 0.003)), // Slight fade for depth
+                    opacity: Math.max(0.8, 1 - cardIndex * 0.003), // Slight fade for depth
                     background: atCutCard
-                      ? 'linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)'
+                      ? "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)"
                       : nearCutCard
-                      ? 'linear-gradient(135deg, #854D0E 0%, #A16207 50%, #854D0E 100%)'
-                      : 'linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)',
-                    transform: 'rotateX(-5deg) rotateY(5deg)', // Slight 3D tilt - opposite direction
-                    transformStyle: 'preserve-3d',
+                        ? "linear-gradient(135deg, #854D0E 0%, #A16207 50%, #854D0E 100%)"
+                        : "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)",
+                    transform: "rotateX(-5deg) rotateY(5deg)", // Slight 3D tilt - opposite direction
+                    transformStyle: "preserve-3d",
                   }}
                 >
                   {/* Vintage card back pattern - matching table cards */}
@@ -108,7 +115,9 @@ export function ShoeDisplay({
                   {/* Center medallion */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-2 h-2 rounded-full border border-amber-300 bg-amber-900 flex items-center justify-center">
-                      <span className="text-amber-200 text-[6px] font-serif">★</span>
+                      <span className="text-amber-200 text-[6px] font-serif">
+                        ★
+                      </span>
                     </div>
                   </div>
 
@@ -116,12 +125,16 @@ export function ShoeDisplay({
                   {isCutCard && (
                     <>
                       {/* Yellow indicator on the card itself */}
-                      <div className={`absolute inset-0 border-2 border-yellow-400 rounded-sm ${nearCutCard ? 'animate-pulse' : ''}`}
-                           style={{ boxShadow: '0 0 8px rgba(250, 204, 21, 0.6)' }} />
+                      <div
+                        className={`absolute inset-0 border-2 border-yellow-400 rounded-sm ${nearCutCard ? "animate-pulse" : ""}`}
+                        style={{ boxShadow: "0 0 8px rgba(250, 204, 21, 0.6)" }}
+                      />
 
                       {/* Arrow pointing to cut card */}
                       <div className="absolute -right-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                        <div className={`w-2 h-2 bg-yellow-400 rotate-45 ${nearCutCard ? 'animate-pulse' : ''}`} />
+                        <div
+                          className={`w-2 h-2 bg-yellow-400 rotate-45 ${nearCutCard ? "animate-pulse" : ""}`}
+                        />
                         {nearCutCard && (
                           <div className="text-[8px] font-bold text-yellow-400 whitespace-nowrap animate-pulse">
                             CUT
@@ -150,10 +163,10 @@ export function ShoeDisplay({
           <div
             className={`text-xl font-bold transition-all duration-300 ${
               atCutCard
-                ? 'text-red-400 animate-pulse scale-110'
+                ? "text-red-400 animate-pulse scale-110"
                 : nearCutCard
-                ? 'text-yellow-400 animate-pulse'
-                : 'text-amber-200'
+                  ? "text-yellow-400 animate-pulse"
+                  : "text-amber-200"
             }`}
           >
             {remainingCards}
@@ -161,10 +174,10 @@ export function ShoeDisplay({
           <div
             className={`text-[10px] leading-tight transition-colors duration-300 ${
               atCutCard
-                ? 'text-red-400'
+                ? "text-red-400"
                 : nearCutCard
-                ? 'text-yellow-400'
-                : 'text-amber-600'
+                  ? "text-yellow-400"
+                  : "text-amber-600"
             }`}
           >
             cards

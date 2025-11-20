@@ -6,7 +6,7 @@ import {
   ACTION_SURRENDER,
   type ActionType,
 } from "./action";
-import { type Bank, type House } from "./bank";
+import type { Bank, House } from "./bank";
 import { DealerHand } from "./dealer-hand";
 import { Hand } from "./hand";
 import type { RuleSet } from "./rules/index";

@@ -1,8 +1,8 @@
 "use client";
 
-import { Card, CardContent } from "../ui/card";
-import type { GameSession } from "@/types/user";
 import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
+import type { GameSession } from "@/types/user";
+import { Card, CardContent } from "../ui/card";
 
 interface SessionSummaryProps {
   session: GameSession;

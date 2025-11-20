@@ -1,9 +1,8 @@
-import { Game, type PlayerBet, type GameState } from "@/modules/game/game";
 import type { ActionType } from "@/modules/game/action";
+import { Game, type GameState, type PlayerBet } from "@/modules/game/game";
 import type { Player } from "@/modules/game/player";
 import type { Round } from "@/modules/game/round";
 import type { RuleSet } from "@/modules/game/rules";
-import type { SettlementResult } from "@/modules/game/settlement";
 
 export type GameChangeEvent = {
   type:

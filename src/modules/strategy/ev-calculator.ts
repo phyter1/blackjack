@@ -359,7 +359,7 @@ export function calculateAdvantagePlayEV(params: {
     averageBetSize = totalWagered / 100, // Estimate if not provided
   } = params;
 
-  let baseHouseEdge = calculateBaseHouseEdge(rules);
+  const baseHouseEdge = calculateBaseHouseEdge(rules);
   let adjustedHouseEdge = baseHouseEdge;
   let countAdvantage = 0;
 
@@ -449,7 +449,7 @@ export function calculateAdvantagePlayEV(params: {
       break;
     }
 
-    case "perfect-play":
+    case "perfect-play": {
       // Theoretical maximum with perfect information
       // Assumes hole card knowledge, perfect counting, optimal bet sizing
       // Total player edge should be around 2-3%
@@ -465,6 +465,7 @@ export function calculateAdvantagePlayEV(params: {
         countAdvantage = 0; // Already incorporated in adjustedHouseEdge
       }
       break;
+    }
   }
 
   // Final edge (negative = house edge, positive = player edge)

@@ -1,6 +1,7 @@
 "use client";
 
-import { useTrainerStore } from "@/stores/trainer";
+import { GraduationCap, RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,7 +9,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -17,9 +17,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { GraduationCap, RotateCcw } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import type { TrainerDifficulty } from "@/modules/strategy/trainer";
+import { useTrainerStore } from "@/stores/trainer";
 
 export function TrainerControls() {
   const isActive = useTrainerStore((state) => state.isActive);

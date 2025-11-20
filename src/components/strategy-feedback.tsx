@@ -1,12 +1,14 @@
 "use client";
 
-import { useTrainerStore } from "@/stores/trainer";
+import { AlertTriangle, CheckCircle2, XCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTrainerStore } from "@/stores/trainer";
 
 export function StrategyFeedback() {
-  const currentActionFeedback = useTrainerStore((state) => state.currentActionFeedback);
+  const currentActionFeedback = useTrainerStore(
+    (state) => state.currentActionFeedback,
+  );
   const isActive = useTrainerStore((state) => state.isActive);
 
   if (!isActive || !currentActionFeedback) return null;

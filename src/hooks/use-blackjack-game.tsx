@@ -2,17 +2,16 @@
 
 import {
   createContext,
+  type ReactNode,
   useContext,
   useState,
-  useCallback,
   useSyncExternalStore,
-  type ReactNode,
 } from "react";
+import type { ActionType } from "@/modules/game/action";
 import { Game, type PlayerBet } from "@/modules/game/game";
-import { RuleSet } from "@/modules/game/rules";
 import type { Player } from "@/modules/game/player";
 import type { Round } from "@/modules/game/round";
-import type { ActionType } from "@/modules/game/action";
+import { RuleSet } from "@/modules/game/rules";
 
 // Wrapper around Game that supports subscriptions
 class GameStore {
@@ -80,7 +79,17 @@ class GameStore {
   };
 
   getSnapshot = () => {
-    return this.cachedSnapshot!;
+    return this.cachedSnapshot as {
+      game: Game;
+      currentPlayer: Player | null;
+      currentRound: Round | undefined;
+      gameState: "waiting_for_bets" | "in_round" | "round_complete";
+      playerBalance: number;
+      roundNumber: number;
+      currentBet: number | undefined;
+      shoeDetails: any;
+      version: number;
+    };
   };
 
   addPlayer = (name: string, bankroll: number) => {
@@ -97,7 +106,7 @@ class GameStore {
 
     // Create PlayerBet array - one entry per hand
     const playerBets: PlayerBet[] = betAmounts.map((amount) => ({
-      playerId: this.player!.id,
+      playerId: this.player?.id ?? "",
       amount,
     }));
 

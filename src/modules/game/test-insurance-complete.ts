@@ -1,5 +1,5 @@
 import { Bank, House } from "./bank";
-import { Round, type PlayerRoundInfo } from "./round";
+import { type PlayerRoundInfo, Round } from "./round";
 import { RuleSet } from "./rules/index";
 import { Shoe } from "./shoe";
 
@@ -148,7 +148,7 @@ console.log("Test 3: No insurance when dealer doesn't show Ace");
 {
   const rules = new RuleSet();
   const shoe = new Shoe(6, 0.75);
-  const house = new House(100000);
+  const _house = new House(100000);
   const playerBank = new Bank("player", 1000);
 
   const playerInfo: PlayerRoundInfo[] = [

@@ -1,8 +1,8 @@
 import type { ActionType } from "../game/action";
 import type { Card } from "../game/cards";
+import type { HandOutcome } from "../game/settlement";
 import type { BasicStrategyDecision } from "./basic-strategy";
 import type { CountSnapshot } from "./hi-lo-counter";
-import type { HandOutcome } from "../game/settlement";
 
 /**
  * A single decision made during gameplay
@@ -239,7 +239,7 @@ export class DecisionTracker {
         for (const card of cards) {
           if (card.rank === "A") hardTotal += 1;
           else if (["J", "Q", "K"].includes(card.rank)) hardTotal += 10;
-          else hardTotal += parseInt(card.rank);
+          else hardTotal += parseInt(card.rank, 10);
         }
         if (decision.playerHandValue === hardTotal + 10) {
           return "soft";

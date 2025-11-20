@@ -2,20 +2,18 @@
  * Round state machine implementation
  */
 
+import type { ActionType } from "../action";
 import { BaseStateMachine } from "./state-machine";
 import type {
   RoundState,
   RoundTransitionEvent,
   StateMachineConfig,
 } from "./types";
-import type { ActionType } from "../action";
 
 export class RoundStateMachine extends BaseStateMachine<
   RoundState,
   RoundTransitionEvent
 > {
-  private readonly hasInsurance: boolean;
-
   constructor(hasInsurance: boolean = false) {
     const config: StateMachineConfig<RoundState, RoundTransitionEvent> = {
       initialState: hasInsurance ? "insurance" : "player_turn",
@@ -66,7 +64,6 @@ export class RoundStateMachine extends BaseStateMachine<
     };
 
     super(config);
-    this.hasInsurance = hasInsurance;
   }
 
   /**

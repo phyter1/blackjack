@@ -1,7 +1,7 @@
 "use client";
 
-import type { ActionType } from "@/modules/game/action";
 import { cn } from "@/lib/utils";
+import type { ActionType } from "@/modules/game/action";
 
 interface PlayingPhaseProps {
   availableActions: ActionType[];
@@ -15,7 +15,12 @@ interface ActionButtonProps {
   onClick: () => void;
 }
 
-function ActionButton({ label, color, accentColor, onClick }: ActionButtonProps) {
+function ActionButton({
+  label,
+  color,
+  accentColor,
+  onClick,
+}: ActionButtonProps) {
   return (
     <button
       type="button"
@@ -23,7 +28,7 @@ function ActionButton({ label, color, accentColor, onClick }: ActionButtonProps)
       className={cn(
         "relative w-28 h-28 rounded-full transition-all duration-200",
         "hover:scale-110 hover:shadow-xl cursor-pointer",
-        "active:scale-105"
+        "active:scale-105",
       )}
       style={{
         background: `radial-gradient(circle at 30% 30%, ${color} 0%, ${accentColor} 100%)`,

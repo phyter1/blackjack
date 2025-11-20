@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { Shoe, newShoeStack } from "./shoe";
-import type { Card, Stack } from "./cards";
+import type { Stack } from "./cards";
+import { newShoeStack, Shoe } from "./shoe";
 
 describe("newShoeStack", () => {
   test("should create shoe with correct number of cards", () => {

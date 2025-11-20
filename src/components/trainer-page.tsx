@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useBlackjackGame } from "@/hooks/use-blackjack-game";
+import type { ActionType } from "@/modules/game";
 import { useTrainerStore } from "@/stores/trainer";
-import { HandDisplay } from "./hand-display";
-import { BettingControls } from "./betting-controls";
 import { ActionButtons } from "./action-buttons";
+import { BettingControls } from "./betting-controls";
+import { CountingPanel } from "./counting-panel";
 import { GameStats } from "./game-stats";
+import { HandDisplay } from "./hand-display";
+import { StrategyFeedback } from "./strategy-feedback";
+import { TrainerControls } from "./trainer-controls";
+import { TrainerStatsPanel } from "./trainer-stats-panel";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
 import {
   Card,
   CardContent,
@@ -16,11 +20,7 @@ import {
   CardHeader,
   CardTitle,
 } from "./ui/card";
-import { TrainerControls } from "./trainer-controls";
-import { StrategyFeedback } from "./strategy-feedback";
-import { CountingPanel } from "./counting-panel";
-import { TrainerStatsPanel } from "./trainer-stats-panel";
-import type { ActionType } from "@/modules/game";
+import { Input } from "./ui/input";
 
 export function TrainerPage() {
   const {
@@ -40,7 +40,7 @@ export function TrainerPage() {
 
   const initializeTrainer = useTrainerStore((state) => state.initializeTrainer);
   const isActive = useTrainerStore((state) => state.isActive);
-  const difficulty = useTrainerStore((state) => state.difficulty);
+  const _difficulty = useTrainerStore((state) => state.difficulty);
   const refreshStats = useTrainerStore((state) => state.refreshStats);
   const clearFeedback = useTrainerStore((state) => state.clearFeedback);
   const getTrainer = useTrainerStore((state) => state.getTrainer);
@@ -110,7 +110,7 @@ export function TrainerPage() {
     const availableActions = getAvailableActions();
 
     // Evaluate the action before playing it
-    const feedback = trainer.evaluateAction(
+    const _feedback = trainer.evaluateAction(
       activeHand.hand,
       activeHand.handValue,
       dealerUpCard,

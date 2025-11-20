@@ -1,7 +1,7 @@
 import chalk from "chalk";
 import type { Card } from "@/modules/game/cards";
-import type { Hand } from "@/modules/game/hand";
 import type { DealerHand } from "@/modules/game/dealer-hand";
+import type { Hand } from "@/modules/game/hand";
 
 // Card suits in Unicode (lowercase to match Card type)
 const SUITS = {
@@ -155,7 +155,7 @@ export function displaySettlement(
   result: "win" | "loss" | "push" | "blackjack",
   payout: number,
 ): void {
-  console.log("\n" + chalk.yellow.bold("═".repeat(60)));
+  console.log(`\n${chalk.yellow.bold("═".repeat(60))}`);
 
   switch (result) {
     case "blackjack":
@@ -191,7 +191,7 @@ export function displayError(message: string): void {
 // Display welcome message
 export function displayWelcome(): void {
   console.clear();
-  console.log(chalk.green.bold("\n" + "═".repeat(60)));
+  console.log(chalk.green.bold(`\n${"═".repeat(60)}`));
   console.log(
     chalk.green.bold("                    🃏 BLACKJACK 🃏                    "),
   );

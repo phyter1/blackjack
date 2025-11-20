@@ -1,8 +1,9 @@
 "use client";
 
-import { cn } from "@/lib/utils";
-import { PlayingCard } from "../playing-card";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { cn } from "@/lib/utils";
+import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
+import { PlayingCard } from "../playing-card";
 import {
   Card,
   CardContent,
@@ -10,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
 
 interface DecisionDisplayProps {
   decision: PlayerDecision;

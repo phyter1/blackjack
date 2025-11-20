@@ -2,10 +2,10 @@
 
 import { useState } from "react";
 import { UserService } from "@/services/user-service";
+import type { UserBank, UserProfile } from "@/types/user";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-import type { UserProfile, UserBank } from "@/types/user";
 
 interface UserAuthProps {
   onAuthenticated: (user: UserProfile, bank: UserBank) => void;
@@ -56,7 +56,7 @@ export function UserAuth({ onAuthenticated }: UserAuthProps) {
       }
 
       const balance = parseFloat(initialBalance);
-      if (isNaN(balance) || balance < 0) {
+      if (Number.isNaN(balance) || balance < 0) {
         setError("Please enter a valid initial balance");
         setLoading(false);
         return;

@@ -1,13 +1,12 @@
 import { Bank, House } from "./bank";
-import { Hand } from "./hand";
-import { Round, type PlayerRoundInfo } from "./round";
-import { RuleSet } from "./rules/index";
 import { DealerHand } from "./dealer-hand";
 import { Game } from "./game";
+import { Hand } from "./hand";
+import { RuleSet } from "./rules/index";
 
 console.log("=== Insurance Tests ===\n");
 
-const house = new House(100000);
+const _house = new House(100000);
 
 // Test 1: Insurance offered when dealer shows Ace
 console.log("Test 1: Insurance offered when dealer shows Ace");
@@ -201,7 +200,7 @@ console.log("Test 5: Complete game flow with insurance");
   const player = game.addPlayer("TestPlayer", 1000);
 
   // Keep trying until we get a dealer Ace (simulating the scenario)
-  let attempts = 0;
+  const _attempts = 0;
   let round: any;
   let dealerShowsAce = false;
 

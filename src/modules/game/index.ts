@@ -1,102 +1,90 @@
 // Main Game Components
-export { Game } from "./game";
-export type { GameState, PlayerBet } from "./game";
 
-export { Round } from "./round";
-export type { PlayerRoundInfo, RoundState } from "./round";
-
-export { Hand } from "./hand";
-export { DealerHand } from "./dealer-hand";
-
-export { PlayerManager } from "./player";
-export type { Player } from "./player";
-
-// Settlement
-export {
-  settleHand,
-  settleRound,
-  compareHands,
-  determineOutcome,
-  calculatePayout,
-  calculateProfit,
-} from "./settlement";
-export type { HandOutcome, SettlementResult } from "./settlement";
-
-// Rules & Configuration
-export { RuleSet, COMMON_RULESETS } from "./rules/index";
-export type {
-  CompleteRuleSet,
-  BlackjackRule,
-  DealerStandRule,
-  DealerPeekRule,
-  DASRule,
-  DoubleOnTwoRule,
-  RSARule,
-  HitSplitAceRule,
-  MaxSplitRule,
-  LateSurrenderRule,
-  EarlySurrenderRule,
-  BlackjackPayoutRule,
-  DeckCountRule,
-  BlackjackTieRule,
-  CharlieRule,
-  Dealer22PushRule,
-} from "./rules/index";
-
-// Actions
-export {
-  ACTION_HIT,
-  ACTION_STAND,
-  ACTION_DOUBLE,
-  ACTION_SPLIT,
-  ACTION_SURRENDER,
-  hit,
-  stand,
-  double,
-  split,
-  surrender,
-} from "./action";
 export type {
   ActionType,
-  Hit,
-  Stand,
   Double,
+  Hit,
   Split,
+  Stand,
   Surrender,
 } from "./action";
-
+// Actions
+export {
+  ACTION_DOUBLE,
+  ACTION_HIT,
+  ACTION_SPLIT,
+  ACTION_STAND,
+  ACTION_SURRENDER,
+  double,
+  hit,
+  split,
+  stand,
+  surrender,
+} from "./action";
 // Bank & Money Management
 export { Bank, Escrow, House } from "./bank";
-
-// Shoe & Cards
-export { Shoe } from "./shoe";
-export type { ShoeDeck } from "./shoe";
-
-export { newDeck, SUITS, RANKS } from "./cards";
-export type { Card, Stack, Deck } from "./cards";
-
-// Shuffling
-export {
-  randomInterleaveLen,
-  cutStackAtPenetration,
-  riffleShuffleStack,
-  overhandShuffleStack,
-  shuffleShoe,
-} from "./shuffle";
-
+export type { Card, Deck, Stack } from "./cards";
+export { newDeck, RANKS, SUITS } from "./cards";
+export { DealerHand } from "./dealer-hand";
+export type { GameState, PlayerBet } from "./game";
+export { Game } from "./game";
+export { Hand } from "./hand";
+export type { Player } from "./player";
+export { PlayerManager } from "./player";
 // Random utilities
 export {
   randomInt,
-  weightedRandomChoice,
   randomWeieghtedChunks,
+  weightedRandomChoice,
 } from "./random";
-
+export type { PlayerRoundInfo, RoundState } from "./round";
+export { Round } from "./round";
+export type {
+  BlackjackPayoutRule,
+  BlackjackRule,
+  BlackjackTieRule,
+  CharlieRule,
+  CompleteRuleSet,
+  DASRule,
+  Dealer22PushRule,
+  DealerPeekRule,
+  DealerStandRule,
+  DeckCountRule,
+  DoubleOnTwoRule,
+  EarlySurrenderRule,
+  HitSplitAceRule,
+  LateSurrenderRule,
+  MaxSplitRule,
+  RSARule,
+} from "./rules/index";
+// Rules & Configuration
+export { COMMON_RULESETS, RuleSet } from "./rules/index";
+export type { HandOutcome, SettlementResult } from "./settlement";
+// Settlement
+export {
+  calculatePayout,
+  calculateProfit,
+  compareHands,
+  determineOutcome,
+  settleHand,
+  settleRound,
+} from "./settlement";
+export type { ShoeDeck } from "./shoe";
+// Shoe & Cards
 // Re-export newShoeStack for convenience
-export { newShoeStack } from "./shoe";
+export { newShoeStack, Shoe } from "./shoe";
+// Shuffling
+export {
+  cutStackAtPenetration,
+  overhandShuffleStack,
+  randomInterleaveLen,
+  riffleShuffleStack,
+  shuffleShoe,
+} from "./shuffle";
 
 // Test utilities
 export {
+  createCard,
   createTestDeck,
   parseTestScenario,
-  createCard,
 } from "./test-deck-builder";

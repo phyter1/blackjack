@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { cn } from "@/lib/utils";
 
 interface BettingControlsProps {
   balance: number;
@@ -12,7 +12,7 @@ interface BettingControlsProps {
 }
 
 const chipValues = [5, 10, 25, 50, 100, 500];
-const MAX_HANDS = 5;
+const _MAX_HANDS = 5;
 
 const chipColors = {
   5: "bg-red-600 hover:bg-red-700",

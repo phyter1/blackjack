@@ -1,17 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
-  LineChart,
+  CartesianGrid,
+  Legend,
   Line,
+  LineChart,
+  ReferenceLine,
+  ResponsiveContainer,
+  Tooltip,
   XAxis,
   YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-  Legend,
 } from "recharts";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -19,7 +20,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -32,9 +32,9 @@ import {
   formatCurrency,
   transformToAdvantagePlayEVData,
 } from "@/lib/chart-data-utils";
-import type { GameSession } from "@/types/user";
 import type { AdvantagePlayLevel } from "@/modules/strategy/ev-calculator";
 import { getAdvantagePlayDescription } from "@/modules/strategy/ev-calculator";
+import type { GameSession } from "@/types/user";
 
 interface EVVarianceChartProps {
   perSessionData: EVDataPoint[];

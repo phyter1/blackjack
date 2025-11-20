@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { PlayingCard } from "./playing-card";
-import type { Card as GameCard } from "@/modules/game/cards";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
+import type { Card as GameCard } from "@/modules/game/cards";
+import { PlayingCard } from "./playing-card";
 
 interface AnimatedCardProps {
   card?: GameCard;

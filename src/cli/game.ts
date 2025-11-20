@@ -1,20 +1,19 @@
 #!/usr/bin/env bun
 
-import { input, select, confirm, number } from "@inquirer/prompts";
-import { writeFileSync } from "node:fs";
-import { mkdirSync } from "node:fs";
-import { Game } from "@/modules/game/game";
-import { RuleSet } from "@/modules/game/rules";
-import type { Player } from "@/modules/game/player";
-import type { ActionType } from "@/modules/game/action";
+import { mkdirSync, writeFileSync } from "node:fs";
+import { confirm, input, number, select } from "@inquirer/prompts";
 import chalk from "chalk";
+import type { ActionType } from "@/modules/game/action";
+import { Game } from "@/modules/game/game";
+import type { Player } from "@/modules/game/player";
+import { RuleSet } from "@/modules/game/rules";
 import {
-  displayWelcome,
-  displayHeader,
   displayDealerHand,
+  displayError,
+  displayHeader,
   displayPlayerHand,
   displaySettlement,
-  displayError,
+  displayWelcome,
 } from "./display";
 
 class BlackjackCLI {
@@ -121,7 +120,7 @@ class BlackjackCLI {
     // Game over - end session and save audit trail
     this.game.endSession();
 
-    console.log("\n" + "═".repeat(60));
+    console.log(`\n${"═".repeat(60)}`);
     console.log(
       `\n👋 Thanks for playing, ${this.player?.name}!\nFinal balance: $${this.player?.bank.balance.toFixed(2)}\n`,
     );
@@ -324,7 +323,7 @@ class BlackjackCLI {
       // Create audit-logs directory if it doesn't exist
       try {
         mkdirSync("./audit-logs", { recursive: true });
-      } catch (e) {
+      } catch (_e) {
         // Directory might already exist
       }
 

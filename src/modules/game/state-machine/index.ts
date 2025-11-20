@@ -2,28 +2,28 @@
  * State machine module exports
  */
 
-export { BaseStateMachine } from "./state-machine";
 export {
-  GameStateMachine,
   createGameStateMachine,
+  GameStateMachine,
   gameStateValidation,
 } from "./game-state-machine";
 export {
-  RoundStateMachine,
   createRoundStateMachine,
+  RoundStateMachine,
   roundStateValidation,
 } from "./round-state-machine";
+export { BaseStateMachine } from "./state-machine";
 
 export type {
   GameState,
-  RoundState,
   GameTransitionEvent,
+  RoundState,
   RoundTransitionEvent,
+  StateChangeListener,
   StateMachine,
   StateMachineConfig,
   StateValidation,
-  StateChangeListener,
   Transition,
-  TransitionGuard,
   TransitionAction,
+  TransitionGuard,
 } from "./types";

@@ -172,7 +172,9 @@ export function RulesSelector({
         <CardContent className="space-y-3 sm:space-y-6 overflow-y-auto flex-1">
           {/* Preset Buttons */}
           <div>
-            <Label className="text-white text-sm mb-1 sm:mb-2 block">Quick Presets</Label>
+            <Label className="text-white text-sm mb-1 sm:mb-2 block">
+              Quick Presets
+            </Label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 sm:gap-2">
               <Button
                 onClick={() => loadPreset("default")}
@@ -212,7 +214,9 @@ export function RulesSelector({
           {/* House Edge Display */}
           <div className="p-2 sm:p-4 bg-black rounded border border-gray-700">
             <div className="flex justify-between items-center">
-              <span className="text-gray-400 text-sm sm:text-base">House Edge:</span>
+              <span className="text-gray-400 text-sm sm:text-base">
+                House Edge:
+              </span>
               <span
                 className={`text-xl sm:text-2xl font-bold ${
                   houseEdge <= 0.5
@@ -345,7 +349,10 @@ export function RulesSelector({
               </h3>
 
               <div>
-                <Label htmlFor="doubleRestriction" className="text-white text-sm">
+                <Label
+                  htmlFor="doubleRestriction"
+                  className="text-white text-sm"
+                >
                   Double Down Restriction
                 </Label>
                 <Select
@@ -395,7 +402,10 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="maxPlayableHands" className="text-white text-sm">
+                <Label
+                  htmlFor="maxPlayableHands"
+                  className="text-white text-sm"
+                >
                   Max Playable Hands
                 </Label>
                 <Select

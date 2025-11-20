@@ -2,7 +2,8 @@
 /** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { GameSession, TableRules } from "@/types/user";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -11,7 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import type { GameSession, TableRules } from "@/types/user";
 
 interface SessionsPanelProps {
   allSessions: GameSession[];
@@ -38,7 +38,7 @@ export function SessionsPanel({
       const endIndex = startIndex + sessionsPerPage;
       setSessions(allSessions.slice(startIndex, endIndex));
     }
-  }, [viewMode, currentPage, allSessions, sessionsPerPage]);
+  }, [viewMode, currentPage, allSessions]);
 
   const formatDuration = (ms: number) => {
     const minutes = Math.floor(ms / 60000);

@@ -1,28 +1,26 @@
 "use client";
 
-import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import type { ActionType } from "@/modules/game/action";
-import type { UserBank, UserProfile } from "@/types/user";
+import { useGameStore } from "@/stores/game";
 import { selectSettings, useSettingsStore } from "@/stores/settings";
 import { useTrainerStore } from "@/stores/trainer";
 import { useUIStore } from "@/stores/ui";
-import { useGameStore } from "@/stores/game";
-import { useAppStore } from "@/stores/app";
-
+import type { UserBank, UserProfile } from "@/types/user";
+import { SettingsDialog } from "../settings-dialog";
+import { BettingPhase } from "../table/betting-phase";
+import { DealerArea } from "../table/dealer-area";
+import { DiscardTray } from "../table/discard-tray";
+import { InsurancePhase } from "../table/insurance-phase";
+import { PlayerArea } from "../table/player-area";
+import { PlayingPhase } from "../table/playing-phase";
+import { SettlingPhase } from "../table/settling-phase";
+import { ShoeDisplay } from "../table/shoe-display";
 // Import UI components
 import { TableBackground } from "../table/table-background";
 import { TableHeader } from "../table/table-header";
-import { DealerArea } from "../table/dealer-area";
-import { PlayerArea } from "../table/player-area";
-import { BettingPhase } from "../table/betting-phase";
-import { InsurancePhase } from "../table/insurance-phase";
-import { PlayingPhase } from "../table/playing-phase";
-import { SettlingPhase } from "../table/settling-phase";
 import { TrainerSidebar } from "../table/trainer-sidebar";
-import { SettingsDialog } from "../settings-dialog";
-import { ShoeDisplay } from "../table/shoe-display";
-import { DiscardTray } from "../table/discard-tray";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -39,17 +37,17 @@ export function CasinoTable({
   onGameEnd,
   onBackToDashboard,
 }: CasinoTableProps) {
-  const settings = useSettingsStore(selectSettings);
+  const _settings = useSettingsStore(selectSettings);
   const searchParams = useSearchParams();
 
   // UI state from store
   const showTrainerSidebar = useUIStore((state) => state.showTrainerSidebar);
-  const setShowTrainerSidebar = useUIStore((state) =>
-    state.setShowTrainerSidebar
+  const setShowTrainerSidebar = useUIStore(
+    (state) => state.setShowTrainerSidebar,
   );
   const showSettingsDialog = useUIStore((state) => state.showSettingsDialog);
-  const setShowSettingsDialog = useUIStore((state) =>
-    state.setShowSettingsDialog
+  const setShowSettingsDialog = useUIStore(
+    (state) => state.setShowSettingsDialog,
   );
   const previousBets = useUIStore((state) => state.previousBets);
   const setPreviousBets = useUIStore((state) => state.setPreviousBets);
@@ -76,8 +74,8 @@ export function CasinoTable({
   const cleanup = useGameStore((state) => state.cleanup);
   const placeBets = useGameStore((state) => state.placeBets);
   const playAction = useGameStore((state) => state.playAction);
-  const handleInsuranceAction = useGameStore((state) =>
-    state.handleInsuranceAction
+  const handleInsuranceAction = useGameStore(
+    (state) => state.handleInsuranceAction,
   );
   const handleNextRound = useGameStore((state) => state.handleNextRound);
   const handleEndGame = useGameStore((state) => state.handleEndGame);
@@ -92,7 +90,16 @@ export function CasinoTable({
       cleanup();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.id, bank.balance]);
+  }, [
+    user.id,
+    bank.balance,
+    bank,
+    initializeGame,
+    rules,
+    searchParams.toString,
+    cleanup,
+    user,
+  ]);
 
   // Initialize trainer when game is ready
   useEffect(() => {
@@ -100,7 +107,7 @@ export function CasinoTable({
       initializeTrainer(game.getGameInstance());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [game]);
+  }, [game, initializeTrainer]);
 
   // Trigger settlement outcomes update when phase changes to settling
   useEffect(() => {

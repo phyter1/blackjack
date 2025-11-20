@@ -24,8 +24,9 @@ export function RoundActionButton({
       disabled={disabled}
       className={cn(
         "relative w-21 h-21 rounded-full transition-all duration-200",
-        !disabled && "hover:scale-110 hover:shadow-xl cursor-pointer active:scale-105",
-        disabled && "opacity-50 cursor-not-allowed"
+        !disabled &&
+          "hover:scale-110 hover:shadow-xl cursor-pointer active:scale-105",
+        disabled && "opacity-50 cursor-not-allowed",
       )}
       style={{
         background: disabled

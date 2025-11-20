@@ -1,8 +1,8 @@
 "use client";
 
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card, CardContent } from "../ui/card";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface NavigationControlsProps {
   currentIndex: number;

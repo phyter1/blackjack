@@ -1,8 +1,8 @@
-import type { GameSession } from "@/types/user";
-import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
 import type { Card } from "@/modules/game/cards";
+import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
 import type { AdvantagePlayLevel } from "@/modules/strategy/ev-calculator";
 import { calculateAdvantagePlayEV } from "@/modules/strategy/ev-calculator";
+import type { GameSession } from "@/types/user";
 
 type Rank = Card["rank"];
 
@@ -448,7 +448,7 @@ export function analyzeDealerUpcards(
     if (!byUpcard.has(upcard)) {
       byUpcard.set(upcard, []);
     }
-    byUpcard.get(upcard)!.push(decision);
+    byUpcard.get(upcard)?.push(decision);
   }
 
   // Calculate stats for each upcard

@@ -3,9 +3,9 @@
  */
 
 import type {
+  StateChangeListener,
   StateMachine,
   StateMachineConfig,
-  StateChangeListener,
   Transition,
 } from "./types";
 
@@ -52,7 +52,7 @@ export class BaseStateMachine<S extends string, E extends { type: string }>
           if (!this.transitions.has(key)) {
             this.transitions.set(key, []);
           }
-          this.transitions.get(key)!.push(transition);
+          this.transitions.get(key)?.push(transition);
         }
       }
     }

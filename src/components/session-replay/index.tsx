@@ -1,6 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { X } from "lucide-react";
+import { useEffect, useState } from "react";
+import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
+import type { GameSession } from "@/types/user";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -9,14 +12,11 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { X } from "lucide-react";
-import { SessionSummary } from "./session-summary";
+import { CountInfo } from "./count-info";
 import { DecisionDisplay } from "./decision-display";
 import { FinancialMetrics } from "./financial-metrics";
-import { CountInfo } from "./count-info";
 import { NavigationControls } from "./navigation-controls";
-import type { GameSession } from "@/types/user";
-import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
+import { SessionSummary } from "./session-summary";
 
 interface SessionReplayProps {
   session: GameSession;

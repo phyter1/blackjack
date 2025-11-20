@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import type { SerializedRound } from "@/stores/game";
-import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
-import { useSettingsStore, selectSettings } from "@/stores/settings";
+import type { SerializedRound } from "@/stores/game";
+import { selectSettings, useSettingsStore } from "@/stores/settings";
+import type { GamePhase } from "./types";
 
 interface DealerAreaProps {
   round: SerializedRound | undefined;
@@ -18,7 +18,7 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
 
   React.useEffect(() => {
     forceUpdate();
-  }, [version]);
+  }, []);
 
   if (!round) return null;
 

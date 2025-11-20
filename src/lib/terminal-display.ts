@@ -1,6 +1,6 @@
 import type { Card } from "@/modules/game/cards";
-import type { Hand } from "@/modules/game/hand";
 import type { DealerHand } from "@/modules/game/dealer-hand";
+import type { Hand } from "@/modules/game/hand";
 
 export type TerminalColor =
   | "white"
@@ -214,7 +214,7 @@ export function displaySettlement(
   payout: number,
 ): TerminalLine[] {
   const output: TerminalLine[] = [];
-  output.push([colored("\n" + "═".repeat(60), "yellow", true)]);
+  output.push([colored(`\n${"═".repeat(60)}`, "yellow", true)]);
 
   switch (result) {
     case "blackjack":
@@ -253,7 +253,7 @@ export function displayError(message: string): TerminalLine[] {
 // Display welcome message
 export function displayWelcome(): TerminalLine[] {
   const output: TerminalLine[] = [];
-  output.push([colored("\n" + "═".repeat(60), "green", true)]);
+  output.push([colored(`\n${"═".repeat(60)}`, "green", true)]);
   output.push([
     colored(
       "                    🃏 BLACKJACK 🃏                    ",

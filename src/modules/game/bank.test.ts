@@ -1,4 +1,4 @@
-import { describe, expect, test, beforeEach } from "bun:test";
+import { beforeEach, describe, expect, test } from "bun:test";
 import { Bank, Escrow, House } from "./bank";
 
 describe("Bank", () => {
@@ -47,7 +47,7 @@ describe("Bank", () => {
     test("should record failed transaction for insufficient funds", () => {
       try {
         bank.debit(1500, "test-recipient");
-      } catch (e) {
+      } catch (_e) {
         // Expected to throw
       }
       const txs = bank.transactions;

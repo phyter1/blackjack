@@ -208,10 +208,11 @@ export function updateSettlementOutcomes(params: SettlementEffectParams): void {
             0,
           );
           // Calculate total payout from settlement
-          const totalPayout = round.settlementResults?.reduce(
-            (sum, result) => sum + result.payout,
-            0,
-          ) || 0;
+          const totalPayout =
+            round.settlementResults?.reduce(
+              (sum, result) => sum + result.payout,
+              0,
+            ) || 0;
 
           // Reverse the game's bank operations:
           // The game debited totalBet and credited totalPayout

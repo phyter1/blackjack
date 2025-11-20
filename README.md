@@ -5,6 +5,7 @@ A comprehensive blackjack game simulation and training platform built with moder
 ## Features
 
 ### Core Gameplay
+
 - ✅ Complete blackjack game engine with all standard actions
 - ✅ Multiple rule sets (Vegas Strip, Atlantic City, European, etc.)
 - ✅ Insurance betting
@@ -15,12 +16,14 @@ A comprehensive blackjack game simulation and training platform built with moder
 - ✅ Multi-deck shoes with configurable penetration
 
 ### User Interfaces
+
 - 🎨 **Web UI**: Beautiful casino-style interface with animations
 - 💻 **CLI**: Terminal-based game for command-line enthusiasts
 - 📊 **Dashboard**: Player statistics and session history
 - 🔄 **Session Replay**: Replay past games from audit trails
 
 ### Advanced Features
+
 - 📝 Comprehensive audit trail system (25+ event types)
 - 🧮 House edge calculator for any rule combination
 - 📈 Basic strategy engine
@@ -43,6 +46,7 @@ A comprehensive blackjack game simulation and training platform built with moder
 ## Quick Start
 
 ### Prerequisites
+
 - [Bun](https://bun.sh) installed on your system
 - Node.js 18+ (for compatibility)
 
@@ -95,17 +99,20 @@ The project follows a modular architecture with clear separation of concerns:
 ### Core Modules (`src/modules/`)
 
 #### Game Engine (`/game`)
+
 - **Framework-agnostic**: Can be used in any JavaScript environment
 - **State machines**: Formal state management for game flow
 - **Modular rules system**: 7 focused modules for rule management
 - **Complete type safety**: 100% TypeScript coverage
 
 #### Audit System (`/audit`)
+
 - **Automatic logging**: All significant events tracked
 - **Strongly-typed events**: 25+ event types
 - **Export capabilities**: JSON/CSV export for analysis
 
 #### Strategy Engine (`/strategy`)
+
 - **Basic strategy**: Optimal play recommendations
 - **Card counting**: Hi-Lo system implementation
 - **EV calculations**: Expected value analysis
@@ -113,6 +120,7 @@ The project follows a modular architecture with clear separation of concerns:
 ### UI Components (`src/components/`)
 
 Following separation of concerns:
+
 - **Components**: Pure presentation
 - **Hooks**: State management
 - **Handlers**: Business logic
@@ -121,13 +129,14 @@ Following separation of concerns:
 ### Architecture Decisions
 
 See [`docs/adr/`](docs/adr/) directory for detailed Architecture Decision Records:
+
 - [ADR-001](docs/adr/001-modular-architecture.md): Modular Architecture Pattern
 - [ADR-002](docs/adr/002-state-machine-pattern.md): State Machine Pattern
 - [ADR-003](docs/adr/003-separation-of-concerns.md): Separation of Concerns
 
 ## Project Structure
 
-```
+```bash
 blackjack/
 ├── src/
 │   ├── app/                    # Next.js App Router
@@ -161,6 +170,7 @@ blackjack/
 **📖 [Complete Documentation Index](docs/README.md)**
 
 ### Quick Links
+
 - 📚 [Quick Start Guide](docs/guides/quick-start.md) - Game engine API usage
 - 🎮 [CLI Guide](docs/guides/cli-guide.md) - Terminal game documentation
 - 🖼️ [UI Guide](docs/guides/ui-guide.md) - Web interface architecture
@@ -205,13 +215,16 @@ console.log(customRules.houseEdge); // Calculated house edge
 ## Contributing
 
 ### Code Style
+
 - Follow Biome configuration (auto-formatted)
 - Use TypeScript strict mode
 - Write JSDoc for exported functions
 - Keep modules focused (single responsibility)
 
 ### Testing
+
 Run integration tests:
+
 ```bash
 bun run src/modules/game/test-complete-round.ts
 bun run src/modules/game/test-settlement.ts
@@ -219,6 +232,7 @@ bun run src/modules/game/test-insurance.ts
 ```
 
 ### Git Workflow
+
 - Branch naming: `feature/description` or `fix/description`
 - Conventional commits preferred
 - Update documentation for API changes
@@ -226,6 +240,7 @@ bun run src/modules/game/test-insurance.ts
 ## Recent Updates (Phase 3 - Documentation)
 
 ### Completed
+
 - ✅ Updated CLAUDE.md with modular architecture
 - ✅ Created comprehensive architecture documentation
 - ✅ Added JSDoc comments to key functions
@@ -233,6 +248,7 @@ bun run src/modules/game/test-insurance.ts
 - ✅ Updated this README
 
 ### Previous Updates (Phase 2 - Modularization)
+
 - ✅ Modularized rules system (7 focused modules)
 - ✅ Extracted state machines to dedicated module
 - ✅ Refactored CasinoTable component (60% size reduction)
@@ -254,6 +270,7 @@ bun run src/modules/game/test-insurance.ts
 ## Support
 
 For questions or issues:
+
 - Check the documentation links above
 - Review Architecture Decision Records
 - Consult CLAUDE.md for AI assistance

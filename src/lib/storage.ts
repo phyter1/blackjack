@@ -1,10 +1,10 @@
 "use client";
 
 import type {
-  UserProfile,
-  UserBank,
   GameSession,
   Transaction,
+  UserBank,
+  UserProfile,
 } from "@/types/user";
 
 const STORAGE_KEYS = {
@@ -69,19 +69,19 @@ export class UserStorage {
   }
 
   static getById(id: string): UserProfile | null {
-    const users = this.getAll();
+    const users = UserStorage.getAll();
     return users.find((u) => u.id === id) || null;
   }
 
   static getByName(name: string): UserProfile | null {
-    const users = this.getAll();
+    const users = UserStorage.getAll();
     return (
       users.find((u) => u.name.toLowerCase() === name.toLowerCase()) || null
     );
   }
 
   static save(user: UserProfile): void {
-    const users = this.getAll();
+    const users = UserStorage.getAll();
     const index = users.findIndex((u) => u.id === user.id);
     if (index >= 0) {
       users[index] = user;
@@ -92,13 +92,13 @@ export class UserStorage {
   }
 
   static delete(id: string): void {
-    const users = this.getAll().filter((u) => u.id !== id);
+    const users = UserStorage.getAll().filter((u) => u.id !== id);
     Storage.set(STORAGE_KEYS.USERS, users);
   }
 
   static getCurrentUser(): UserProfile | null {
     const userId = Storage.get<string>(STORAGE_KEYS.CURRENT_USER);
-    return userId ? this.getById(userId) : null;
+    return userId ? UserStorage.getById(userId) : null;
   }
 
   static setCurrentUser(userId: string | null): void {
@@ -117,12 +117,12 @@ export class BankStorage {
   }
 
   static getByUserId(userId: string): UserBank | null {
-    const banks = this.getAll();
+    const banks = BankStorage.getAll();
     return banks.find((b) => b.userId === userId) || null;
   }
 
   static save(bank: UserBank): void {
-    const banks = this.getAll();
+    const banks = BankStorage.getAll();
     const index = banks.findIndex((b) => b.userId === bank.userId);
     if (index >= 0) {
       banks[index] = bank;
@@ -133,7 +133,7 @@ export class BankStorage {
   }
 
   static delete(userId: string): void {
-    const banks = this.getAll().filter((b) => b.userId !== userId);
+    const banks = BankStorage.getAll().filter((b) => b.userId !== userId);
     Storage.set(STORAGE_KEYS.BANKS, banks);
   }
 }
@@ -145,17 +145,17 @@ export class SessionStorage {
   }
 
   static getByUserId(userId: string): GameSession[] {
-    const sessions = this.getAll();
+    const sessions = SessionStorage.getAll();
     return sessions.filter((s) => s.userId === userId);
   }
 
   static getById(id: string): GameSession | null {
-    const sessions = this.getAll();
+    const sessions = SessionStorage.getAll();
     return sessions.find((s) => s.id === id) || null;
   }
 
   static save(session: GameSession): void {
-    const sessions = this.getAll();
+    const sessions = SessionStorage.getAll();
     const index = sessions.findIndex((s) => s.id === session.id);
     if (index >= 0) {
       sessions[index] = session;
@@ -166,7 +166,7 @@ export class SessionStorage {
   }
 
   static delete(id: string): void {
-    const sessions = this.getAll().filter((s) => s.id !== id);
+    const sessions = SessionStorage.getAll().filter((s) => s.id !== id);
     Storage.set(STORAGE_KEYS.SESSIONS, sessions);
   }
 }
@@ -178,18 +178,18 @@ export class TransactionStorage {
   }
 
   static getByUserId(userId: string): Transaction[] {
-    const transactions = this.getAll();
+    const transactions = TransactionStorage.getAll();
     return transactions.filter((t) => t.userId === userId);
   }
 
   static save(transaction: Transaction): void {
-    const transactions = this.getAll();
+    const transactions = TransactionStorage.getAll();
     transactions.push(transaction);
     Storage.set(STORAGE_KEYS.TRANSACTIONS, transactions);
   }
 
   static delete(id: string): void {
-    const transactions = this.getAll().filter((t) => t.id !== id);
+    const transactions = TransactionStorage.getAll().filter((t) => t.id !== id);
     Storage.set(STORAGE_KEYS.TRANSACTIONS, transactions);
   }
 }

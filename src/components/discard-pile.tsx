@@ -3,7 +3,6 @@
 import { Card as UICard } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { Card, Suit } from "@/modules/game/cards";
-import { ca } from "date-fns/locale";
 
 interface DiscardPileProps {
   discardPile: Card[];

@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import type { UserProfile, UserBank, TableRules } from "@/types/user";
 import { UserService } from "@/services/user-service";
+import type { TableRules, UserBank, UserProfile } from "@/types/user";
 
 export type AppState = "auth" | "dashboard" | "game";
 export type GameMode = "terminal" | "graphical";
@@ -91,7 +91,7 @@ const initialState: AppStateData = {
  * Manages authentication, navigation, user state
  */
 export const useAppStore = create<AppStore>()(
-  immer((set, get) => ({
+  immer((set, _get) => ({
     ...initialState,
 
     // Initialization

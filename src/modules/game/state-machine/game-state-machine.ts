@@ -2,18 +2,18 @@
  * Game state machine implementation
  */
 
+import { getAuditLogger } from "../../audit/logger";
+import type { GameStateChangeEvent } from "../../audit/types";
+import type { PlayerBet } from "../game";
+import type { SettlementResult } from "../settlement";
 import { BaseStateMachine } from "./state-machine";
 import type {
   GameState,
   GameTransitionEvent,
+  RoundState,
   StateMachineConfig,
   StateValidation,
-  RoundState,
 } from "./types";
-import type { PlayerBet } from "../game";
-import type { SettlementResult } from "../settlement";
-import { getAuditLogger } from "../../audit/logger";
-import type { GameStateChangeEvent } from "../../audit/types";
 
 export class GameStateMachine extends BaseStateMachine<
   GameState,

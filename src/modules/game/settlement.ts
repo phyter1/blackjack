@@ -1,4 +1,4 @@
-import type { Bank, Escrow, House } from "./bank";
+import type { House } from "./bank";
 import type { DealerHand } from "./dealer-hand";
 import type { Hand } from "./hand";
 import type { CompleteRuleSet } from "./rules/index";

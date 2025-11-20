@@ -1,14 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Game } from "@/modules/game/game";
-import { RuleSet } from "@/modules/game/rules";
-import type { Player } from "@/modules/game/player";
-import type { UserBank, UserProfile } from "@/types/user";
-import { UserService } from "@/services/user-service";
-import { DecisionTracker } from "@/modules/strategy/decision-tracker";
+import { useEffect, useRef, useState } from "react";
 import { createTestDeck, parseTestScenario } from "@/modules/game";
+import { Game } from "@/modules/game/game";
+import type { Player } from "@/modules/game/player";
+import { RuleSet } from "@/modules/game/rules";
+import { DecisionTracker } from "@/modules/strategy/decision-tracker";
+import { UserService } from "@/services/user-service";
+import type { UserBank, UserProfile } from "@/types/user";
 import type { GamePhase } from "../table/types";
 
 interface UseCasinoGameProps {
@@ -121,7 +121,7 @@ export function useCasinoGame({
     if (game) {
       setShoeDetails(game.getShoeDetails());
     }
-  }, [game, roundVersion]);
+  }, [game]);
 
   return {
     // State

@@ -1,7 +1,7 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface ShoeIndicatorProps {
   remainingCards: number;

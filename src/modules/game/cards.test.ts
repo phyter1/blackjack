@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { newDeck, SUITS, RANKS, type Card } from "./cards";
+import { newDeck, RANKS, SUITS } from "./cards";
 
 describe("cards", () => {
   describe("newDeck", () => {

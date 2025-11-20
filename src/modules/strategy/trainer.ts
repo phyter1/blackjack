@@ -1,13 +1,12 @@
-import type { Game } from "../game/game";
-import type { Round } from "../game/round";
 import type { ActionType } from "../game/action";
 import type { Card } from "../game/cards";
-import { HiLoCounter, type CountSnapshot } from "./hi-lo-counter";
-import { DecisionTracker, type PlayerDecision } from "./decision-tracker";
+import type { Game } from "../game/game";
 import {
-  getBasicStrategyDecision,
   type BasicStrategyDecision,
+  getBasicStrategyDecision,
 } from "./basic-strategy";
+import { DecisionTracker, type PlayerDecision } from "./decision-tracker";
+import { type CountSnapshot, HiLoCounter } from "./hi-lo-counter";
 
 /**
  * Difficulty levels for trainer mode
@@ -82,7 +81,6 @@ export interface TrainerStats {
  * Practice mode uses virtual balance and doesn't affect real bankroll.
  */
 export class TrainerMode {
-  private game: Game;
   private counter: HiLoCounter;
   private decisionTracker: DecisionTracker;
   private difficulty: TrainerDifficulty;
@@ -97,7 +95,6 @@ export class TrainerMode {
     difficulty: TrainerDifficulty = "beginner",
     practiceBalance: number = 10000,
   ) {
-    this.game = game;
     this.difficulty = difficulty;
     this.practiceBalance = practiceBalance;
     this.initialBalance = practiceBalance;

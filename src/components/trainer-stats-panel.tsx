@@ -1,6 +1,7 @@
 "use client";
 
-import { useTrainerStore } from "@/stores/trainer";
+import { BarChart3, Brain, Hash, TrendingUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -9,9 +10,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { BarChart3, TrendingUp, Brain, Hash } from "lucide-react";
+import { useTrainerStore } from "@/stores/trainer";
 
 export function TrainerStatsPanel() {
   const stats = useTrainerStore((state) => state.stats);

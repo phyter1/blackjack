@@ -1,5 +1,5 @@
-import type { Card as CardType } from "@/modules/game/cards";
 import { cn } from "@/lib/utils";
+import type { Card as CardType } from "@/modules/game/cards";
 
 interface CardProps {
   card: CardType;

@@ -1,9 +1,9 @@
 "use client";
 
+import { DollarSign, TrendingDown, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { DollarSign, TrendingUp, TrendingDown } from "lucide-react";
-import { calculateHandEV } from "@/modules/strategy/ev-calculator";
 import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
+import { calculateHandEV } from "@/modules/strategy/ev-calculator";
 
 interface FinancialMetricsProps {
   decision: PlayerDecision;

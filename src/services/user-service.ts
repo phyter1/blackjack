@@ -161,9 +161,9 @@ export class UserService {
 
     if (bank.balance < amount) {
       throw new Error(
-        `Insufficient funds. Balance: $${
-          bank.balance.toFixed(2)
-        }, Requested: $${amount.toFixed(2)}`,
+        `Insufficient funds. Balance: $${bank.balance.toFixed(
+          2,
+        )}, Requested: $${amount.toFixed(2)}`,
       );
     }
 
@@ -284,9 +284,10 @@ export class UserService {
         userId: session.userId,
         type: netProfit > 0 ? "game_win" : "game_loss",
         amount: Math.abs(netProfit),
-        description: netProfit > 0
-          ? `Won $${netProfit.toFixed(2)} in session`
-          : `Lost $${Math.abs(netProfit).toFixed(2)} in session`,
+        description:
+          netProfit > 0
+            ? `Won $${netProfit.toFixed(2)} in session`
+            : `Lost $${Math.abs(netProfit).toFixed(2)} in session`,
         sessionId,
       });
     }
@@ -308,9 +309,8 @@ export class UserService {
     const totalSessionsPlayed = completedSessions.length;
 
     const wins = completedSessions.filter((s) => s.netProfit > 0).length;
-    const winRate = totalSessionsPlayed > 0
-      ? (wins / totalSessionsPlayed) * 100
-      : 0;
+    const winRate =
+      totalSessionsPlayed > 0 ? (wins / totalSessionsPlayed) * 100 : 0;
 
     const biggestWin = Math.max(
       ...completedSessions.map((s) => s.netProfit),
@@ -325,9 +325,8 @@ export class UserService {
       (sum, s) => sum + s.netProfit,
       0,
     );
-    const averageSessionProfit = totalSessionsPlayed > 0
-      ? totalProfit / totalSessionsPlayed
-      : 0;
+    const averageSessionProfit =
+      totalSessionsPlayed > 0 ? totalProfit / totalSessionsPlayed : 0;
 
     const totalTimePlayedMs = completedSessions.reduce((sum, s) => {
       if (s.endTime) {

@@ -1,7 +1,9 @@
 "use client";
 
+import { AlertTriangle, Calculator, CheckCircle2, XCircle } from "lucide-react";
 import { useState } from "react";
-import { useTrainerStore } from "@/stores/trainer";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,17 +12,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Calculator, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTrainerStore } from "@/stores/trainer";
 
 export function CountingPanel() {
   const trainer = useTrainerStore((state) => state.trainer);
   const isActive = useTrainerStore((state) => state.isActive);
   const difficulty = useTrainerStore((state) => state.difficulty);
-  const currentCountFeedback = useTrainerStore((state) => state.currentCountFeedback);
+  const currentCountFeedback = useTrainerStore(
+    (state) => state.currentCountFeedback,
+  );
   const refreshStats = useTrainerStore((state) => state.refreshStats);
 
   const [runningCount, setRunningCount] = useState("");
@@ -36,8 +38,9 @@ export function CountingPanel() {
     const running = parseInt(runningCount, 10);
     const trueCnt = trueCount ? parseInt(trueCount, 10) : undefined;
 
-    if (isNaN(running)) return;
-    if (shouldShowTrueCount && trueCnt !== undefined && isNaN(trueCnt)) return;
+    if (Number.isNaN(running)) return;
+    if (shouldShowTrueCount && trueCnt !== undefined && Number.isNaN(trueCnt))
+      return;
 
     trainer.submitCountGuess(running, trueCnt);
     refreshStats();

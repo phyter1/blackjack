@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { CasinoChip, CHIP_VALUES } from "@/components/casino-chip";
-import { RoundActionButton } from "./round-action-button";
 import { cn } from "@/lib/utils";
+import { RoundActionButton } from "./round-action-button";
 
 interface BettingPhaseProps {
   currentBalance: number;
@@ -252,7 +252,7 @@ export function BettingPhase({
               accentColor="#1E40AF"
               disabled={
                 previousBets.reduce((sum, bet) => sum + bet, 0) >
-                  availableBalance
+                availableBalance
               }
             />
 
@@ -263,7 +263,7 @@ export function BettingPhase({
               accentColor="#6D28D9"
               disabled={
                 previousBets.reduce((sum, bet) => sum + bet, 0) * 2 >
-                  availableBalance
+                availableBalance
               }
             />
           </>

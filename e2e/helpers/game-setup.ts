@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
 
 /**
  * Helper functions for setting up game scenarios in E2E tests

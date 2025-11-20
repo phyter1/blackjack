@@ -1,13 +1,13 @@
 import { describe, expect, test } from "bun:test";
-import {
-  riffleShuffleStack,
-  overhandShuffleStack,
-  cutStackAtPenetration,
-  shuffleShoe,
-  randomInterleaveLen,
-} from "./shuffle";
-import { newDeck } from "./cards";
 import type { Stack } from "./cards";
+import { newDeck } from "./cards";
+import {
+  cutStackAtPenetration,
+  overhandShuffleStack,
+  randomInterleaveLen,
+  riffleShuffleStack,
+  shuffleShoe,
+} from "./shuffle";
 
 describe("randomInterleaveLen", () => {
   test("should return 0 for no remaining cards", () => {
@@ -246,7 +246,13 @@ describe("shuffleShoe", () => {
   });
 
   test("should change card order significantly", () => {
-    const deck = newDeck();
+    const deck = newDeck().concat(
+      newDeck(),
+      newDeck(),
+      newDeck(),
+      newDeck(),
+      newDeck(),
+    ); // 6-deck shoe
     const shuffled = shuffleShoe(deck);
 
     // Most cards should be in different positions after full shuffle
@@ -259,8 +265,13 @@ describe("shuffleShoe", () => {
         differentPositions++;
       }
     }
-    // Expect at least 70% of cards to be in different positions
-    expect(differentPositions).toBeGreaterThan(36);
+    // Expect at least 80% of cards to be in different positions
+    expect(differentPositions).toBeGreaterThan(41 * 6);
+
+    // Expect first few cards to not be aces (very high probability)
+    const firstFew = shuffled.slice(0, 5);
+    const aceInFirstFew = firstFew.some((c) => c.rank === "A");
+    expect(aceInFirstFew).toBe(false);
   });
 
   test("should handle 8-deck shoe", () => {

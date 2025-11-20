@@ -1,10 +1,10 @@
+import type { ActionType } from "@/modules/game/action";
 import type { Game } from "@/modules/game/game";
 import type { Player } from "@/modules/game/player";
-import type { ActionType } from "@/modules/game/action";
+import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
 import type { DecisionTracker } from "@/modules/strategy/decision-tracker";
 import type { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
 import type { TrainerMode } from "@/modules/strategy/trainer";
-import { getBasicStrategyDecision } from "@/modules/strategy/basic-strategy";
 import type { GamePhase } from "../../table/types";
 
 export interface ActionHandlerParams {

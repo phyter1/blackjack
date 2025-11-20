@@ -1,6 +1,6 @@
 import { ACTION_HIT, ACTION_STAND } from "./action";
 import { Bank, House } from "./bank";
-import { Round, type PlayerRoundInfo } from "./round";
+import { type PlayerRoundInfo, Round } from "./round";
 import { RuleSet } from "./rules/index";
 import { Shoe } from "./shoe";
 

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -8,17 +9,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import {
-  useSettingsStore,
-  selectSettings,
-} from "@/stores/settings";
+import type { Card } from "@/modules/game/cards";
+import { selectSettings, useSettingsStore } from "@/stores/settings";
 import { SETTINGS_CONSTRAINTS } from "@/types/settings";
 import { AnimatedCard } from "./animated-card";
-import type { Card } from "@/modules/game/cards";
 
 // Sample cards for preview
 const SAMPLE_CARDS: Card[] = [

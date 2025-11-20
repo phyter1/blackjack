@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+import { useAppStore } from "@/stores/app";
+import { CasinoTable } from "./casino-table";
 import { UserAuth } from "./user-auth";
 import { UserDashboard } from "./user-dashboard";
-import { TerminalGamePersistent } from "./terminal-game-persistent";
-import { CasinoTable } from "./casino-table";
-import { useAppStore } from "@/stores/app";
 
 export function BlackjackApp() {
   // App state from store
@@ -13,7 +12,6 @@ export function BlackjackApp() {
   const loading = useAppStore((state) => state.loading);
   const user = useAppStore((state) => state.user);
   const bank = useAppStore((state) => state.bank);
-  const gameMode = useAppStore((state) => state.gameMode);
   const currentRules = useAppStore((state) => state.currentRules);
 
   // App actions from store
@@ -23,7 +21,9 @@ export function BlackjackApp() {
   const updateBank = useAppStore((state) => state.updateBank);
   const goToGame = useAppStore((state) => state.goToGame);
   const handleGameEnd = useAppStore((state) => state.handleGameEnd);
-  const handleBackToDashboard = useAppStore((state) => state.handleBackToDashboard);
+  const handleBackToDashboard = useAppStore(
+    (state) => state.handleBackToDashboard,
+  );
 
   // Initialize app on mount
   useEffect(() => {
@@ -55,27 +55,15 @@ export function BlackjackApp() {
   }
 
   if (appState === "game" && user && bank) {
-    if (gameMode === "terminal") {
-      return (
-        <TerminalGamePersistent
-          user={user}
-          bank={bank}
-          rules={currentRules}
-          onGameEnd={handleGameEnd}
-          onBackToDashboard={handleBackToDashboard}
-        />
-      );
-    } else {
-      return (
-        <CasinoTable
-          user={user}
-          bank={bank}
-          rules={currentRules}
-          onGameEnd={handleGameEnd}
-          onBackToDashboard={handleBackToDashboard}
-        />
-      );
-    }
+    return (
+      <CasinoTable
+        user={user}
+        bank={bank}
+        rules={currentRules}
+        onGameEnd={handleGameEnd}
+        onBackToDashboard={handleBackToDashboard}
+      />
+    );
   }
 
   return null;

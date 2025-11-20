@@ -1,17 +1,17 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { ObservableGame, type GameChangeEvent } from "@/lib/observable-game";
-import { RuleSet } from "@/modules/game/rules";
-import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
-import { DecisionTracker } from "@/modules/strategy/decision-tracker";
-import { UserService } from "@/services/user-service";
+import type { GamePhase } from "@/components/table/types";
+import { type GameChangeEvent, ObservableGame } from "@/lib/observable-game";
 import { createTestDeck, parseTestScenario } from "@/modules/game";
+import type { ActionType } from "@/modules/game/action";
+import type { Hand } from "@/modules/game/hand";
 import type { Player } from "@/modules/game/player";
 import type { Round } from "@/modules/game/round";
-import type { Hand } from "@/modules/game/hand";
-import type { ActionType } from "@/modules/game/action";
-import type { UserProfile, UserBank, TableRules } from "@/types/user";
-import type { GamePhase } from "@/components/table/types";
+import { RuleSet } from "@/modules/game/rules";
+import { DecisionTracker } from "@/modules/strategy/decision-tracker";
+import { HiLoCounter } from "@/modules/strategy/hi-lo-counter";
+import { UserService } from "@/services/user-service";
+import type { TableRules, UserBank, UserProfile } from "@/types/user";
 import { useAppStore } from "./app";
 import { useTrainerStore } from "./trainer";
 
@@ -201,7 +201,7 @@ export const useGameStore = create<GameStore>()(
       const counter = new HiLoCounter(deckCount, false);
 
       // Subscribe to game changes
-      const unsubscribe = newGame.subscribe((event: GameChangeEvent) => {
+      const unsubscribe = newGame.subscribe((_event: GameChangeEvent) => {
         // Update state when game changes
         get().updateFromGame();
       });
@@ -447,10 +447,7 @@ export const useGameStore = create<GameStore>()(
         // Track cards before action
         const currentRound = game.getCurrentRound();
         const cardsBefore = currentRound
-          ? currentRound.playerHands.reduce(
-              (sum, h) => sum + h.cards.length,
-              0,
-            )
+          ? currentRound.playerHands.reduce((sum, h) => sum + h.cards.length, 0)
           : 0;
 
         // Play the action
@@ -471,9 +468,7 @@ export const useGameStore = create<GameStore>()(
             );
             if (cardsAfter > cardsBefore) {
               // New cards were dealt, collect all cards and add the new ones
-              const allCurrentCards = round.playerHands.flatMap(
-                (h) => h.cards,
-              );
+              const allCurrentCards = round.playerHands.flatMap((h) => h.cards);
               const newCards = allCurrentCards.slice(cardsBefore);
               cardCounter.addCards(newCards);
             }
@@ -622,7 +617,7 @@ export const useGameStore = create<GameStore>()(
       }
     },
 
-    handleEndGame: (userId, onGameEnd) => {
+    handleEndGame: (_userId, onGameEnd) => {
       const state = get();
       const {
         game,

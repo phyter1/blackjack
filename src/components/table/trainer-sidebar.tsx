@@ -1,11 +1,11 @@
 "use client";
 
 import { GraduationCap } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { TrainerControls } from "@/components/trainer-controls";
-import { StrategyFeedback } from "@/components/strategy-feedback";
 import { CountingPanel } from "@/components/counting-panel";
+import { StrategyFeedback } from "@/components/strategy-feedback";
+import { TrainerControls } from "@/components/trainer-controls";
 import { TrainerStatsPanel } from "@/components/trainer-stats-panel";
+import { Button } from "@/components/ui/button";
 
 interface TrainerSidebarProps {
   isActive: boolean;

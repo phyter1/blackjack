@@ -5,10 +5,7 @@ interface DiscardTrayProps {
   totalCards: number;
 }
 
-export function DiscardTray({
-  discardedCards,
-  totalCards,
-}: DiscardTrayProps) {
+export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
   // Calculate deck count and proportional sizing (matching shoe)
   const deckCount = Math.round(totalCards / 52);
 
@@ -17,9 +14,9 @@ export function DiscardTray({
     2: 94,
     4: 146,
     6: 198,
-    8: 250
-  }
-  const containerHeight =  deckHeights[deckCount as keyof typeof deckHeights] 
+    8: 250,
+  };
+  const containerHeight = deckHeights[deckCount as keyof typeof deckHeights];
 
   // Calculate card layers - use same sizing as shoe
   const cardsPerLayer = 4;
@@ -35,12 +32,18 @@ export function DiscardTray({
         </div>
 
         {/* Discard tray container with stacked cards */}
-        <div className="relative w-20" style={{ height: `${containerHeight}px` }}>
+        <div
+          className="relative w-20"
+          style={{ height: `${containerHeight}px` }}
+        >
           {/* Tray base/holder */}
           <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 rounded-lg border-2 border-amber-900/50 shadow-lg" />
 
           {/* Stacked discarded cards visualization - from bottom up */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16" style={{ height: `calc(${containerHeight}px - 1rem)` }}>
+          <div
+            className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16"
+            style={{ height: `calc(${containerHeight}px - 1rem)` }}
+          >
             {Array.from({ length: maxVisibleLayers }).map((_, index) => {
               // Only show cards that have been discarded
               if (index >= discardedLayers) return null;
@@ -61,10 +64,11 @@ export function DiscardTray({
                   style={{
                     bottom: `${baseOffset}px`,
                     zIndex: cardIndex,
-                    opacity: Math.max(0.8, 1 - (cardIndex * 0.003)), // Slight fade for depth
-                    background: 'linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)',
-                    transform: 'rotateX(-5deg) rotateY(-5deg)', // Slight 3D tilt - opposite of shoe
-                    transformStyle: 'preserve-3d',
+                    opacity: Math.max(0.8, 1 - cardIndex * 0.003), // Slight fade for depth
+                    background:
+                      "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)",
+                    transform: "rotateX(-5deg) rotateY(-5deg)", // Slight 3D tilt - opposite of shoe
+                    transformStyle: "preserve-3d",
                   }}
                 >
                   {/* Vintage card back pattern - matching table cards */}
@@ -83,7 +87,9 @@ export function DiscardTray({
                   {/* Center medallion */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="w-2 h-2 rounded-full border border-amber-300 bg-amber-900 flex items-center justify-center">
-                      <span className="text-amber-200 text-[6px] font-serif">★</span>
+                      <span className="text-amber-200 text-[6px] font-serif">
+                        ★
+                      </span>
                     </div>
                   </div>
                 </div>

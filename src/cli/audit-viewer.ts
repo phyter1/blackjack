@@ -1,9 +1,8 @@
 #!/usr/bin/env bun
 
-import { select, input, confirm } from "@inquirer/prompts";
+import { readFileSync, writeFileSync } from "node:fs";
+import { input, select } from "@inquirer/prompts";
 import chalk from "chalk";
-import { readFileSync, writeFileSync, readdirSync } from "node:fs";
-import { join } from "node:path";
 
 interface AuditTrailFile {
   sessionId: string;
@@ -13,8 +12,6 @@ interface AuditTrailFile {
 }
 
 class AuditViewer {
-  private auditLogsPath = "./audit-logs";
-
   async start(): Promise<void> {
     console.clear();
     console.log(chalk.green.bold("═".repeat(60)));
@@ -90,11 +87,11 @@ class AuditViewer {
 
   private async viewAuditTrail(audit: AuditTrailFile): Promise<void> {
     while (true) {
-      console.log(chalk.cyan("\n" + "═".repeat(60)));
+      console.log(chalk.cyan(`\n${"═".repeat(60)}`));
       console.log(chalk.cyan(`Session ID: ${audit.sessionId}`));
       console.log(chalk.cyan(`Total Events: ${audit.totalEvents}`));
       console.log(chalk.cyan(`Exported At: ${audit.exportedAt}`));
-      console.log(chalk.cyan("═".repeat(60) + "\n"));
+      console.log(chalk.cyan(`${"═".repeat(60)}\n`));
 
       const action = await select({
         message: "What would you like to do?",

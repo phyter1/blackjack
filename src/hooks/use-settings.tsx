@@ -2,10 +2,10 @@
 
 import {
   createContext,
+  type ReactNode,
   useContext,
   useEffect,
   useState,
-  type ReactNode,
 } from "react";
 import { DEFAULT_SETTINGS, type GameSettings } from "@/types/settings";
 

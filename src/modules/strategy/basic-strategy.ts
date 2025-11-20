@@ -36,7 +36,7 @@ function isSoftHand(cards: Card[], handValue: number): boolean {
     } else if (["J", "Q", "K"].includes(card.rank)) {
       hardTotal += 10;
     } else {
-      hardTotal += parseInt(card.rank);
+      hardTotal += parseInt(card.rank, 10);
     }
   }
 
@@ -50,7 +50,7 @@ function isSoftHand(cards: Card[], handValue: number): boolean {
 function getDealerValue(dealerUpCard: Card): number {
   if (dealerUpCard.rank === "A") return 11;
   if (["J", "Q", "K"].includes(dealerUpCard.rank)) return 10;
-  return parseInt(dealerUpCard.rank);
+  return parseInt(dealerUpCard.rank, 10);
 }
 
 /**
@@ -128,7 +128,7 @@ function getPairStrategy(
   }
 
   // Fall back to hard total strategy
-  const hardValue = pairRank === "A" ? 12 : parseInt(pairRank) * 2;
+  const hardValue = pairRank === "A" ? 12 : parseInt(pairRank, 10) * 2;
   return getHardStrategy(hardValue, dealerValue, canDouble, canSurrender);
 }
 

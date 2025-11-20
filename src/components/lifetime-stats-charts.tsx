@@ -1,25 +1,13 @@
 "use client";
 
 import { useMemo } from "react";
-import type { GameSession } from "@/types/user";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProfitLossChart } from "@/components/charts/profit-loss-chart";
-import { WinRateChart } from "@/components/charts/win-rate-chart";
-import { EVVarianceChart } from "@/components/charts/ev-variance-chart";
-import { TimePlayedChart } from "@/components/charts/time-played-chart";
 import { BetSizeChart } from "@/components/charts/bet-size-chart";
-import { StreaksChart } from "@/components/charts/streaks-chart";
 import { DealerUpcardChart } from "@/components/charts/dealer-upcard-chart";
-import {
-  transformToProfitLossData,
-  transformToWinRateData,
-  transformToEVData,
-  transformToCumulativeEVData,
-  transformToTimePlayedData,
-  transformToBetSizeData,
-  analyzeStreaks,
-  analyzeDealerUpcards,
-} from "@/lib/chart-data-utils";
+import { EVVarianceChart } from "@/components/charts/ev-variance-chart";
+import { ProfitLossChart } from "@/components/charts/profit-loss-chart";
+import { StreaksChart } from "@/components/charts/streaks-chart";
+import { TimePlayedChart } from "@/components/charts/time-played-chart";
+import { WinRateChart } from "@/components/charts/win-rate-chart";
 import {
   Card,
   CardContent,
@@ -27,6 +15,18 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  analyzeDealerUpcards,
+  analyzeStreaks,
+  transformToBetSizeData,
+  transformToCumulativeEVData,
+  transformToEVData,
+  transformToProfitLossData,
+  transformToTimePlayedData,
+  transformToWinRateData,
+} from "@/lib/chart-data-utils";
+import type { GameSession } from "@/types/user";
 
 interface LifetimeStatsChartsProps {
   sessions: GameSession[];

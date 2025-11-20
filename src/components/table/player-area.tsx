@@ -1,11 +1,10 @@
 "use client";
 
-import React from "react";
-import type { SerializedRound } from "@/stores/game";
-import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
 import { cn } from "@/lib/utils";
-import { useSettingsStore, selectSettings } from "@/stores/settings";
+import type { SerializedRound } from "@/stores/game";
+import { selectSettings, useSettingsStore } from "@/stores/settings";
+import type { GamePhase } from "./types";
 
 interface PlayerAreaProps {
   round: SerializedRound | undefined;

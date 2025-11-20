@@ -1,13 +1,13 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
+import type { Game } from "@/modules/game/game";
 import {
-  TrainerMode,
-  type TrainerDifficulty,
   type ActionFeedback,
   type CountFeedback,
+  type TrainerDifficulty,
+  TrainerMode,
   type TrainerStats,
 } from "@/modules/strategy/trainer";
-import type { Game } from "@/modules/game/game";
 
 export interface TrainerState {
   trainer: TrainerMode | null;

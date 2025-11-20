@@ -1,22 +1,22 @@
 /** biome-ignore-all lint/suspicious/noAssignInExpressions: <explanation> */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { UserService } from "@/services/user-service";
-import { Button } from "../ui/button";
-import { SessionReplay } from "../session-replay";
-import { LifetimeStatsCharts } from "../lifetime-stats-charts";
-import { RulesSelector } from "../rules-selector";
-import { BalancePanel } from "./balance-panel";
-import { StatsPanel } from "./stats-panel";
-import { SessionsPanel } from "./sessions-panel";
 import type {
-  UserProfile,
-  UserBank,
-  UserStats,
   GameSession,
   TableRules,
+  UserBank,
+  UserProfile,
+  UserStats,
 } from "@/types/user";
+import { LifetimeStatsCharts } from "../lifetime-stats-charts";
+import { RulesSelector } from "../rules-selector";
+import { SessionReplay } from "../session-replay";
+import { Button } from "../ui/button";
+import { BalancePanel } from "./balance-panel";
+import { SessionsPanel } from "./sessions-panel";
+import { StatsPanel } from "./stats-panel";
 
 interface UserDashboardProps {
   user: UserProfile;
@@ -54,21 +54,13 @@ export function UserDashboard({
   }, [user.id]);
 
   const handleDeposit = (amount: number) => {
-    try {
-      const updatedBank = UserService.deposit(user.id, amount);
-      onBankUpdate(updatedBank);
-    } catch (err) {
-      throw err;
-    }
+    const updatedBank = UserService.deposit(user.id, amount);
+    onBankUpdate(updatedBank);
   };
 
   const handleWithdraw = (amount: number) => {
-    try {
-      const updatedBank = UserService.withdraw(user.id, amount);
-      onBankUpdate(updatedBank);
-    } catch (err) {
-      throw err;
-    }
+    const updatedBank = UserService.withdraw(user.id, amount);
+    onBankUpdate(updatedBank);
   };
 
   const handleStartGame = (mode: "terminal" | "graphical") => {

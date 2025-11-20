@@ -1,8 +1,8 @@
-import { describe, expect, test, beforeEach } from "bun:test";
-import { Hand } from "./hand";
+import { beforeEach, describe, expect, test } from "bun:test";
 import { Bank } from "./bank";
-import { RuleSet } from "./rules";
 import type { Card } from "./cards";
+import { Hand } from "./hand";
+import { RuleSet } from "./rules";
 
 describe("Hand", () => {
   let bank: Bank;

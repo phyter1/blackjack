@@ -2,20 +2,20 @@
 
 import {
   createContext,
+  type ReactNode,
+  useCallback,
   useContext,
   useState,
-  useCallback,
-  type ReactNode,
 } from "react";
-import {
-  TrainerMode,
-  type TrainerDifficulty,
-} from "@/modules/strategy/trainer";
 import type { Game } from "@/modules/game/game";
 import type {
   ActionFeedback,
   CountFeedback,
   TrainerStats,
+} from "@/modules/strategy/trainer";
+import {
+  type TrainerDifficulty,
+  TrainerMode,
 } from "@/modules/strategy/trainer";
 
 interface TrainerContextValue {
@@ -63,12 +63,20 @@ export function TrainerModeProvider({ children }: { children: ReactNode }) {
     [difficulty],
   );
 
+  const refreshStats = useCallback(() => {
+    if (!trainer) return;
+    setStats(trainer.getStats());
+    setPracticeBalance(trainer.getPracticeBalance());
+    setCurrentActionFeedback(trainer.getCurrentActionFeedback());
+    setCurrentCountFeedback(trainer.getCurrentCountFeedback());
+  }, [trainer]);
+
   const activateTrainer = useCallback(() => {
     if (!trainer) return;
     trainer.activate();
     setIsActive(true);
     refreshStats();
-  }, [trainer]);
+  }, [trainer, refreshStats]);
 
   const deactivateTrainer = useCallback(() => {
     if (!trainer) return;
@@ -93,14 +101,6 @@ export function TrainerModeProvider({ children }: { children: ReactNode }) {
     setStats(trainer.getStats());
     setCurrentActionFeedback(null);
     setCurrentCountFeedback(null);
-  }, [trainer]);
-
-  const refreshStats = useCallback(() => {
-    if (!trainer) return;
-    setStats(trainer.getStats());
-    setPracticeBalance(trainer.getPracticeBalance());
-    setCurrentActionFeedback(trainer.getCurrentActionFeedback());
-    setCurrentCountFeedback(trainer.getCurrentCountFeedback());
   }, [trainer]);
 
   const clearFeedback = useCallback(() => {

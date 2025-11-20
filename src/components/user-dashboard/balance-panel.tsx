@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import type { TableRules, UserBank } from "@/types/user";
 import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import {
   Card,
   CardContent,
@@ -11,7 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import type { UserBank, TableRules } from "@/types/user";
+import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 interface BalancePanelProps {
   bank: UserBank;

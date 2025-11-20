@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import type { UserStats } from "@/types/user";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 interface StatsPanelProps {
   stats: UserStats | null;
