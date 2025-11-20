@@ -1,9 +1,10 @@
 "use client";
 
-import type { Player } from "@/modules/game/player";
-import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { Player } from "@/modules/game/player";
 
 interface TableHeaderProps {
   player: Player | null;
@@ -15,7 +16,6 @@ interface TableHeaderProps {
 }
 
 export function TableHeader({
-  player,
   currentBalance,
   practiceBalance,
   isTrainerActive,
