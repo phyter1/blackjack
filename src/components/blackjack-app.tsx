@@ -1,87 +1,34 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { UserAuth } from "./user-auth";
 import { UserDashboard } from "./user-dashboard";
 import { TerminalGamePersistent } from "./terminal-game-persistent";
 import { CasinoTable } from "./casino-table";
-import { TrainerModeProvider } from "@/hooks/use-trainer-mode";
-import type { UserProfile, UserBank, TableRules } from "@/types/user";
-import { UserService } from "@/services/user-service";
-
-type AppState = "auth" | "dashboard" | "game";
-type GameMode = "terminal" | "graphical";
+import { useAppStore } from "@/stores/app";
 
 export function BlackjackApp() {
-  const [appState, setAppState] = useState<AppState>("auth");
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [bank, setBank] = useState<UserBank | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [gameMode, setGameMode] = useState<GameMode>("graphical");
-  const [currentRules, setCurrentRules] = useState<TableRules | undefined>();
-  const searchParams = useSearchParams();
+  // App state from store
+  const appState = useAppStore((state) => state.appState);
+  const loading = useAppStore((state) => state.loading);
+  const user = useAppStore((state) => state.user);
+  const bank = useAppStore((state) => state.bank);
+  const gameMode = useAppStore((state) => state.gameMode);
+  const currentRules = useAppStore((state) => state.currentRules);
 
+  // App actions from store
+  const initialize = useAppStore((state) => state.initialize);
+  const handleAuthenticated = useAppStore((state) => state.handleAuthenticated);
+  const handleLogout = useAppStore((state) => state.handleLogout);
+  const updateBank = useAppStore((state) => state.updateBank);
+  const goToGame = useAppStore((state) => state.goToGame);
+  const handleGameEnd = useAppStore((state) => state.handleGameEnd);
+  const handleBackToDashboard = useAppStore((state) => state.handleBackToDashboard);
+
+  // Initialize app on mount
   useEffect(() => {
-    // Check for test-mode URL parameter and store it in sessionStorage
-    const testMode = searchParams.get("test-mode");
-    if (testMode && typeof window !== "undefined") {
-      sessionStorage.setItem("test-mode", testMode);
-      console.log(`Test mode enabled: ${testMode}`);
-    }
-
-    // Check if user is already logged in
-    const currentUser = UserService.getCurrentUser();
-    if (currentUser) {
-      setUser(currentUser.user);
-      setBank(currentUser.bank);
-      setAppState("dashboard");
-    }
-    setLoading(false);
-  }, [searchParams]);
-
-  const handleAuthenticated = (
-    authenticatedUser: UserProfile,
-    authenticatedBank: UserBank,
-  ) => {
-    setUser(authenticatedUser);
-    setBank(authenticatedBank);
-    setAppState("dashboard");
-  };
-
-  const handleLogout = () => {
-    UserService.logout();
-    setUser(null);
-    setBank(null);
-    setAppState("auth");
-  };
-
-  const handleBankUpdate = (updatedBank: UserBank) => {
-    setBank(updatedBank);
-  };
-
-  const handleStartGame = (
-    mode: GameMode = "graphical",
-    rules?: TableRules,
-  ) => {
-    setGameMode(mode);
-    setCurrentRules(rules);
-    setAppState("game");
-  };
-
-  const handleGameEnd = (updatedBank: UserBank) => {
-    setBank(updatedBank);
-  };
-
-  const handleBackToDashboard = () => {
-    // Refresh user data from storage when returning to dashboard
-    const currentUser = UserService.getCurrentUser();
-    if (currentUser) {
-      setUser(currentUser.user);
-      setBank(currentUser.bank);
-    }
-    setAppState("dashboard");
-  };
+    initialize();
+  }, [initialize]);
 
   if (loading) {
     return (
@@ -100,8 +47,8 @@ export function BlackjackApp() {
       <UserDashboard
         user={user}
         bank={bank}
-        onBankUpdate={handleBankUpdate}
-        onStartGame={handleStartGame}
+        onBankUpdate={updateBank}
+        onStartGame={goToGame}
         onLogout={handleLogout}
       />
     );
@@ -120,15 +67,13 @@ export function BlackjackApp() {
       );
     } else {
       return (
-        <TrainerModeProvider>
-          <CasinoTable
-            user={user}
-            bank={bank}
-            rules={currentRules}
-            onGameEnd={handleGameEnd}
-            onBackToDashboard={handleBackToDashboard}
-          />
-        </TrainerModeProvider>
+        <CasinoTable
+          user={user}
+          bank={bank}
+          rules={currentRules}
+          onGameEnd={handleGameEnd}
+          onBackToDashboard={handleBackToDashboard}
+        />
       );
     }
   }

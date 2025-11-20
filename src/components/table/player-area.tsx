@@ -5,7 +5,7 @@ import type { Round } from "@/modules/game/round";
 import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
 import { cn } from "@/lib/utils";
-import { useSettings } from "@/hooks/use-settings";
+import { useSettingsStore, selectSettings } from "@/stores/settings";
 
 interface PlayerAreaProps {
   round: Round | undefined;
@@ -20,12 +20,7 @@ export function PlayerArea({
   userName,
   version,
 }: PlayerAreaProps) {
-  const { settings } = useSettings();
-  const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
-
-  React.useEffect(() => {
-    forceUpdate();
-  }, [version]);
+  const settings = useSettingsStore(selectSettings);
 
   if (!round) return null;
 
@@ -36,7 +31,7 @@ export function PlayerArea({
       <div className="flex gap-4">
         {round.playerHands.map((hand, handIdx) => (
           <div
-            key={`hand-${handIdx}`}
+            key={hand.id}
             className={cn(
               "flex flex-col items-center gap-2 p-4 rounded-lg transition-all",
               round.currentHandIndex === handIdx &&
@@ -54,28 +49,32 @@ export function PlayerArea({
             <div
               className="relative flex"
               style={{ minHeight: "146px" }}
-              key={`hand-${handIdx}`}
+              key={`hand-${hand.id}`}
             >
-              {hand.cards.map((card, cardIdx) => (
-                <div
-                  key={`card-${cardIdx}-${card.rank}-${card.suit}`}
-                  className="transition-all duration-300"
-                  style={{
-                    marginLeft: cardIdx > 0 ? "-55px" : "0",
-                    zIndex: cardIdx,
-                  }}
-                >
-                  <AnimatedCard
-                    card={card}
-                    size="xl"
-                    dealDelay={
-                      settings.animations.enableAnimations
-                        ? cardIdx * settings.animations.dealingSpeed + 100
-                        : 0
-                    }
-                  />
-                </div>
-              ))}
+              {hand.cards.map((card, cardIdx) => {
+                // Use hand.id to create stable keys that survive re-renders
+                const cardKey = `${hand.id}-card-${cardIdx}-${card.rank}-${card.suit}`;
+                return (
+                  <div
+                    key={cardKey}
+                    className="transition-all duration-300"
+                    style={{
+                      marginLeft: cardIdx > 0 ? "-55px" : "0",
+                      zIndex: cardIdx,
+                    }}
+                  >
+                    <AnimatedCard
+                      card={card}
+                      size="xl"
+                      dealDelay={
+                        settings.animations.enableAnimations
+                          ? cardIdx * settings.animations.dealingSpeed + 100
+                          : 0
+                      }
+                    />
+                  </div>
+                );
+              })}
             </div>
 
             <div className="text-amber-400 font-serif text-sm">

@@ -4,7 +4,7 @@ import React from "react";
 import type { Round } from "@/modules/game/round";
 import type { GamePhase } from "./types";
 import { AnimatedCard } from "@/components/animated-card";
-import { useSettings } from "@/hooks/use-settings";
+import { useSettingsStore, selectSettings } from "@/stores/settings";
 
 interface DealerAreaProps {
   round: Round | undefined;
@@ -13,7 +13,7 @@ interface DealerAreaProps {
 }
 
 export function DealerArea({ round, phase, version }: DealerAreaProps) {
-  const { settings } = useSettings();
+  const settings = useSettingsStore(selectSettings);
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   React.useEffect(() => {

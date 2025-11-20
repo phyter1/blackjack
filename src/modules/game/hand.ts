@@ -333,4 +333,26 @@ export class Hand {
   get insuranceEscrow(): Escrow | null {
     return this.insuranceBet;
   }
+
+  /**
+   * Serialize hand to a plain object for UI rendering
+   * This ensures UI components get fresh data on each render
+   */
+  toObject() {
+    return {
+      id: this.id,
+      state: this.state,
+      cards: [...this.hand],
+      handValue: this.handValue,
+      isSoft: this.isSoft,
+      betAmount: this.bet.balance,
+      availableActions: [...this.availableActions],
+      isSplit: this.isSplit,
+      isSplitAce: this.isSplitAce,
+      hasInsurance: this.hasInsurance,
+      insuranceAmount: this.insuranceAmount,
+      originalHandIndex: this.originalHandIndex,
+      parentHandId: this.parentHandId,
+    };
+  }
 }

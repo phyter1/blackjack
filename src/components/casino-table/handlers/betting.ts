@@ -55,7 +55,7 @@ export function handleBet(params: BettingHandlerParams): void {
     }));
 
     // In trainer mode, we'll track virtual balance separately
-    if (isTrainerActive) {
+    if (isTrainerActive && trainer) {
       const totalBet = bets.reduce((sum, bet) => sum + bet, 0);
       if (totalBet > practiceBalance) {
         console.error(
@@ -63,6 +63,8 @@ export function handleBet(params: BettingHandlerParams): void {
         );
         return;
       }
+      // Debit the bet from practice balance
+      trainer.adjustPracticeBalance(-totalBet);
     }
 
     // Start the round - this will debit the bets from the player's bank
