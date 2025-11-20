@@ -9,6 +9,17 @@ export function DiscardTray({
   discardedCards,
   totalCards,
 }: DiscardTrayProps) {
+  // Calculate deck count and proportional sizing (matching shoe)
+  const deckCount = Math.round(totalCards / 52);
+
+  const deckHeights = {
+    1: 68,
+    2: 94,
+    4: 146,
+    6: 198,
+    8: 250
+  }
+  const containerHeight =  deckHeights[deckCount as keyof typeof deckHeights] 
 
   // Calculate card layers - use same sizing as shoe
   const cardsPerLayer = 4;
@@ -24,12 +35,12 @@ export function DiscardTray({
         </div>
 
         {/* Discard tray container with stacked cards */}
-        <div className="relative w-20 h-48">
+        <div className="relative w-20" style={{ height: `${containerHeight}px` }}>
           {/* Tray base/holder */}
           <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 rounded-lg border-2 border-amber-900/50 shadow-lg" />
 
           {/* Stacked discarded cards visualization - from bottom up */}
-          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16 h-[calc(100%-1rem)]">
+          <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16" style={{ height: `calc(${containerHeight}px - 1rem)` }}>
             {Array.from({ length: maxVisibleLayers }).map((_, index) => {
               // Only show cards that have been discarded
               if (index >= discardedLayers) return null;
@@ -39,7 +50,7 @@ export function DiscardTray({
 
               // Calculate vertical offset (stacked effect)
               // Use dynamic spacing: more layers = tighter stacking
-              const totalHeight = 176; // Available height in px (h-48 minus padding)
+              const totalHeight = containerHeight - 16; // Available height in px (container minus padding)
               const spacing = Math.min(2, totalHeight / maxVisibleLayers); // Dynamic spacing
               const baseOffset = cardIndex * spacing;
 
