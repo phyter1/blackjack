@@ -31,6 +31,7 @@ import { PlayingPhase } from "../table/playing-phase";
 import { SettlingPhase } from "../table/settling-phase";
 import { TrainerSidebar } from "../table/trainer-sidebar";
 import { SettingsDialog } from "../settings-dialog";
+import { ShoeDisplay } from "../table/shoe-display";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -74,6 +75,7 @@ export function CasinoTable({
     roundVersion,
     currentRound,
     currentActions,
+    shoeDetails,
     decisionTracker,
     setPhase,
     setRoundsPlayed,
@@ -211,6 +213,17 @@ export function CasinoTable({
         onOpenSettings={() => setShowSettingsDialog(true)}
         onEndGame={onEndGame}
       />
+
+      {/* Shoe Display - Left Side */}
+      {shoeDetails && (
+        <ShoeDisplay
+          remainingCards={shoeDetails.remainingCards}
+          totalCards={shoeDetails.totalCards}
+          cutCardPosition={shoeDetails.cutCardPosition}
+          penetration={shoeDetails.penetration}
+          isComplete={shoeDetails.isComplete}
+        />
+      )}
 
       {/* Main playing area */}
       <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-12 p-8">

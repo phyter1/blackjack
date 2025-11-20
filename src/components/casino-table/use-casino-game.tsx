@@ -34,6 +34,7 @@ export function useCasinoGame({
   const [roundVersion, setRoundVersion] = useState(0);
   const [currentRound, setCurrentRound] = useState<any>(undefined);
   const [currentActions, setCurrentActions] = useState<any[]>([]);
+  const [shoeDetails, setShoeDetails] = useState<any>(null);
   const decisionTracker = useRef<DecisionTracker | null>(null);
   const originalBalanceRef = useRef<number>(0);
   const searchParams = useSearchParams();
@@ -96,6 +97,7 @@ export function useCasinoGame({
     setCurrentBalance(newPlayer.bank.balance);
     setCurrentRound(undefined);
     setCurrentActions([]);
+    setShoeDetails(newGame.getShoeDetails());
 
     // Initialize decision tracker for this session
     decisionTracker.current = new DecisionTracker(session.id);
@@ -114,6 +116,13 @@ export function useCasinoGame({
     initializeTrainer,
   ]);
 
+  // Update shoe details whenever round version changes
+  useEffect(() => {
+    if (game) {
+      setShoeDetails(game.getShoeDetails());
+    }
+  }, [game, roundVersion]);
+
   return {
     // State
     game,
@@ -126,6 +135,7 @@ export function useCasinoGame({
     roundVersion,
     currentRound,
     currentActions,
+    shoeDetails,
     decisionTracker,
     originalBalanceRef,
 
