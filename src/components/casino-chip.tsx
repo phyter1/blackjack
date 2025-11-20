@@ -25,7 +25,7 @@ export function CasinoChip({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "relative w-16 h-16 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
+        "relative w-24 h-24 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
         !disabled && "hover:scale-110 hover:shadow-lg cursor-pointer",
         selected && "scale-110 shadow-xl ring-2 ring-amber-400",
       )}
@@ -47,7 +47,7 @@ export function CasinoChip({
               style={{
                 top: "50%",
                 left: "50%",
-                transform: `rotate(${i * 45}deg) translate(-50%, -50%) translateY(-24px)`,
+                transform: `rotate(${i * 45}deg) translate(-50%, -50%) translateY(-36px)`,
               }}
             />
           ))}
