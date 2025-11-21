@@ -10,11 +10,31 @@ function Tabs({
   ...props
 }: React.ComponentProps<typeof TabsPrimitive.Root>) {
   return (
-    <TabsPrimitive.Root
-      data-slot="tabs"
-      className={cn("flex flex-col gap-2", className)}
-      {...props}
-    />
+    <>
+      <style>{`
+        [data-slot="tabs-trigger"]:hover {
+          color: var(--theme-text-secondary);
+        }
+        /* Dark theme active state - darker background */
+        [data-theme-mode="dark"] [data-slot="tabs-trigger"][data-state="active"] {
+          background-color: var(--theme-dashboard-bg);
+          color: var(--theme-text-primary);
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        }
+        /* Light theme active state - lighter/white background */
+        [data-theme-mode="light"] [data-slot="tabs-trigger"][data-state="active"] {
+          background-color: var(--theme-background);
+          color: var(--theme-text-primary);
+          box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+          border: 1px solid var(--theme-border);
+        }
+      `}</style>
+      <TabsPrimitive.Root
+        data-slot="tabs"
+        className={cn("flex flex-col gap-2", className)}
+        {...props}
+      />
+    </>
   );
 }
 
@@ -26,9 +46,14 @@ function TabsList({
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        "bg-gray-800 text-gray-400 inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
+        "inline-flex h-9 w-fit items-center justify-center rounded-lg p-[3px]",
         className,
       )}
+      style={{
+        backgroundColor: "var(--theme-dashboard-card)",
+        color: "var(--theme-text-muted)",
+        borderColor: "var(--theme-border)",
+      }}
       {...props}
     />
   );
@@ -43,11 +68,12 @@ function TabsTrigger({
       data-slot="tabs-trigger"
       className={cn(
         "inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap transition-all disabled:pointer-events-none disabled:opacity-50",
-        "text-gray-400 hover:text-gray-300",
-        "data-[state=active]:bg-gray-900 data-[state=active]:text-white data-[state=active]:shadow-sm",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
+      style={{
+        color: "var(--theme-text-muted)",
+      }}
       {...props}
     />
   );

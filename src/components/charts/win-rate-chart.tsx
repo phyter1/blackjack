@@ -26,10 +26,15 @@ interface WinRateChartProps {
 export function WinRateChart({ data }: WinRateChartProps) {
   if (data.length === 0) {
     return (
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">Win Rate Trends</CardTitle>
-          <CardDescription>No session data available</CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>Win Rate Trends</CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>No session data available</CardDescription>
         </CardHeader>
       </Card>
     );
@@ -41,17 +46,27 @@ export function WinRateChart({ data }: WinRateChartProps) {
       : 0;
 
   return (
-    <Card className="bg-gray-900 border-gray-700">
+    <Card
+      style={{
+        background: "var(--theme-dashboard-card)",
+        borderColor: "var(--theme-dashboard-card-border)",
+      }}
+    >
       <CardHeader>
-        <CardTitle className="text-white">Win Rate Trends</CardTitle>
-        <CardDescription>
+        <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+          Win Rate Trends
+        </CardTitle>
+        <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
           Overall Win Rate:
           <span
             className={
               avgWinRate >= 50
-                ? "text-green-500 ml-2 font-semibold"
-                : "text-red-500 ml-2 font-semibold"
+                ? "ml-2 font-semibold"
+                : "ml-2 font-semibold"
             }
+            style={{
+              color: avgWinRate >= 50 ? "var(--theme-success)" : "var(--theme-error)",
+            }}
           >
             {avgWinRate.toFixed(1)}%
           </span>
@@ -63,17 +78,21 @@ export function WinRateChart({ data }: WinRateChartProps) {
             data={data}
             margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--theme-border)"
+              opacity={0.3}
+            />
             <XAxis
               dataKey="sessionNumber"
               label={{
                 value: "Session #",
                 position: "insideBottom",
                 offset: -5,
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
             <YAxis
               domain={[0, 100]}
@@ -87,15 +106,19 @@ export function WinRateChart({ data }: WinRateChartProps) {
               stroke="#6B7280"
               tick={{ fill: "#9CA3AF" }}
             />
-            <ReferenceLine y={50} stroke="#6B7280" strokeDasharray="3 3" />
+            <ReferenceLine
+              y={50}
+              stroke="var(--theme-border)"
+              strokeDasharray="3 3"
+            />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1F2937",
-                border: "1px solid #374151",
+                backgroundColor: "var(--theme-dashboard-bg)",
+                border: "1px solid var(--theme-border)",
                 borderRadius: "6px",
               }}
-              labelStyle={{ color: "#9CA3AF" }}
-              itemStyle={{ color: "#F3F4F6" }}
+              labelStyle={{ color: "var(--theme-text-secondary)" }}
+              itemStyle={{ color: "var(--theme-text-primary)" }}
               formatter={(value: any, name: string) => {
                 if (typeof value === "number") {
                   const label =
@@ -110,15 +133,15 @@ export function WinRateChart({ data }: WinRateChartProps) {
             <Line
               type="monotone"
               dataKey="movingAvgWinRate"
-              stroke="#10B981"
+              stroke="var(--theme-success)"
               strokeWidth={3}
-              dot={{ fill: "#10B981", r: 4 }}
+              dot={{ fill: "var(--theme-success)", r: 4 }}
               activeDot={{ r: 6 }}
             />
             <Line
               type="stepAfter"
               dataKey="winRate"
-              stroke="#60A5FA"
+              stroke="var(--theme-primary)"
               strokeWidth={2}
               strokeOpacity={0.4}
               dot={false}

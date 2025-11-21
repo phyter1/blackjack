@@ -91,10 +91,19 @@ export function EVVarianceChart({
 
   if (data.length === 0) {
     return (
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">Expected vs Actual Value</CardTitle>
-          <CardDescription>No EV/AV data available</CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+            Expected vs Actual Value
+          </CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
+            No EV/AV data available
+          </CardDescription>
         </CardHeader>
       </Card>
     );
@@ -108,41 +117,48 @@ export function EVVarianceChart({
   const getEVLineColor = () => {
     switch (advantageLevel) {
       case "house-edge":
-        return "#EF4444"; // Red - house advantage
+        return "var(--theme-error)"; // Red - house advantage
       case "basic-strategy":
-        return "#F59E0B"; // Amber - slight house advantage
+        return "var(--theme-warning)"; // Amber - slight house advantage
       case "card-counting-conservative":
-        return "#3B82F6"; // Blue - small player advantage
+        return "var(--theme-primary)"; // Blue - small player advantage
       case "card-counting-aggressive":
         return "#8B5CF6"; // Purple - moderate player advantage
       case "perfect-play":
         return "#EC4899"; // Pink - theoretical maximum
       default:
-        return "#F59E0B";
+        return "var(--theme-warning)";
     }
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-700">
+    <Card
+      style={{
+        background: "var(--theme-dashboard-card)",
+        borderColor: "var(--theme-dashboard-card-border)",
+      }}
+    >
       <CardHeader>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="text-white">
+              <CardTitle style={{ color: "var(--theme-text-primary)" }}>
                 Expected vs Actual Value
               </CardTitle>
-              <CardDescription>
+              <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
                 Variance:
                 <span
-                  className={
-                    variance >= 0
-                      ? "text-green-500 ml-2 font-semibold"
-                      : "text-red-500 ml-2 font-semibold"
-                  }
+                  className="ml-2 font-semibold"
+                  style={{
+                    color:
+                      variance >= 0
+                        ? "var(--theme-success)"
+                        : "var(--theme-error)",
+                  }}
                 >
                   {formatCurrency(variance)}
                 </span>
-                <span className="text-gray-400 ml-2">
+                <span className="ml-2" style={{ color: "var(--theme-text-muted)" }}>
                   ({variance >= 0 ? "+" : ""}
                   {totalEV !== 0
                     ? ((variance / Math.abs(totalEV)) * 100).toFixed(1)
@@ -173,7 +189,9 @@ export function EVVarianceChart({
 
           {/* Advantage Play Level Selector */}
           <div className="flex items-center gap-3">
-            <span className="text-gray-400 text-sm">Advantage Play:</span>
+            <span className="text-sm" style={{ color: "var(--theme-text-muted)" }}>
+              Advantage Play:
+            </span>
             <Select
               value={advantageLevel}
               onValueChange={(value) =>
@@ -219,7 +237,7 @@ export function EVVarianceChart({
           </div>
 
           {/* Description of selected advantage play level */}
-          <div className="text-sm text-gray-400 italic">
+          <div className="text-sm italic" style={{ color: "var(--theme-text-muted)" }}>
             {getAdvantagePlayDescription(advantageLevel)}
           </div>
         </div>
@@ -230,38 +248,46 @@ export function EVVarianceChart({
             data={data}
             margin={{ top: 35, right: 20, left: 10, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--theme-border)"
+              opacity={0.3}
+            />
             <XAxis
               dataKey="sessionNumber"
               label={{
                 value: "Session #",
                 position: "insideBottom",
                 offset: -5,
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
             <YAxis
               label={{
                 value: "$ Amount",
                 angle: -90,
                 position: "insideLeft",
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
               tickFormatter={(value) => `$${value}`}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
-            <ReferenceLine y={0} stroke="#6B7280" strokeDasharray="3 3" />
+            <ReferenceLine
+              y={0}
+              stroke="var(--theme-border)"
+              strokeDasharray="3 3"
+            />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1F2937",
-                border: "1px solid #374151",
+                backgroundColor: "var(--theme-dashboard-bg)",
+                border: "1px solid var(--theme-border)",
                 borderRadius: "6px",
               }}
-              labelStyle={{ color: "#9CA3AF" }}
-              itemStyle={{ color: "#F3F4F6" }}
+              labelStyle={{ color: "var(--theme-text-secondary)" }}
+              itemStyle={{ color: "var(--theme-text-primary)" }}
               formatter={(value: any, name: string) => {
                 if (typeof value === "number") {
                   const label =
@@ -277,7 +303,7 @@ export function EVVarianceChart({
               verticalAlign="top"
               height={36}
               iconType="line"
-              wrapperStyle={{ color: "#9CA3AF" }}
+              wrapperStyle={{ color: "var(--theme-text-secondary)" }}
               formatter={(value) => {
                 return value === "expectedValue"
                   ? `EV (${advantageLevel.replace(/-/g, " ")})`
@@ -296,9 +322,9 @@ export function EVVarianceChart({
             <Line
               type="monotone"
               dataKey="actualValue"
-              stroke="#10B981"
+              stroke="var(--theme-success)"
               strokeWidth={3}
-              dot={{ fill: "#10B981", r: 4 }}
+              dot={{ fill: "var(--theme-success)", r: 4 }}
               activeDot={{ r: 6 }}
             />
           </LineChart>

@@ -21,45 +21,84 @@ export function StatsPanel({ stats }: StatsPanelProps) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">
+          <CardTitle
+            className="text-sm"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
             Total Sessions
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-white">
+          <div
+            className="text-3xl font-bold"
+            style={{ color: "var(--theme-text-primary)" }}
+          >
             {stats.totalSessionsPlayed}
           </div>
-          <p className="text-xs text-gray-500">
+          <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
             {stats.totalRoundsPlayed} rounds played
           </p>
         </CardContent>
       </Card>
 
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">Win Rate</CardTitle>
+          <CardTitle
+            className="text-sm"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
+            Win Rate
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-white">
+          <div
+            className="text-3xl font-bold"
+            style={{ color: "var(--theme-text-primary)" }}
+          >
             {stats.winRate.toFixed(1)}%
           </div>
-          <p className="text-xs text-gray-500">Session win rate</p>
+          <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
+            Session win rate
+          </p>
         </CardContent>
       </Card>
 
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-gray-400">
+          <CardTitle
+            className="text-sm"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
             Total Play Time
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-3xl font-bold text-white">
+          <div
+            className="text-3xl font-bold"
+            style={{ color: "var(--theme-text-primary)" }}
+          >
             {formatDuration(stats.totalTimePlayedMs)}
           </div>
-          <p className="text-xs text-gray-500">Time at the tables</p>
+          <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
+            Time at the tables
+          </p>
         </CardContent>
       </Card>
     </div>

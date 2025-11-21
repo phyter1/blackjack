@@ -42,13 +42,25 @@ export function PresetSelector({
   const customPresets = presets.filter((p) => !p.isBuiltIn);
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4">
-      <Card className="bg-gray-900 border-green-500 max-w-4xl w-full max-h-[90vh] flex flex-col">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50 p-4"
+      style={{ background: "rgba(0, 0, 0, 0.8)" }}
+    >
+      <Card
+        className="max-w-4xl w-full max-h-[90vh] flex flex-col"
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-accent)",
+        }}
+      >
         <CardHeader className="flex-shrink-0">
-          <CardTitle className="text-green-500 text-2xl">
+          <CardTitle className="text-2xl" style={{ color: "var(--theme-accent)" }}>
             Select Table Rules
           </CardTitle>
-          <CardDescription className="text-lg">
+          <CardDescription
+            className="text-lg"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
             Choose a preset to quick-start your game
           </CardDescription>
         </CardHeader>
@@ -56,7 +68,10 @@ export function PresetSelector({
         <CardContent className="overflow-y-auto flex-1 space-y-6">
           {/* Built-in Presets */}
           <div>
-            <h3 className="text-lg font-semibold text-white mb-3">
+            <h3
+              className="text-lg font-semibold mb-3"
+              style={{ color: "var(--theme-text-primary)" }}
+            >
               Standard Tables
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -68,26 +83,47 @@ export function PresetSelector({
                   className={`text-left p-4 rounded-lg border-2 transition-all hover:scale-105 ${getPresetColor(preset)} hover:shadow-lg`}
                 >
                   <div className="flex items-start justify-between mb-2">
-                    <h4 className="font-bold text-white text-lg">
+                    <h4
+                      className="font-bold text-lg"
+                      style={{ color: "var(--theme-text-primary)" }}
+                    >
                       {preset.name}
                     </h4>
-                    <div className="text-xs text-gray-400">
+                    <div
+                      className="text-xs"
+                      style={{ color: "var(--theme-text-muted)" }}
+                    >
                       {preset.rules.deckCount}D •{" "}
                       {preset.rules.dealerStand.toUpperCase()}
                     </div>
                   </div>
-                  <p className="text-sm text-gray-300 mb-3">
+                  <p
+                    className="text-sm mb-3"
+                    style={{ color: "var(--theme-text-secondary)" }}
+                  >
                     {preset.description}
                   </p>
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
-                    <span className="px-2 py-1 bg-black/30 rounded">
+                  <div
+                    className="flex items-center gap-2 text-xs"
+                    style={{ color: "var(--theme-text-muted)" }}
+                  >
+                    <span
+                      className="px-2 py-1 rounded"
+                      style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                    >
                       ${preset.rules.minBet}-${preset.rules.maxBet}
                     </span>
-                    <span className="px-2 py-1 bg-black/30 rounded">
+                    <span
+                      className="px-2 py-1 rounded"
+                      style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                    >
                       {preset.rules.blackjackPayout} BJ
                     </span>
                     {preset.rules.surrender !== "none" && (
-                      <span className="px-2 py-1 bg-black/30 rounded">
+                      <span
+                        className="px-2 py-1 rounded"
+                        style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                      >
                         {preset.rules.surrender === "late" ? "LS" : "ES"}
                       </span>
                     )}
@@ -100,7 +136,10 @@ export function PresetSelector({
           {/* Custom Presets */}
           {customPresets.length > 0 && (
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3">
+              <h3
+                className="text-lg font-semibold mb-3"
+                style={{ color: "var(--theme-text-primary)" }}
+              >
                 My Custom Tables
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -112,22 +151,40 @@ export function PresetSelector({
                     className="text-left p-4 rounded-lg border-2 border-cyan-500 bg-cyan-950/20 transition-all hover:scale-105 hover:shadow-lg relative"
                   >
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="font-bold text-white text-lg">
+                      <h4
+                        className="font-bold text-lg"
+                        style={{ color: "var(--theme-text-primary)" }}
+                      >
                         {preset.name}
                       </h4>
                       <div className="text-xs text-cyan-400">CUSTOM</div>
                     </div>
-                    <p className="text-sm text-gray-300 mb-3">
+                    <p
+                      className="text-sm mb-3"
+                      style={{ color: "var(--theme-text-secondary)" }}
+                    >
                       {preset.description}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-400">
-                      <span className="px-2 py-1 bg-black/30 rounded">
+                    <div
+                      className="flex items-center gap-2 text-xs"
+                      style={{ color: "var(--theme-text-muted)" }}
+                    >
+                      <span
+                        className="px-2 py-1 rounded"
+                        style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                      >
                         ${preset.rules.minBet}-${preset.rules.maxBet}
                       </span>
-                      <span className="px-2 py-1 bg-black/30 rounded">
+                      <span
+                        className="px-2 py-1 rounded"
+                        style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                      >
                         {preset.rules.deckCount}D
                       </span>
-                      <span className="px-2 py-1 bg-black/30 rounded">
+                      <span
+                        className="px-2 py-1 rounded"
+                        style={{ background: "rgba(0, 0, 0, 0.3)" }}
+                      >
                         {preset.rules.blackjackPayout} BJ
                       </span>
                     </div>
@@ -138,25 +195,39 @@ export function PresetSelector({
           )}
 
           {/* Custom Game Button */}
-          <div className="pt-4 border-t border-gray-700">
+          <div className="pt-4 border-t" style={{ borderColor: "var(--theme-border)" }}>
             <Button
               onClick={onCustomGame}
-              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white font-bold py-6 text-lg"
+              style={{
+                background: `linear-gradient(to right, var(--theme-primary), var(--theme-secondary))`,
+                color: "var(--theme-text-primary)",
+              }}
+              className="w-full font-bold py-6 text-lg hover:opacity-90"
             >
               🎨 Create Custom Game
             </Button>
-            <p className="text-center text-sm text-gray-400 mt-2">
+            <p
+              className="text-center text-sm mt-2"
+              style={{ color: "var(--theme-text-muted)" }}
+            >
               Configure your own table rules and save as a preset
             </p>
           </div>
         </CardContent>
 
         {/* Footer */}
-        <div className="flex-shrink-0 p-6 border-t border-gray-700">
+        <div
+          className="flex-shrink-0 p-6 border-t"
+          style={{ borderColor: "var(--theme-border)" }}
+        >
           <Button
             onClick={onCancel}
             variant="outline"
-            className="w-full border-gray-700 text-gray-400 hover:text-white"
+            style={{
+              borderColor: "var(--theme-border)",
+              color: "var(--theme-text-muted)",
+            }}
+            className="w-full hover:opacity-80"
           >
             Cancel
           </Button>

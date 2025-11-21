@@ -165,16 +165,32 @@ export function BettingPhase({
   return (
     <div className="flex flex-col items-center gap-6 pb-20">
       {isTrainerActive && (
-        <div className="px-4 py-2 bg-blue-950/80 border border-blue-500/50 rounded-lg text-blue-200 text-sm">
+        <div
+          className="px-4 py-2 border rounded-lg text-sm"
+          style={{
+            background: "var(--theme-primary)",
+            borderColor: "var(--theme-primary)",
+            color: "var(--theme-primary-foreground)",
+            opacity: 0.9,
+          }}
+        >
           🎓 <strong>Practice Mode</strong> - Using virtual balance, real
           bankroll is safe
         </div>
       )}
 
-      <div className="text-amber-200 font-serif text-xl">Place Your Bets</div>
+      <div
+        className="font-serif text-xl"
+        style={{ color: "var(--theme-text-primary)" }}
+      >
+        Place Your Bets
+      </div>
 
       {/* Instruction text */}
-      <div className="text-amber-400/80 text-sm text-center">
+      <div
+        className="text-sm text-center"
+        style={{ color: "var(--theme-text-secondary)", opacity: 0.8 }}
+      >
         {selectedChipValue === null
           ? "Click a chip to select it, then click a betting circle to place bet"
           : `Selected: $${selectedChipValue} - Click a betting circle to add`}
@@ -182,20 +198,41 @@ export function BettingPhase({
 
       {/* Error message */}
       {betError && (
-        <div className="bg-red-950/80 border-2 border-red-500 px-6 py-3 rounded-lg text-red-200 text-sm font-medium">
+        <div
+          className="border-2 px-6 py-3 rounded-lg text-sm font-medium"
+          style={{
+            background: "var(--theme-error)",
+            borderColor: "var(--theme-error)",
+            color: "var(--theme-text-primary)",
+            opacity: 0.9,
+          }}
+        >
           ⚠️ {betError}
         </div>
       )}
 
       {/* Total bet display - MOVED HERE ABOVE CIRCLES */}
       {totalBet > 0 && (
-        <div className="bg-amber-950/30 px-8 py-3 rounded-lg border-2 border-amber-600">
+        <div
+          className="px-8 py-3 rounded-lg border-2"
+          style={{
+            background: "var(--theme-table-edge)",
+            borderColor: "var(--theme-accent)",
+            opacity: 0.9,
+          }}
+        >
           <div className="text-center">
-            <div className="text-xs text-amber-400 uppercase tracking-wide">
+            <div
+              className="text-xs uppercase tracking-wide"
+              style={{ color: "var(--theme-text-secondary)" }}
+            >
               Total Bet
               {activeBetsCount > 0 && ` (${activeBetsCount} hands)`}
             </div>
-            <div className="text-3xl font-bold text-yellow-400 font-serif">
+            <div
+              className="text-3xl font-bold font-serif"
+              style={{ color: "var(--theme-accent)" }}
+            >
               ${totalBet.toFixed(2)}
             </div>
           </div>
@@ -212,7 +249,10 @@ export function BettingPhase({
             return (
               <div key={positionIndex} className="flex flex-col items-center">
                 {/* Position label */}
-                <div className="text-xs mb-2 font-serif text-amber-400">
+                <div
+                  className="text-xs mb-2 font-serif"
+                  style={{ color: "var(--theme-text-secondary)" }}
+                >
                   Spot {displayIndex + 1}
                 </div>
 
@@ -228,22 +268,38 @@ export function BettingPhase({
                   className={cn(
                     "relative w-24 h-24 rounded-full transition-all duration-200 flex items-center justify-center",
                     "border-4 font-serif font-bold",
-                    selectedChipValue !== null
-                      ? "cursor-pointer hover:scale-105 hover:shadow-lg border-amber-500 bg-gradient-to-br from-green-900/80 to-green-950/80 hover:from-green-800/90 hover:to-green-900/90"
-                      : "border-amber-700/50 bg-gradient-to-br from-green-950/40 to-black/40",
-                    hasChips && "ring-2 ring-yellow-400",
+                    selectedChipValue !== null && "cursor-pointer hover:scale-105 hover:shadow-lg",
+                    hasChips && "ring-2",
                   )}
+                  style={{
+                    borderColor: selectedChipValue !== null
+                      ? "var(--theme-accent)"
+                      : "var(--theme-border)",
+                    background: selectedChipValue !== null
+                      ? `radial-gradient(ellipse at center, var(--theme-table-felt-start), var(--theme-table-felt-end))`
+                      : `radial-gradient(ellipse at center, var(--theme-table-felt-end), var(--theme-background))`,
+                    opacity: selectedChipValue !== null ? 0.9 : 0.5,
+                    ...(hasChips && { "--tw-ring-color": "var(--theme-accent)" }),
+                  }}
                   title={`Right-click to clear • Bet: $${bet}`}
                 >
                   {/* Bet amount display */}
                   {hasChips ? (
                     <div className="text-center">
-                      <div className="text-2xl text-yellow-400 font-bold drop-shadow-lg">
+                      <div
+                        className="text-2xl font-bold drop-shadow-lg"
+                        style={{ color: "var(--theme-accent)" }}
+                      >
                         ${bet}
                       </div>
                     </div>
                   ) : (
-                    <div className="text-amber-600/50 text-4xl">+</div>
+                    <div
+                      className="text-4xl"
+                      style={{ color: "var(--theme-text-muted)", opacity: 0.5 }}
+                    >
+                      +
+                    </div>
                   )}
                 </button>
 
@@ -252,7 +308,8 @@ export function BettingPhase({
                   <button
                     type="button"
                     onClick={() => handleClearPosition(positionIndex)}
-                    className="mt-2 text-xs text-red-400 hover:text-red-300 underline"
+                    className="mt-2 text-xs hover:opacity-80 underline"
+                    style={{ color: "var(--theme-error)" }}
                   >
                     Clear
                   </button>

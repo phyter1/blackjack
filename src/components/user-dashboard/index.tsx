@@ -14,6 +14,7 @@ import { LifetimeStatsCharts } from "../lifetime-stats-charts";
 import { PresetSelector } from "../preset-selector";
 import { RulesSelector } from "../rules-selector";
 import { SessionReplay } from "../session-replay";
+import { ThemeSelector } from "../theme-selector";
 import { Button } from "../ui/button";
 import { BalancePanel } from "./balance-panel";
 import { SessionsPanel } from "./sessions-panel";
@@ -104,18 +105,32 @@ export function UserDashboard({
   };
 
   return (
-    <div className="h-screen bg-black p-4 overflow-y-auto">
+    <div
+      className="h-screen p-4 overflow-y-auto"
+      style={{ background: "var(--theme-dashboard-bg)" }}
+    >
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h1 className="text-3xl font-bold text-green-500">♠ 21 ♠</h1>
-            <p className="text-gray-400">Welcome back, {user.name}!</p>
+            <h1
+              className="text-3xl font-bold"
+              style={{ color: "var(--theme-primary)" }}
+            >
+              ♠ 21 ♠
+            </h1>
+            <p style={{ color: "var(--theme-text-secondary)" }}>
+              Welcome back, {user.name}!
+            </p>
           </div>
           <Button
             onClick={onLogout}
             variant="outline"
-            className="border-gray-700 text-gray-400 hover:text-white"
+            style={{
+              borderColor: "var(--theme-border)",
+              color: "var(--theme-text-muted)",
+            }}
+            className="hover:text-white"
           >
             Logout
           </Button>
@@ -132,6 +147,11 @@ export function UserDashboard({
 
         {/* Stats Panel */}
         <StatsPanel stats={stats} />
+
+        {/* Theme Selector */}
+        <div className="mb-6">
+          <ThemeSelector />
+        </div>
 
         {/* Lifetime Stats Charts */}
         {allSessions.length > 0 && (

@@ -27,10 +27,19 @@ interface BetSizeChartProps {
 export function BetSizeChart({ data }: BetSizeChartProps) {
   if (data.length === 0) {
     return (
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">Average Bet Size</CardTitle>
-          <CardDescription>No betting data available</CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+            Average Bet Size
+          </CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
+            No betting data available
+          </CardDescription>
         </CardHeader>
       </Card>
     );
@@ -39,12 +48,22 @@ export function BetSizeChart({ data }: BetSizeChartProps) {
   const avgOfAvg = data.reduce((sum, d) => sum + d.avgBetSize, 0) / data.length;
 
   return (
-    <Card className="bg-gray-900 border-gray-700">
+    <Card
+      style={{
+        background: "var(--theme-dashboard-card)",
+        borderColor: "var(--theme-dashboard-card-border)",
+      }}
+    >
       <CardHeader>
-        <CardTitle className="text-white">Average Bet Size Over Time</CardTitle>
-        <CardDescription>
+        <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+          Average Bet Size Over Time
+        </CardTitle>
+        <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
           Overall Average:{" "}
-          <span className="text-blue-400 font-semibold ml-2">
+          <span
+            className="font-semibold ml-2"
+            style={{ color: "var(--theme-primary)" }}
+          >
             {formatCurrency(avgOfAvg)}
           </span>
         </CardDescription>
@@ -55,37 +74,41 @@ export function BetSizeChart({ data }: BetSizeChartProps) {
             data={data}
             margin={{ top: 35, right: 20, left: 10, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--theme-border)"
+              opacity={0.3}
+            />
             <XAxis
               dataKey="sessionNumber"
               label={{
                 value: "Session #",
                 position: "insideBottom",
                 offset: -5,
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
             <YAxis
               label={{
                 value: "$ Avg Bet",
                 angle: -90,
                 position: "insideLeft",
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
               tickFormatter={(value) => `$${value}`}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1F2937",
-                border: "1px solid #374151",
+                backgroundColor: "var(--theme-dashboard-bg)",
+                border: "1px solid var(--theme-border)",
                 borderRadius: "6px",
               }}
-              labelStyle={{ color: "#9CA3AF" }}
-              itemStyle={{ color: "#F3F4F6" }}
+              labelStyle={{ color: "var(--theme-text-secondary)" }}
+              itemStyle={{ color: "var(--theme-text-primary)" }}
               formatter={(value: any, name: string) => {
                 if (typeof value === "number") {
                   const label = name === "avgBetSize" ? "Avg Bet Size" : name;
@@ -98,7 +121,7 @@ export function BetSizeChart({ data }: BetSizeChartProps) {
               verticalAlign="top"
               height={36}
               iconType="line"
-              wrapperStyle={{ color: "#9CA3AF" }}
+              wrapperStyle={{ color: "var(--theme-text-secondary)" }}
               formatter={(value) => {
                 return value === "avgBetSize" ? "Average Bet Size" : value;
               }}
@@ -106,9 +129,9 @@ export function BetSizeChart({ data }: BetSizeChartProps) {
             <Line
               type="monotone"
               dataKey="avgBetSize"
-              stroke="#3B82F6"
+              stroke="var(--theme-primary)"
               strokeWidth={3}
-              dot={{ fill: "#3B82F6", r: 4 }}
+              dot={{ fill: "var(--theme-primary)", r: 4 }}
               activeDot={{ r: 6 }}
             />
           </LineChart>

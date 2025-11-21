@@ -37,7 +37,12 @@ export function SettlingPhase({
 
   return (
     <div className="flex flex-col items-center gap-6 pb-20">
-      <div className="text-amber-200 font-serif text-xl">{getResultText()}</div>
+      <div
+        className="font-serif text-xl"
+        style={{ color: "var(--theme-text-primary)" }}
+      >
+        {getResultText()}
+      </div>
 
       <RoundActionButton
         label={buttonText}

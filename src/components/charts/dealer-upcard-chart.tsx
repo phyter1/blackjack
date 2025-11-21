@@ -27,12 +27,17 @@ interface DealerUpcardChartProps {
 export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
   if (data.length === 0) {
     return (
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
             Performance vs Dealer Upcard
           </CardTitle>
-          <CardDescription>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
             No upcard performance data available. Play with strategy tracking
             enabled to see this analysis.
           </CardDescription>
@@ -48,17 +53,25 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
 
   return (
     <div className="space-y-4">
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
             Win Rate vs Dealer Upcard
           </CardTitle>
-          <CardDescription>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
             Overall Win Rate:{" "}
-            <span className="text-green-400 font-semibold ml-2">
+            <span
+              className="font-semibold ml-2"
+              style={{ color: "var(--theme-success)" }}
+            >
               {overallWinRate.toFixed(1)}%
             </span>
-            <span className="text-gray-400 ml-2">
+            <span className="ml-2" style={{ color: "var(--theme-text-muted)" }}>
               ({totalHands} total hands)
             </span>
           </CardDescription>
@@ -69,57 +82,86 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
               data={data}
               margin={{ top: 20, right: 20, left: 10, bottom: 5 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="var(--theme-border)"
+                opacity={0.3}
+              />
               <XAxis
                 dataKey="upcard"
                 label={{
                   value: "Dealer Upcard",
                   position: "insideBottom",
                   offset: -5,
-                  fill: "#9CA3AF",
+                  fill: "var(--theme-text-secondary)",
                 }}
-                stroke="#6B7280"
-                tick={{ fill: "#9CA3AF" }}
+                stroke="var(--theme-border)"
+                tick={{ fill: "var(--theme-text-muted)" }}
               />
               <YAxis
                 label={{
                   value: "Win Rate %",
                   angle: -90,
                   position: "insideLeft",
-                  fill: "#9CA3AF",
+                  fill: "var(--theme-text-secondary)",
                 }}
                 domain={[0, 100]}
-                stroke="#6B7280"
-                tick={{ fill: "#9CA3AF" }}
+                stroke="var(--theme-border)"
+                tick={{ fill: "var(--theme-text-muted)" }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#1F2937",
-                  border: "1px solid #374151",
+                  backgroundColor: "var(--theme-dashboard-bg)",
+                  border: "1px solid var(--theme-border)",
                   borderRadius: "6px",
                 }}
-                labelStyle={{ color: "#9CA3AF" }}
-                itemStyle={{ color: "#F3F4F6" }}
+                labelStyle={{ color: "var(--theme-text-secondary)" }}
+                itemStyle={{ color: "var(--theme-text-primary)" }}
                 content={({ active, payload }) => {
                   if (active && payload && payload.length > 0) {
                     const data = payload[0].payload as DealerUpcardStats;
                     return (
-                      <div className="bg-gray-800 border border-gray-700 rounded p-3 space-y-1">
-                        <div className="text-gray-300 font-semibold">
+                      <div
+                        className="rounded p-3 space-y-1"
+                        style={{
+                          background: "var(--theme-dashboard-card)",
+                          borderColor: "var(--theme-border)",
+                          border: "1px solid",
+                        }}
+                      >
+                        <div
+                          className="font-semibold"
+                          style={{ color: "var(--theme-text-primary)" }}
+                        >
                           Dealer Upcard: {data.upcard}
                         </div>
-                        <div className="text-sm text-gray-400">
+                        <div
+                          className="text-sm"
+                          style={{ color: "var(--theme-text-secondary)" }}
+                        >
                           Win Rate: {data.winRate.toFixed(1)}%
                         </div>
-                        <div className="text-sm text-gray-400">
+                        <div
+                          className="text-sm"
+                          style={{ color: "var(--theme-text-secondary)" }}
+                        >
                           Wins: {data.wins} | Losses: {data.losses} | Pushes:{" "}
                           {data.pushes}
                         </div>
-                        <div className="text-sm text-gray-400">
+                        <div
+                          className="text-sm"
+                          style={{ color: "var(--theme-text-secondary)" }}
+                        >
                           Total Hands: {data.totalHands}
                         </div>
                         <div
-                          className={`text-sm font-semibold ${data.totalProfit >= 0 ? "text-green-400" : "text-red-400"}`}
+                          className="text-sm font-semibold"
+                          style={{
+                            color:
+                              data.totalProfit >= 0
+                                ? "var(--theme-success)"
+                                : "var(--theme-error)",
+                          }}
                         >
                           Total Profit: {formatCurrency(data.totalProfit)}
                         </div>
@@ -135,10 +177,10 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
                     key={`cell-${index}`}
                     fill={
                       entry.winRate >= 50
-                        ? "#10B981"
+                        ? "var(--theme-success)"
                         : entry.winRate >= 40
-                          ? "#F59E0B"
-                          : "#EF4444"
+                          ? "var(--theme-warning)"
+                          : "var(--theme-error)"
                     }
                   />
                 ))}
@@ -148,10 +190,17 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
         </CardContent>
       </Card>
 
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">Profit vs Dealer Upcard</CardTitle>
-          <CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+            Profit vs Dealer Upcard
+          </CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
             Shows average profit per hand against each dealer upcard
           </CardDescription>
         </CardHeader>
@@ -161,37 +210,41 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
               data={data}
               margin={{ top: 20, right: 20, left: 10, bottom: 5 }}
             >
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="var(--theme-border)"
+                opacity={0.3}
+              />
               <XAxis
                 dataKey="upcard"
                 label={{
                   value: "Dealer Upcard",
                   position: "insideBottom",
                   offset: -5,
-                  fill: "#9CA3AF",
+                  fill: "var(--theme-text-secondary)",
                 }}
-                stroke="#6B7280"
-                tick={{ fill: "#9CA3AF" }}
+                stroke="var(--theme-border)"
+                tick={{ fill: "var(--theme-text-muted)" }}
               />
               <YAxis
                 label={{
                   value: "Avg Profit",
                   angle: -90,
                   position: "insideLeft",
-                  fill: "#9CA3AF",
+                  fill: "var(--theme-text-secondary)",
                 }}
                 tickFormatter={(value) => `$${value.toFixed(0)}`}
-                stroke="#6B7280"
-                tick={{ fill: "#9CA3AF" }}
+                stroke="var(--theme-border)"
+                tick={{ fill: "var(--theme-text-muted)" }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "#1F2937",
-                  border: "1px solid #374151",
+                  backgroundColor: "var(--theme-dashboard-bg)",
+                  border: "1px solid var(--theme-border)",
                   borderRadius: "6px",
                 }}
-                labelStyle={{ color: "#9CA3AF" }}
-                itemStyle={{ color: "#F3F4F6" }}
+                labelStyle={{ color: "var(--theme-text-secondary)" }}
+                itemStyle={{ color: "var(--theme-text-primary)" }}
                 formatter={(value: any, name: string) => {
                   if (typeof value === "number") {
                     return [formatCurrency(value), "Avg Profit"];
@@ -203,7 +256,11 @@ export function DealerUpcardChart({ data }: DealerUpcardChartProps) {
                 {data.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={entry.avgProfit >= 0 ? "#10B981" : "#EF4444"}
+                    fill={
+                      entry.avgProfit >= 0
+                        ? "var(--theme-success)"
+                        : "var(--theme-error)"
+                    }
                   />
                 ))}
               </Bar>

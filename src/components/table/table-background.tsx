@@ -6,7 +6,7 @@ export function TableBackground() {
       className="absolute inset-0"
       style={{
         background:
-          "radial-gradient(ellipse at center, #1a472a 0%, #0f2f1a 100%)",
+          "radial-gradient(ellipse at center, var(--theme-table-felt-start) 0%, var(--theme-table-felt-end) 100%)",
       }}
     >
       {/* Felt texture overlay */}
@@ -18,8 +18,20 @@ export function TableBackground() {
         }}
       />
       {/* Table edge - wood grain */}
-      <div className="absolute top-0 left-0 right-0 h-22 bg-linear-to-b from-amber-900 to-amber-950 border-b-4 border-amber-700" />
-      <div className="absolute bottom-0 left-0 right-0 h-22 bg-linear-to-t from-amber-900 to-amber-950 border-t-4 border-amber-700" />
+      <div
+        className="absolute top-0 left-0 right-0 h-22 border-b-4"
+        style={{
+          background: `linear-gradient(to bottom, var(--theme-table-edge), var(--theme-table-edge))`,
+          borderColor: "var(--theme-table-edge-accent)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 right-0 h-22 border-t-4"
+        style={{
+          background: `linear-gradient(to top, var(--theme-table-edge), var(--theme-table-edge))`,
+          borderColor: "var(--theme-table-edge-accent)",
+        }}
+      />
     </div>
   );
 }

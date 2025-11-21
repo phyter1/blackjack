@@ -78,30 +78,54 @@ export function BalancePanel({
   };
 
   return (
-    <Card className="bg-gray-900 border-green-500 mb-6">
+    <Card
+      className="mb-6"
+      style={{
+        background: "var(--theme-dashboard-card)",
+        borderColor: "var(--theme-dashboard-accent)",
+      }}
+    >
       <CardHeader>
-        <CardTitle className="text-green-500">Your Balance</CardTitle>
-        <CardDescription>Current account balance</CardDescription>
+        <CardTitle style={{ color: "var(--theme-accent)" }}>
+          Your Balance
+        </CardTitle>
+        <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
+          Current account balance
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-5xl font-bold text-white mb-4">
+        <div
+          className="text-5xl font-bold mb-4"
+          style={{ color: "var(--theme-text-primary)" }}
+        >
           ${bank.balance.toFixed(2)}
         </div>
         <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
           <div>
-            <p className="text-gray-400">Lifetime Profit/Loss</p>
+            <p style={{ color: "var(--theme-text-secondary)" }}>
+              Lifetime Profit/Loss
+            </p>
             <p
-              className={`text-xl font-semibold ${
-                bank.lifetimeProfit >= 0 ? "text-green-500" : "text-red-500"
-              }`}
+              className="text-xl font-semibold"
+              style={{
+                color:
+                  bank.lifetimeProfit >= 0
+                    ? "var(--theme-success)"
+                    : "var(--theme-error)",
+              }}
             >
               {bank.lifetimeProfit >= 0 ? "+" : ""}$
               {bank.lifetimeProfit.toFixed(2)}
             </p>
           </div>
           <div>
-            <p className="text-gray-400">Total Deposited</p>
-            <p className="text-xl font-semibold text-white">
+            <p style={{ color: "var(--theme-text-secondary)" }}>
+              Total Deposited
+            </p>
+            <p
+              className="text-xl font-semibold"
+              style={{ color: "var(--theme-text-primary)" }}
+            >
               ${bank.totalDeposited.toFixed(2)}
             </p>
           </div>
@@ -114,7 +138,11 @@ export function BalancePanel({
               setError("");
               setAmount("");
             }}
-            className="bg-green-600 hover:bg-green-700"
+            style={{
+              background: "var(--theme-success)",
+              color: "var(--theme-text-primary)",
+            }}
+            className="hover:opacity-90"
           >
             Deposit
           </Button>
@@ -125,7 +153,11 @@ export function BalancePanel({
               setError("");
               setAmount("");
             }}
-            className="bg-blue-600 hover:bg-blue-700"
+            style={{
+              background: "var(--theme-primary)",
+              color: "var(--theme-primary-foreground)",
+            }}
+            className="hover:opacity-90"
             disabled={bank.balance === 0}
           >
             Withdraw
@@ -134,14 +166,22 @@ export function BalancePanel({
         <div className="grid grid-cols-2 gap-2">
           <Button
             onClick={() => onStartGame("graphical")}
-            className="bg-amber-600 hover:bg-amber-700"
+            style={{
+              background: "var(--theme-accent)",
+              color: "var(--theme-accent-foreground)",
+            }}
+            className="hover:opacity-90"
             disabled={bank.balance < 10}
           >
             🎰 Casino Table
           </Button>
           <Button
             onClick={() => onStartGame("terminal")}
-            className="bg-gray-700 hover:bg-gray-600"
+            style={{
+              background: "var(--theme-secondary)",
+              color: "var(--theme-secondary-foreground)",
+            }}
+            className="hover:opacity-90"
             disabled={bank.balance < 10}
           >
             💻 Terminal
@@ -150,10 +190,20 @@ export function BalancePanel({
 
         {/* Current Rules Display */}
         {currentRules && (
-          <div className="mt-2 p-2 bg-black rounded border border-gray-700">
-            <p className="text-xs text-gray-400">Current table rules:</p>
-            <p className="text-sm text-white">{formatRules(currentRules)}</p>
-            <p className="text-xs text-green-400">
+          <div
+            className="mt-2 p-2 rounded border"
+            style={{
+              background: "var(--theme-dashboard-bg)",
+              borderColor: "var(--theme-border)",
+            }}
+          >
+            <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
+              Current table rules:
+            </p>
+            <p className="text-sm" style={{ color: "var(--theme-text-primary)" }}>
+              {formatRules(currentRules)}
+            </p>
+            <p className="text-xs" style={{ color: "var(--theme-accent)" }}>
               House Edge: {currentRules.houseEdge?.toFixed(2)}%
             </p>
           </div>
@@ -161,13 +211,25 @@ export function BalancePanel({
 
         {/* Deposit/Withdraw Form */}
         {(showDeposit || showWithdraw) && (
-          <div className="mt-4 p-4 bg-black rounded border border-gray-700">
-            <Label htmlFor="amount" className="text-white">
+          <div
+            className="mt-4 p-4 rounded border"
+            style={{
+              background: "var(--theme-dashboard-bg)",
+              borderColor: "var(--theme-border)",
+            }}
+          >
+            <Label
+              htmlFor="amount"
+              style={{ color: "var(--theme-text-primary)" }}
+            >
               {showDeposit ? "Deposit" : "Withdraw"} Amount
             </Label>
             <div className="flex gap-2 mt-2">
               <div className="relative flex-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <span
+                  className="absolute left-3 top-1/2 -translate-y-1/2"
+                  style={{ color: "var(--theme-text-muted)" }}
+                >
                   $
                 </span>
                 <Input
@@ -176,7 +238,12 @@ export function BalancePanel({
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   placeholder="100"
-                  className="bg-gray-900 text-white border-gray-700 pl-7"
+                  style={{
+                    background: "var(--theme-background)",
+                    color: "var(--theme-text-primary)",
+                    borderColor: "var(--theme-border)",
+                  }}
+                  className="pl-7"
                   min="1"
                   step="10"
                   onKeyDown={(e) => {
@@ -189,11 +256,13 @@ export function BalancePanel({
               </div>
               <Button
                 onClick={showDeposit ? handleDeposit : handleWithdraw}
-                className={
-                  showDeposit
-                    ? "bg-green-600 hover:bg-green-700"
-                    : "bg-blue-600 hover:bg-blue-700"
-                }
+                style={{
+                  background: showDeposit
+                    ? "var(--theme-success)"
+                    : "var(--theme-primary)",
+                  color: "var(--theme-text-primary)",
+                }}
+                className="hover:opacity-90"
               >
                 Confirm
               </Button>
@@ -205,12 +274,20 @@ export function BalancePanel({
                   setError("");
                 }}
                 variant="outline"
-                className="border-gray-700"
+                style={{
+                  borderColor: "var(--theme-border)",
+                  color: "var(--theme-text-secondary)",
+                }}
+                className="hover:opacity-80"
               >
                 Cancel
               </Button>
             </div>
-            {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+            {error && (
+              <p className="text-sm mt-2" style={{ color: "var(--theme-error)" }}>
+                {error}
+              </p>
+            )}
           </div>
         )}
       </CardContent>
