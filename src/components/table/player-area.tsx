@@ -47,7 +47,7 @@ export function PlayerArea({
                 ? {
                     "--tw-ring-color": "var(--theme-accent)",
                     boxShadow: `0 0 20px var(--theme-accent)`,
-                  }
+                  } as any
                 : undefined
             }
           >
