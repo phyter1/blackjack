@@ -25,22 +25,38 @@ export function PlayerArea({
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="text-amber-200 font-serif text-lg">{userName}</div>
+      <div
+        className="font-serif text-lg"
+        style={{ color: "var(--theme-text-primary)" }}
+      >
+        {userName}
+      </div>
 
       <div className="flex gap-4">
         {round.playerHands.map((hand, handIdx) => (
           <div
             key={hand.id}
             className={cn(
-              "flex flex-col items-center gap-2 p-4 rounded-lg transition-all",
+              "flex flex-col items-center gap-2 p-4 rounded-lg transition-all relative",
               round.currentHandIndex === handIdx &&
                 phase === "playing" &&
-                "ring-2 ring-amber-400 bg-amber-950/30",
+                "ring-2",
             )}
+            style={
+              round.currentHandIndex === handIdx && phase === "playing"
+                ? {
+                    "--tw-ring-color": "var(--theme-accent)",
+                    boxShadow: `0 0 20px var(--theme-accent)`,
+                  }
+                : undefined
+            }
           >
             {/* Hand label (if multiple hands) */}
             {round.playerHands.length > 1 && (
-              <div className="text-amber-300 text-xs font-serif font-bold uppercase tracking-wide">
+              <div
+                className="text-xs font-serif font-bold uppercase tracking-wide"
+                style={{ color: "var(--theme-text-secondary)" }}
+              >
                 Hand {handIdx + 1}
               </div>
             )}
@@ -76,25 +92,34 @@ export function PlayerArea({
               })}
             </div>
 
-            <div className="text-amber-400 font-serif text-sm">
+            <div
+              className="font-serif text-sm"
+              style={{ color: "var(--theme-text-secondary)" }}
+            >
               Total: {hand.handValue}
               {hand.isSoft && " (soft)"}
             </div>
 
-            <div className="text-amber-300 text-xs">
+            <div
+              className="text-xs"
+              style={{ color: "var(--theme-text-muted)" }}
+            >
               Bet: ${hand.betAmount.toFixed(2)}
             </div>
 
             {hand.state && hand.state !== "active" && (
               <div
-                className={cn(
-                  "text-sm font-bold uppercase",
-                  hand.state === "blackjack" && "text-amber-400",
-                  hand.state === "won" && "text-green-400",
-                  hand.state === "lost" && "text-red-400",
-                  hand.state === "pushed" && "text-gray-400",
-                  hand.state === "busted" && "text-red-500",
-                )}
+                className={cn("text-sm font-bold uppercase")}
+                style={{
+                  color:
+                    hand.state === "blackjack"
+                      ? "var(--theme-accent)"
+                      : hand.state === "won"
+                        ? "var(--theme-success)"
+                        : hand.state === "lost" || hand.state === "busted"
+                          ? "var(--theme-error)"
+                          : "var(--theme-text-muted)",
+                }}
               >
                 {hand.state}
               </div>

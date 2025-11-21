@@ -27,7 +27,10 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
     <div className="fixed left-4 top-1/2 -translate-y-1/2 z-20">
       <div className="flex flex-col items-center gap-2">
         {/* Discard tray label */}
-        <div className="text-xs font-semibold text-amber-400 tracking-wider">
+        <div
+          className="text-xs font-semibold tracking-wider"
+          style={{ color: "var(--theme-accent)" }}
+        >
           DISCARD
         </div>
 
@@ -37,7 +40,13 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
           style={{ height: `${containerHeight}px` }}
         >
           {/* Tray base/holder */}
-          <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 rounded-lg border-2 border-amber-900/50 shadow-lg" />
+          <div
+            className="absolute inset-0 rounded-lg border-2 shadow-lg"
+            style={{
+              background: `linear-gradient(to bottom, var(--theme-table-edge), var(--theme-secondary))`,
+              borderColor: "var(--theme-table-edge-accent)",
+            }}
+          />
 
           {/* Stacked discarded cards visualization - from bottom up */}
           <div
@@ -100,10 +109,16 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
 
         {/* Card count display - animated */}
         <div className="flex flex-col items-center gap-1 text-center">
-          <div className="text-xl font-bold text-amber-200 transition-all duration-300">
+          <div
+            className="text-xl font-bold transition-all duration-300"
+            style={{ color: "var(--theme-text-primary)" }}
+          >
             {discardedCards}
           </div>
-          <div className="text-[10px] leading-tight text-amber-600">
+          <div
+            className="text-[10px] leading-tight"
+            style={{ color: "var(--theme-text-muted)" }}
+          >
             cards
             <br />
             dealt

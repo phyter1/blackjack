@@ -51,7 +51,10 @@ export function ShoeDisplay({
     <div className="fixed right-4 top-1/2 -translate-y-1/2 z-20">
       <div className="flex flex-col items-center gap-2">
         {/* Shoe label */}
-        <div className="text-xs font-semibold text-amber-400 tracking-wider">
+        <div
+          className="text-xs font-semibold tracking-wider"
+          style={{ color: "var(--theme-accent)" }}
+        >
           SHOE
         </div>
 
@@ -61,7 +64,13 @@ export function ShoeDisplay({
           style={{ height: `${containerHeight}px` }}
         >
           {/* Shoe base/holder */}
-          <div className="absolute inset-0 bg-linear-to-b from-gray-800 to-gray-900 rounded-lg border-2 border-amber-900/50 shadow-lg" />
+          <div
+            className="absolute inset-0 rounded-lg border-2 shadow-lg"
+            style={{
+              background: `linear-gradient(to bottom, var(--theme-table-edge), var(--theme-secondary))`,
+              borderColor: "var(--theme-table-edge-accent)",
+            }}
+          />
 
           {/* Stacked cards visualization - from top down */}
           <div
@@ -163,22 +172,30 @@ export function ShoeDisplay({
           <div
             className={`text-xl font-bold transition-all duration-300 ${
               atCutCard
-                ? "text-red-400 animate-pulse scale-110"
+                ? "animate-pulse scale-110"
                 : nearCutCard
-                  ? "text-yellow-400 animate-pulse"
-                  : "text-amber-200"
+                  ? "animate-pulse"
+                  : ""
             }`}
+            style={{
+              color: atCutCard
+                ? "var(--theme-error)"
+                : nearCutCard
+                  ? "var(--theme-warning)"
+                  : "var(--theme-text-primary)",
+            }}
           >
             {remainingCards}
           </div>
           <div
-            className={`text-[10px] leading-tight transition-colors duration-300 ${
-              atCutCard
-                ? "text-red-400"
+            className={`text-[10px] leading-tight transition-colors duration-300`}
+            style={{
+              color: atCutCard
+                ? "var(--theme-error)"
                 : nearCutCard
-                  ? "text-yellow-400"
-                  : "text-amber-600"
-            }`}
+                  ? "var(--theme-warning)"
+                  : "var(--theme-text-muted)",
+            }}
           >
             cards
             <br />

@@ -23,22 +23,35 @@ export function TableHeader({
   onEndGame,
 }: TableHeaderProps) {
   return (
-    <div className="relative z-10 flex justify-between items-center p-4 text-amber-100">
+    <div
+      className="relative z-10 flex justify-between items-center p-4"
+      style={{ color: "var(--theme-text-primary)" }}
+    >
       <div className="flex items-center gap-4">
-        <h1 className="text-2xl font-serif font-bold text-amber-200">♠ 21 ♠</h1>
+        <h1
+          className="text-2xl font-serif font-bold"
+          style={{ color: "var(--theme-accent)" }}
+        >
+          ♠ 21 ♠
+        </h1>
       </div>
 
       <div className="flex items-center gap-4">
         {/* Balance Display */}
         <div className="text-right">
-          <div className="text-sm text-amber-400">
+          <div
+            className="text-sm"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
             {isTrainerActive ? "Practice Balance" : "Balance"}
           </div>
           <div
-            className={cn(
-              "text-xl font-bold",
-              isTrainerActive ? "text-blue-400" : "text-green-400",
-            )}
+            className={cn("text-xl font-bold")}
+            style={{
+              color: isTrainerActive
+                ? "var(--theme-primary)"
+                : "var(--theme-success)",
+            }}
           >
             $
             {isTrainerActive
@@ -46,7 +59,12 @@ export function TableHeader({
               : currentBalance.toFixed(2)}
           </div>
           {isTrainerActive && (
-            <div className="text-xs text-blue-300">(Training Mode)</div>
+            <div
+              className="text-xs"
+              style={{ color: "var(--theme-primary)" }}
+            >
+              (Training Mode)
+            </div>
           )}
         </div>
 
@@ -55,7 +73,12 @@ export function TableHeader({
           onClick={onOpenSettings}
           variant="outline"
           size="icon"
-          className="border-gray-700 bg-gray-950/50 text-gray-200 hover:bg-gray-900"
+          style={{
+            borderColor: "var(--theme-border)",
+            background: "var(--theme-background)",
+            color: "var(--theme-text-primary)",
+          }}
+          className="hover:opacity-80"
         >
           <Settings className="h-4 w-4" />
         </Button>
@@ -64,7 +87,12 @@ export function TableHeader({
         <Button
           onClick={onEndGame}
           variant="outline"
-          className="border-red-700 bg-red-950/50 text-red-200 hover:bg-red-900"
+          style={{
+            borderColor: "var(--theme-error)",
+            background: "var(--theme-error)",
+            color: "var(--theme-text-primary)",
+          }}
+          className="hover:opacity-80"
         >
           Cash Out
         </Button>

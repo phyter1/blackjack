@@ -62,14 +62,19 @@ export function SessionsPanel({
   };
 
   return (
-    <Card className="bg-gray-900 border-gray-700">
+    <Card
+      style={{
+        background: "var(--theme-dashboard-card)",
+        borderColor: "var(--theme-dashboard-card-border)",
+      }}
+    >
       <CardHeader>
         <div className="flex justify-between items-start">
           <div>
-            <CardTitle className="text-white">
+            <CardTitle style={{ color: "var(--theme-text-primary)" }}>
               {viewMode === "recent" ? "Recent Sessions" : "All Sessions"}
             </CardTitle>
-            <CardDescription>
+            <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
               {viewMode === "recent"
                 ? "Your last 5 game sessions"
                 : `All sessions (${allSessions.length} total)`}
@@ -79,11 +84,18 @@ export function SessionsPanel({
             <Button
               onClick={() => setViewMode("recent")}
               variant={viewMode === "recent" ? "default" : "outline"}
-              className={
+              style={
                 viewMode === "recent"
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "border-gray-700 text-gray-400 hover:text-white"
+                  ? {
+                      background: "var(--theme-accent)",
+                      color: "var(--theme-accent-foreground)",
+                    }
+                  : {
+                      borderColor: "var(--theme-border)",
+                      color: "var(--theme-text-muted)",
+                    }
               }
+              className="hover:opacity-90"
               size="sm"
             >
               Recent
@@ -91,11 +103,18 @@ export function SessionsPanel({
             <Button
               onClick={() => setViewMode("all")}
               variant={viewMode === "all" ? "default" : "outline"}
-              className={
+              style={
                 viewMode === "all"
-                  ? "bg-green-600 hover:bg-green-700"
-                  : "border-gray-700 text-gray-400 hover:text-white"
+                  ? {
+                      background: "var(--theme-accent)",
+                      color: "var(--theme-accent-foreground)",
+                    }
+                  : {
+                      borderColor: "var(--theme-border)",
+                      color: "var(--theme-text-muted)",
+                    }
               }
+              className="hover:opacity-90"
               size="sm"
             >
               All
@@ -105,7 +124,10 @@ export function SessionsPanel({
       </CardHeader>
       <CardContent>
         {sessions.length === 0 ? (
-          <p className="text-gray-400 text-center py-4">
+          <p
+            className="text-center py-4"
+            style={{ color: "var(--theme-text-muted)" }}
+          >
             No sessions yet. Start playing to see your history!
           </p>
         ) : (
@@ -118,18 +140,40 @@ export function SessionsPanel({
                     onSessionSelect(session);
                   }
                 }}
-                className={`flex justify-between items-center p-3 bg-black rounded border border-gray-800 ${
-                  session.decisionsData
-                    ? "cursor-pointer hover:border-green-600 hover:bg-gray-900 transition-colors"
-                    : ""
+                className={`flex justify-between items-center p-3 rounded border transition-colors ${
+                  session.decisionsData ? "cursor-pointer" : ""
                 }`}
+                style={{
+                  background: "var(--theme-dashboard-bg)",
+                  borderColor: "var(--theme-border)",
+                }}
+                onMouseEnter={(e) => {
+                  if (session.decisionsData) {
+                    e.currentTarget.style.borderColor = "var(--theme-accent)";
+                    e.currentTarget.style.background =
+                      "var(--theme-dashboard-card)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (session.decisionsData) {
+                    e.currentTarget.style.borderColor = "var(--theme-border)";
+                    e.currentTarget.style.background =
+                      "var(--theme-dashboard-bg)";
+                  }
+                }}
               >
                 <div>
-                  <p className="text-white font-semibold">
+                  <p
+                    className="font-semibold"
+                    style={{ color: "var(--theme-text-primary)" }}
+                  >
                     {new Date(session.startTime).toLocaleDateString()}{" "}
                     {new Date(session.startTime).toLocaleTimeString()}
                   </p>
-                  <p className="text-sm text-gray-400">
+                  <p
+                    className="text-sm"
+                    style={{ color: "var(--theme-text-secondary)" }}
+                  >
                     {session.roundsPlayed} rounds
                     {session.endTime &&
                       ` • ${formatDuration(
@@ -137,7 +181,10 @@ export function SessionsPanel({
                           new Date(session.startTime).getTime(),
                       )}`}
                     {session.decisionsData && (
-                      <span className="ml-2 text-green-500">
+                      <span
+                        className="ml-2"
+                        style={{ color: "var(--theme-accent)" }}
+                      >
                         • Click to replay
                       </span>
                     )}
@@ -145,38 +192,55 @@ export function SessionsPanel({
                 </div>
                 <div className="text-right">
                   <p
-                    className={`text-lg font-semibold ${
-                      session.netProfit >= 0 ? "text-green-500" : "text-red-500"
-                    }`}
+                    className="text-lg font-semibold"
+                    style={{
+                      color:
+                        session.netProfit >= 0
+                          ? "var(--theme-success)"
+                          : "var(--theme-error)",
+                    }}
                   >
                     {session.netProfit >= 0 ? "+" : ""}$
                     {session.netProfit.toFixed(2)}
                   </p>
-                  <p className="text-xs text-gray-400">
+                  <p
+                    className="text-xs"
+                    style={{ color: "var(--theme-text-secondary)" }}
+                  >
                     ${session.startingBalance.toFixed(2)} → $
                     {session.endingBalance.toFixed(2)}
                   </p>
                   {session.strategyGrade && (
-                    <p className="text-xs text-blue-400 mt-1">
+                    <p
+                      className="text-xs mt-1"
+                      style={{ color: "var(--theme-primary)" }}
+                    >
                       Strategy: {session.strategyGrade} (
                       {session.strategyAccuracy?.toFixed(1)}%)
                     </p>
                   )}
                   {session.hasCountData && (
-                    <p className="text-xs text-purple-400 mt-1">
+                    <p
+                      className="text-xs mt-1"
+                      style={{ color: "var(--theme-secondary)" }}
+                    >
                       📊 Count data available
                     </p>
                   )}
                   {session.expectedValue !== undefined &&
                     session.variance !== undefined && (
-                      <p className="text-xs text-gray-400 mt-1">
+                      <p
+                        className="text-xs mt-1"
+                        style={{ color: "var(--theme-text-secondary)" }}
+                      >
                         EV: ${session.expectedValue.toFixed(2)} | Variance:{" "}
                         <span
-                          className={
-                            session.variance >= 0
-                              ? "text-green-400"
-                              : "text-red-400"
-                          }
+                          style={{
+                            color:
+                              session.variance >= 0
+                                ? "var(--theme-success)"
+                                : "var(--theme-error)",
+                          }}
                         >
                           {session.variance >= 0 ? "+" : ""}$
                           {session.variance.toFixed(2)}
@@ -184,7 +248,10 @@ export function SessionsPanel({
                       </p>
                     )}
                   {session.rules && (
-                    <p className="text-xs text-amber-400 mt-1">
+                    <p
+                      className="text-xs mt-1"
+                      style={{ color: "var(--theme-warning)" }}
+                    >
                       📋 {formatRules(session.rules)} (House Edge:{" "}
                       {session.rules.houseEdge?.toFixed(2)}%)
                     </p>
@@ -197,17 +264,27 @@ export function SessionsPanel({
 
         {/* Pagination Controls */}
         {viewMode === "all" && allSessions.length > sessionsPerPage && (
-          <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-800">
+          <div
+            className="flex justify-between items-center mt-4 pt-4 border-t"
+            style={{ borderColor: "var(--theme-border)" }}
+          >
             <Button
               onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
               disabled={currentPage === 1}
               variant="outline"
-              className="border-gray-700 text-gray-400 hover:text-white disabled:opacity-30"
+              style={{
+                borderColor: "var(--theme-border)",
+                color: "var(--theme-text-muted)",
+              }}
+              className="hover:opacity-80 disabled:opacity-30"
               size="sm"
             >
               ← Previous
             </Button>
-            <span className="text-gray-400 text-sm">
+            <span
+              className="text-sm"
+              style={{ color: "var(--theme-text-secondary)" }}
+            >
               Page {currentPage} of{" "}
               {Math.ceil(allSessions.length / sessionsPerPage)}
             </span>
@@ -224,7 +301,11 @@ export function SessionsPanel({
                 currentPage >= Math.ceil(allSessions.length / sessionsPerPage)
               }
               variant="outline"
-              className="border-gray-700 text-gray-400 hover:text-white disabled:opacity-30"
+              style={{
+                borderColor: "var(--theme-border)",
+                color: "var(--theme-text-muted)",
+              }}
+              className="hover:opacity-80 disabled:opacity-30"
               size="sm"
             >
               Next →

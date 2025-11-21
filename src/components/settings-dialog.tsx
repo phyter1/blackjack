@@ -172,7 +172,12 @@ export function SettingsDialog({
             {localAnimationSettings.enableAnimations && (
               <div className="space-y-2">
                 <Label>Preview</Label>
-                <div className="bg-green-900 rounded-lg p-4 flex justify-center items-center h-32">
+                <div
+                  className="rounded-lg p-4 flex justify-center items-center h-32"
+                  style={{
+                    background: `radial-gradient(ellipse at center, var(--theme-table-felt-start), var(--theme-table-felt-end))`,
+                  }}
+                >
                   <div className="flex gap-2" key={previewKey}>
                     {SAMPLE_CARDS.map((card, idx) => (
                       <div

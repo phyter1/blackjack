@@ -22,7 +22,12 @@ export function PlayingPhase({
 }: PlayingPhaseProps) {
   return (
     <div className="flex flex-col items-center gap-6 pb-20">
-      <div className="text-amber-200 font-serif text-lg">Your Action</div>
+      <div
+        className="font-serif text-lg"
+        style={{ color: "var(--theme-text-primary)" }}
+      >
+        Your Action
+      </div>
 
       <div className="flex gap-4">
         {availableActions.includes("hit") && (

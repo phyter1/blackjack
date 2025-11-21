@@ -202,7 +202,13 @@ export function CasinoTable({
       </div>
 
       {/* Action area */}
-      <div className="relative z-10 p-6 bg-linear-to-t from-amber-950/80 to-transparent backdrop-blur-sm">
+      <div
+        className="relative z-10 p-6 backdrop-blur-sm"
+        style={{
+          background:
+            "linear-gradient(to top, var(--theme-table-edge) / 0.8, transparent)",
+        }}
+      >
         {phase === "betting" && (
           <BettingPhase
             currentBalance={currentBalance}

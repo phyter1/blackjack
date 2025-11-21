@@ -292,27 +292,49 @@ export function RulesSelector({
   };
 
   return (
-    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-0 sm:p-4">
-      <Card className="bg-gray-900 border-green-500 max-w-3xl w-full h-full sm:h-auto sm:max-h-[90vh] flex flex-col sm:rounded-lg rounded-none border-0 sm:border">
+    <div
+      className="fixed inset-0 flex items-center justify-center z-50 p-0 sm:p-4"
+      style={{ background: "rgba(0, 0, 0, 0.8)" }}
+    >
+      <Card
+        className="max-w-3xl w-full h-full sm:h-auto sm:max-h-[90vh] flex flex-col sm:rounded-lg rounded-none border-0 sm:border"
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-accent)",
+        }}
+      >
         <CardHeader className="flex-shrink-0 pb-3 sm:pb-6">
-          <CardTitle className="text-green-500 text-xl sm:text-2xl">
+          <CardTitle
+            className="text-xl sm:text-2xl"
+            style={{ color: "var(--theme-accent)" }}
+          >
             Table Rules Configuration
           </CardTitle>
-          <CardDescription className="text-sm sm:text-lg">
+          <CardDescription
+            className="text-sm sm:text-lg"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
             Customize blackjack table rules for your game
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3 sm:space-y-6 overflow-y-auto flex-1">
           {/* Preset Buttons */}
           <div>
-            <Label className="text-white text-sm mb-1 sm:mb-2 block">
+            <Label
+              className="text-sm mb-1 sm:mb-2 block"
+              style={{ color: "var(--theme-text-primary)" }}
+            >
               Quick Presets
             </Label>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-1.5 sm:gap-2">
               <Button
                 onClick={() => loadPreset("default")}
                 variant="outline"
-                className="border-gray-700 text-gray-400 hover:text-white"
+                style={{
+                  borderColor: "var(--theme-border)",
+                  color: "var(--theme-text-muted)",
+                }}
+                className="hover:opacity-80"
                 size="sm"
               >
                 Default
@@ -320,7 +342,11 @@ export function RulesSelector({
               <Button
                 onClick={() => loadPreset("vegas-strip")}
                 variant="outline"
-                className="border-gray-700 text-gray-400 hover:text-white"
+                style={{
+                  borderColor: "var(--theme-border)",
+                  color: "var(--theme-text-muted)",
+                }}
+                className="hover:opacity-80"
                 size="sm"
               >
                 Vegas Strip
@@ -328,7 +354,11 @@ export function RulesSelector({
               <Button
                 onClick={() => loadPreset("atlantic-city")}
                 variant="outline"
-                className="border-gray-700 text-gray-400 hover:text-white"
+                style={{
+                  borderColor: "var(--theme-border)",
+                  color: "var(--theme-text-muted)",
+                }}
+                className="hover:opacity-80"
                 size="sm"
               >
                 Atlantic City
@@ -336,7 +366,11 @@ export function RulesSelector({
               <Button
                 onClick={() => loadPreset("single-deck")}
                 variant="outline"
-                className="border-gray-700 text-gray-400 hover:text-white"
+                style={{
+                  borderColor: "var(--theme-border)",
+                  color: "var(--theme-text-muted)",
+                }}
+                className="hover:opacity-80"
                 size="sm"
               >
                 Single Deck
@@ -345,24 +379,38 @@ export function RulesSelector({
           </div>
 
           {/* House Edge Display */}
-          <div className="p-2 sm:p-4 bg-black rounded border border-gray-700">
+          <div
+            className="p-2 sm:p-4 rounded border"
+            style={{
+              background: "var(--theme-dashboard-bg)",
+              borderColor: "var(--theme-border)",
+            }}
+          >
             <div className="flex justify-between items-center">
-              <span className="text-gray-400 text-sm sm:text-base">
+              <span
+                className="text-sm sm:text-base"
+                style={{ color: "var(--theme-text-secondary)" }}
+              >
                 House Edge:
               </span>
               <span
-                className={`text-xl sm:text-2xl font-bold ${
-                  houseEdge <= 0.5
-                    ? "text-green-500"
-                    : houseEdge <= 1.0
-                      ? "text-yellow-500"
-                      : "text-red-500"
-                }`}
+                className="text-xl sm:text-2xl font-bold"
+                style={{
+                  color:
+                    houseEdge <= 0.5
+                      ? "var(--theme-success)"
+                      : houseEdge <= 1.0
+                        ? "var(--theme-warning)"
+                        : "var(--theme-error)",
+                }}
               >
                 {houseEdge.toFixed(2)}%
               </span>
             </div>
-            <p className="text-xs text-gray-500 mt-0.5 sm:mt-1">
+            <p
+              className="text-xs mt-0.5 sm:mt-1"
+              style={{ color: "var(--theme-text-muted)" }}
+            >
               {houseEdge <= 0.5
                 ? "Excellent player odds"
                 : houseEdge <= 1.0
@@ -373,16 +421,31 @@ export function RulesSelector({
 
           {/* Table Limits */}
           <div className="space-y-2 sm:space-y-4">
-            <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-1 sm:pb-2">
+            <h3
+              className="text-base sm:text-lg font-semibold border-b pb-1 sm:pb-2"
+              style={{
+                color: "var(--theme-text-primary)",
+                borderColor: "var(--theme-border)",
+              }}
+            >
               Table Limits
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
               <div>
-                <Label htmlFor="minBet" className="text-white text-sm">
+                <Label
+                  htmlFor="minBet"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Minimum Bet
                 </Label>
                 <div className="flex items-center gap-1">
-                  <span className="text-white text-sm">$</span>
+                  <span
+                    className="text-sm"
+                    style={{ color: "var(--theme-text-primary)" }}
+                  >
+                    $
+                  </span>
                   <Input
                     id="minBet"
                     type="number"
@@ -392,17 +455,30 @@ export function RulesSelector({
                     onChange={(e) =>
                       updateRule("minBet", parseInt(e.target.value, 10) || 5)
                     }
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="maxBet" className="text-white text-sm">
+                <Label
+                  htmlFor="maxBet"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Maximum Bet
                 </Label>
                 <div className="flex items-center gap-1">
-                  <span className="text-white text-sm">$</span>
+                  <span
+                    className="text-sm"
+                    style={{ color: "var(--theme-text-primary)" }}
+                  >
+                    $
+                  </span>
                   <Input
                     id="maxBet"
                     type="number"
@@ -412,17 +488,30 @@ export function RulesSelector({
                     onChange={(e) =>
                       updateRule("maxBet", parseInt(e.target.value, 10) || 1000)
                     }
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   />
                 </div>
               </div>
 
               <div>
-                <Label htmlFor="betUnit" className="text-white text-sm">
+                <Label
+                  htmlFor="betUnit"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Bet Unit
                 </Label>
                 <div className="flex items-center gap-1">
-                  <span className="text-white text-sm">$</span>
+                  <span
+                    className="text-sm"
+                    style={{ color: "var(--theme-text-primary)" }}
+                  >
+                    $
+                  </span>
                   <Input
                     id="betUnit"
                     type="number"
@@ -432,12 +521,16 @@ export function RulesSelector({
                     onChange={(e) =>
                       updateRule("betUnit", parseInt(e.target.value, 10) || 5)
                     }
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   />
                 </div>
               </div>
             </div>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
               All bets must be multiples of the bet unit and within the table limits
             </p>
           </div>
@@ -481,7 +574,11 @@ export function RulesSelector({
 
                 <div className="flex gap-2">
                   <div className="flex-1">
-                    <Label htmlFor="chipValue" className="text-white text-sm">
+                    <Label
+                      htmlFor="chipValue"
+                      className="text-sm"
+                      style={{ color: "var(--theme-text-primary)" }}
+                    >
                       Add Chip Denomination
                     </Label>
                     <div className="flex gap-2">
@@ -589,12 +686,22 @@ export function RulesSelector({
           <div className="grid md:grid-cols-2 gap-3 sm:gap-6">
             {/* Basic Rules */}
             <div className="space-y-2 sm:space-y-4">
-              <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-1 sm:pb-2">
+              <h3
+                className="text-base sm:text-lg font-semibold border-b pb-1 sm:pb-2"
+                style={{
+                  color: "var(--theme-text-primary)",
+                  borderColor: "var(--theme-border)",
+                }}
+              >
                 Basic Rules
               </h3>
 
               <div>
-                <Label htmlFor="deckCount" className="text-white text-sm">
+                <Label
+                  htmlFor="deckCount"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Number of Decks
                 </Label>
                 <Select
@@ -605,7 +712,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="deckCount"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -620,7 +731,11 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="dealerStand" className="text-white text-sm">
+                <Label
+                  htmlFor="dealerStand"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Dealer Stand Rule
                 </Label>
                 <Select
@@ -631,7 +746,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="dealerStand"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -643,7 +762,11 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="blackjackPayout" className="text-white text-sm">
+                <Label
+                  htmlFor="blackjackPayout"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Blackjack Payout
                 </Label>
                 <Select
@@ -654,7 +777,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="blackjackPayout"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -666,7 +793,11 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="surrender" className="text-white text-sm">
+                <Label
+                  htmlFor="surrender"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Surrender
                 </Label>
                 <Select
@@ -677,7 +808,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="surrender"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -692,14 +827,21 @@ export function RulesSelector({
 
             {/* Advanced Rules */}
             <div className="space-y-2 sm:space-y-4">
-              <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-1 sm:pb-2">
+              <h3
+                className="text-base sm:text-lg font-semibold border-b pb-1 sm:pb-2"
+                style={{
+                  color: "var(--theme-text-primary)",
+                  borderColor: "var(--theme-border)",
+                }}
+              >
                 Advanced Rules
               </h3>
 
               <div>
                 <Label
                   htmlFor="doubleRestriction"
-                  className="text-white text-sm"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
                 >
                   Double Down Restriction
                 </Label>
@@ -711,7 +853,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="doubleRestriction"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -725,7 +871,11 @@ export function RulesSelector({
               </div>
 
               <div>
-                <Label htmlFor="maxSplits" className="text-white text-sm">
+                <Label
+                  htmlFor="maxSplits"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Maximum Splits
                 </Label>
                 <Select
@@ -736,7 +886,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="maxSplits"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -752,7 +906,8 @@ export function RulesSelector({
               <div>
                 <Label
                   htmlFor="maxPlayableHands"
-                  className="text-white text-sm"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
                 >
                   Max Playable Hands
                 </Label>
@@ -764,7 +919,11 @@ export function RulesSelector({
                 >
                   <SelectTrigger
                     id="maxPlayableHands"
-                    className="bg-gray-800 text-white border-gray-700"
+                    style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -778,8 +937,15 @@ export function RulesSelector({
                 </Select>
               </div>
 
-              <div className="flex items-center justify-between p-2 sm:p-3 bg-black rounded">
-                <Label htmlFor="das" className="text-white text-sm">
+              <div
+                className="flex items-center justify-between p-2 sm:p-3 rounded"
+                style={{ background: "var(--theme-dashboard-bg)" }}
+              >
+                <Label
+                  htmlFor="das"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Double After Split (DAS)
                 </Label>
                 <Switch
@@ -791,8 +957,15 @@ export function RulesSelector({
                 />
               </div>
 
-              <div className="flex items-center justify-between p-2 sm:p-3 bg-black rounded">
-                <Label htmlFor="rsa" className="text-white text-sm">
+              <div
+                className="flex items-center justify-between p-2 sm:p-3 rounded"
+                style={{ background: "var(--theme-dashboard-bg)" }}
+              >
+                <Label
+                  htmlFor="rsa"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Resplit Aces
                 </Label>
                 <Switch
@@ -804,8 +977,15 @@ export function RulesSelector({
                 />
               </div>
 
-              <div className="flex items-center justify-between p-2 sm:p-3 bg-black rounded">
-                <Label htmlFor="hsa" className="text-white text-sm">
+              <div
+                className="flex items-center justify-between p-2 sm:p-3 rounded"
+                style={{ background: "var(--theme-dashboard-bg)" }}
+              >
+                <Label
+                  htmlFor="hsa"
+                  className="text-sm"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Hit Split Aces
                 </Label>
                 <Switch
@@ -821,9 +1001,15 @@ export function RulesSelector({
 
           {/* Save as Preset Section */}
           {allowSaveAsPreset && (
-            <div className="space-y-3 pt-3 border-t border-gray-700">
+            <div
+              className="space-y-3 pt-3 border-t"
+              style={{ borderColor: "var(--theme-border)" }}
+            >
               <div className="flex items-center justify-between">
-                <h3 className="text-base font-semibold text-white">
+                <h3
+                  className="text-base font-semibold"
+                  style={{ color: "var(--theme-text-primary)" }}
+                >
                   Save as Preset (Optional)
                 </h3>
                 <Button
@@ -840,7 +1026,11 @@ export function RulesSelector({
               {showSavePreset && (
                 <div className="space-y-3 p-3 bg-cyan-950/20 rounded border border-cyan-800">
                   <div>
-                    <Label htmlFor="presetName" className="text-white text-sm">
+                    <Label
+                      htmlFor="presetName"
+                      className="text-sm"
+                      style={{ color: "var(--theme-text-primary)" }}
+                    >
                       Preset Name *
                     </Label>
                     <Input
@@ -848,11 +1038,19 @@ export function RulesSelector({
                       value={presetName}
                       onChange={(e) => setPresetName(e.target.value)}
                       placeholder="e.g., My Favorite Table"
-                      className="bg-gray-800 text-white border-gray-700"
+                      style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                     />
                   </div>
                   <div>
-                    <Label htmlFor="presetDesc" className="text-white text-sm">
+                    <Label
+                      htmlFor="presetDesc"
+                      className="text-sm"
+                      style={{ color: "var(--theme-text-primary)" }}
+                    >
                       Description
                     </Label>
                     <Input
@@ -860,7 +1058,11 @@ export function RulesSelector({
                       value={presetDescription}
                       onChange={(e) => setPresetDescription(e.target.value)}
                       placeholder="e.g., Player-friendly rules with low house edge"
-                      className="bg-gray-800 text-white border-gray-700"
+                      style={{
+                      background: "var(--theme-background)",
+                      color: "var(--theme-text-primary)",
+                      borderColor: "var(--theme-border)",
+                    }}
                     />
                   </div>
                   <p className="text-xs text-cyan-300">
@@ -877,14 +1079,22 @@ export function RulesSelector({
             {allowSaveAsPreset && showSavePreset && presetName.trim() ? (
               <Button
                 onClick={handleSaveAsPreset}
-                className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+                style={{
+                background: "var(--theme-primary)",
+                color: "var(--theme-primary-foreground)",
+              }}
+              className="flex-1 hover:opacity-90"
               >
                 Save Preset & Start Game
               </Button>
             ) : (
               <Button
                 onClick={handleSave}
-                className="flex-1 bg-green-600 hover:bg-green-700"
+                style={{
+                  background: "var(--theme-success)",
+                  color: "var(--theme-text-primary)",
+                }}
+                className="flex-1 hover:opacity-90"
               >
                 {allowSaveAsPreset ? "Start Game" : "Save Rules"}
               </Button>
@@ -892,7 +1102,11 @@ export function RulesSelector({
             <Button
               onClick={onCancel}
               variant="outline"
-              className="flex-1 border-gray-700 text-gray-400 hover:text-white"
+              style={{
+                borderColor: "var(--theme-border)",
+                color: "var(--theme-text-muted)",
+              }}
+              className="flex-1 hover:opacity-80"
             >
               Cancel
             </Button>

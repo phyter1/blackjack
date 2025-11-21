@@ -69,15 +69,25 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
 
   if (sessions.length === 0) {
     return (
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">Lifetime Statistics</CardTitle>
-          <CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+            Lifetime Statistics
+          </CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
             Play some games to see your lifetime statistics and trends
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-400 text-center py-8">
+          <p
+            className="text-center py-8"
+            style={{ color: "var(--theme-text-muted)" }}
+          >
             No session data available. Start playing to track your progress!
           </p>
         </CardContent>
@@ -88,10 +98,13 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight text-white">
+        <h2
+          className="text-2xl font-bold tracking-tight"
+          style={{ color: "var(--theme-text-primary)" }}
+        >
           Lifetime Statistics
         </h2>
-        <p className="text-gray-400">
+        <p style={{ color: "var(--theme-text-secondary)" }}>
           Track your performance across {sessions.length} session
           {sessions.length !== 1 ? "s" : ""}
         </p>
@@ -122,15 +135,27 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
               sessions={sessions}
             />
           ) : (
-            <Card className="bg-gray-900 border-gray-700">
+            <Card
+              style={{
+                background: "var(--theme-dashboard-card)",
+                borderColor: "var(--theme-dashboard-card-border)",
+              }}
+            >
               <CardHeader>
-                <CardTitle className="text-white">
+                <CardTitle style={{ color: "var(--theme-text-primary)" }}>
                   Expected vs Actual Value
                 </CardTitle>
-                <CardDescription>No EV/AV data available</CardDescription>
+                <CardDescription
+                  style={{ color: "var(--theme-text-secondary)" }}
+                >
+                  No EV/AV data available
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-400 text-center py-8">
+                <p
+                  className="text-center py-8"
+                  style={{ color: "var(--theme-text-muted)" }}
+                >
                   EV/AV tracking is available when playing with strategy
                   analysis enabled.
                 </p>

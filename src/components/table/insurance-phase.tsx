@@ -22,10 +22,16 @@ export function InsurancePhase({
 
   return (
     <div className="flex flex-col items-center gap-6 pb-20">
-      <div className="text-amber-200 font-serif text-lg text-center">
+      <div
+        className="font-serif text-lg text-center"
+        style={{ color: "var(--theme-text-primary)" }}
+      >
         Dealer shows Ace - Take Insurance?
         {round && round.playerHands.length > 1 && (
-          <span className="text-amber-400 ml-2">
+          <span
+            className="ml-2"
+            style={{ color: "var(--theme-text-secondary)" }}
+          >
             (Hand {insuranceHandIndex + 1})
           </span>
         )}

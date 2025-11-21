@@ -29,7 +29,12 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
 
   return (
     <div className="flex flex-col items-center gap-4">
-      <div className="text-amber-200 font-serif text-lg">Dealer</div>
+      <div
+        className="font-serif text-lg"
+        style={{ color: "var(--theme-text-primary)" }}
+      >
+        Dealer
+      </div>
 
       <div className="relative flex" style={{ minHeight: "146px" }}>
         {round.dealerHand.cards.map((card, idx) => (
@@ -61,7 +66,12 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
       </div>
 
       {phase !== "betting" && (
-        <div className="text-amber-400 font-serif">{showingText}</div>
+        <div
+          className="font-serif"
+          style={{ color: "var(--theme-text-secondary)" }}
+        >
+          {showingText}
+        </div>
       )}
     </div>
   );

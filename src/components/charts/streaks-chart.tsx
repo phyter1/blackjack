@@ -27,31 +27,52 @@ interface StreaksChartProps {
 export function StreaksChart({ data }: StreaksChartProps) {
   if (data.streakHistory.length === 0) {
     return (
-      <Card className="bg-gray-900 border-gray-700">
+      <Card
+        style={{
+          background: "var(--theme-dashboard-card)",
+          borderColor: "var(--theme-dashboard-card-border)",
+        }}
+      >
         <CardHeader>
-          <CardTitle className="text-white">Win/Loss Streaks</CardTitle>
-          <CardDescription>No streak data available</CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+            Win/Loss Streaks
+          </CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
+            No streak data available
+          </CardDescription>
         </CardHeader>
       </Card>
     );
   }
 
   return (
-    <Card className="bg-gray-900 border-gray-700">
+    <Card
+      style={{
+        background: "var(--theme-dashboard-card)",
+        borderColor: "var(--theme-dashboard-card-border)",
+      }}
+    >
       <CardHeader>
-        <CardTitle className="text-white">Win/Loss Streaks</CardTitle>
-        <CardDescription className="space-y-2">
+        <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+          Win/Loss Streaks
+        </CardTitle>
+        <CardDescription
+          className="space-y-2"
+          style={{ color: "var(--theme-text-secondary)" }}
+        >
           <div className="flex gap-6">
             <div>
               Current Streak:{" "}
               <span
-                className={
-                  data.currentStreakType === "win"
-                    ? "text-green-500 font-semibold ml-2"
-                    : data.currentStreakType === "loss"
-                      ? "text-red-500 font-semibold ml-2"
-                      : "text-gray-400 font-semibold ml-2"
-                }
+                className="font-semibold ml-2"
+                style={{
+                  color:
+                    data.currentStreakType === "win"
+                      ? "var(--theme-success)"
+                      : data.currentStreakType === "loss"
+                        ? "var(--theme-error)"
+                        : "var(--theme-text-muted)",
+                }}
               >
                 {data.currentStreak === 0
                   ? "None"
@@ -60,13 +81,19 @@ export function StreaksChart({ data }: StreaksChartProps) {
             </div>
             <div>
               Longest Win Streak:{" "}
-              <span className="text-green-500 font-semibold ml-2">
+              <span
+                className="font-semibold ml-2"
+                style={{ color: "var(--theme-success)" }}
+              >
                 {data.longestWinStreak}
               </span>
             </div>
             <div>
               Longest Loss Streak:{" "}
-              <span className="text-red-500 font-semibold ml-2">
+              <span
+                className="font-semibold ml-2"
+                style={{ color: "var(--theme-error)" }}
+              >
                 {data.longestLossStreak}
               </span>
             </div>
@@ -79,37 +106,45 @@ export function StreaksChart({ data }: StreaksChartProps) {
             data={data.streakHistory}
             margin={{ top: 20, right: 20, left: 10, bottom: 5 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <CartesianGrid
+              strokeDasharray="3 3"
+              stroke="var(--theme-border)"
+              opacity={0.3}
+            />
             <XAxis
               dataKey="sessionNumber"
               label={{
                 value: "Session #",
                 position: "insideBottom",
                 offset: -5,
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
             <YAxis
               label={{
                 value: "Streak Length",
                 angle: -90,
                 position: "insideLeft",
-                fill: "#9CA3AF",
+                fill: "var(--theme-text-secondary)",
               }}
-              stroke="#6B7280"
-              tick={{ fill: "#9CA3AF" }}
+              stroke="var(--theme-border)"
+              tick={{ fill: "var(--theme-text-muted)" }}
             />
-            <ReferenceLine y={0} stroke="#6B7280" strokeDasharray="3 3" />
+            <ReferenceLine
+              y={0}
+              stroke="var(--theme-border)"
+              strokeDasharray="3 3"
+            />
             <Tooltip
               contentStyle={{
-                backgroundColor: "#1F2937",
-                border: "1px solid #374151",
+                backgroundColor: "var(--theme-dashboard-bg)",
+                border: "1px solid var(--theme-border)",
                 borderRadius: "6px",
               }}
-              labelStyle={{ color: "#9CA3AF" }}
-              itemStyle={{ color: "#F3F4F6" }}
+              labelStyle={{ color: "var(--theme-text-secondary)" }}
+              itemStyle={{ color: "var(--theme-text-primary)" }}
               formatter={(value: any, name: string) => {
                 if (typeof value === "number") {
                   const streakType = value > 0 ? "Win" : "Loss";
@@ -123,7 +158,11 @@ export function StreaksChart({ data }: StreaksChartProps) {
               {data.streakHistory.map((entry, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  fill={entry.streakType === "win" ? "#10B981" : "#EF4444"}
+                  fill={
+                    entry.streakType === "win"
+                      ? "var(--theme-success)"
+                      : "var(--theme-error)"
+                  }
                 />
               ))}
             </Bar>
