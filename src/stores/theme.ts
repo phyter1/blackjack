@@ -23,12 +23,24 @@ export interface ThemeActions {
 export type ThemeStore = ThemeState & ThemeActions;
 
 /**
+ * Determine if a theme is light or dark based on its ID
+ */
+const isLightTheme = (themeId: string): boolean => {
+  const lightThemes = ["pearl-white", "mint-fresh", "sunset-sky"];
+  return lightThemes.includes(themeId);
+};
+
+/**
  * Apply theme by setting CSS custom properties on document root
  */
 const applyThemeToDOM = (theme: Theme) => {
   if (typeof window === "undefined") return;
 
   const root = document.documentElement;
+
+  // Set theme mode attribute for light/dark specific styling
+  const mode = isLightTheme(theme.id) ? "light" : "dark";
+  root.setAttribute("data-theme-mode", mode);
 
   // Table colors
   root.style.setProperty(

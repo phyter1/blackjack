@@ -216,6 +216,135 @@ export const THEME_PRESETS: Record<string, Theme> = {
       foreground: "#f0fdfa",
     },
   },
+  "pearl-white": {
+    id: "pearl-white",
+    name: "Pearl White",
+    description: "Elegant white felt with gold trim",
+    colors: {
+      // Table colors
+      tableFelt: {
+        start: "#f8fafc",
+        end: "#e2e8f0",
+      },
+      tableEdge: "#b45309",
+      tableEdgeAccent: "#f59e0b",
+
+      // Dashboard colors
+      dashboardBackground: "#ffffff",
+      dashboardCard: "#f8fafc",
+      dashboardCardBorder: "#e2e8f0",
+      dashboardAccent: "#d97706",
+
+      // UI element colors
+      primary: "#d97706",
+      primaryForeground: "#ffffff",
+      secondary: "#64748b",
+      secondaryForeground: "#ffffff",
+      accent: "#f59e0b",
+      accentForeground: "#ffffff",
+
+      // Status colors
+      success: "#16a34a",
+      warning: "#ea580c",
+      error: "#dc2626",
+
+      // Text colors
+      textPrimary: "#0f172a",
+      textSecondary: "#475569",
+      textMuted: "#64748b",
+
+      // Border and background
+      border: "#cbd5e1",
+      background: "#ffffff",
+      foreground: "#0f172a",
+    },
+  },
+  "mint-fresh": {
+    id: "mint-fresh",
+    name: "Mint Fresh",
+    description: "Light mint green with teal accents",
+    colors: {
+      // Table colors
+      tableFelt: {
+        start: "#d1fae5",
+        end: "#a7f3d0",
+      },
+      tableEdge: "#0d9488",
+      tableEdgeAccent: "#14b8a6",
+
+      // Dashboard colors
+      dashboardBackground: "#f0fdfa",
+      dashboardCard: "#ccfbf1",
+      dashboardCardBorder: "#99f6e4",
+      dashboardAccent: "#0f766e",
+
+      // UI element colors
+      primary: "#0d9488",
+      primaryForeground: "#ffffff",
+      secondary: "#059669",
+      secondaryForeground: "#ffffff",
+      accent: "#14b8a6",
+      accentForeground: "#ffffff",
+
+      // Status colors
+      success: "#16a34a",
+      warning: "#ea580c",
+      error: "#dc2626",
+
+      // Text colors
+      textPrimary: "#064e3b",
+      textSecondary: "#065f46",
+      textMuted: "#047857",
+
+      // Border and background
+      border: "#5eead4",
+      background: "#f0fdfa",
+      foreground: "#064e3b",
+    },
+  },
+  "sunset-sky": {
+    id: "sunset-sky",
+    name: "Sunset Sky",
+    description: "Warm peach and cream with coral highlights",
+    colors: {
+      // Table colors
+      tableFelt: {
+        start: "#fff7ed",
+        end: "#fed7aa",
+      },
+      tableEdge: "#c2410c",
+      tableEdgeAccent: "#ea580c",
+
+      // Dashboard colors
+      dashboardBackground: "#fffbeb",
+      dashboardCard: "#fef3c7",
+      dashboardCardBorder: "#fde68a",
+      dashboardAccent: "#d97706",
+
+      // UI element colors
+      primary: "#ea580c",
+      primaryForeground: "#ffffff",
+      secondary: "#d97706",
+      secondaryForeground: "#ffffff",
+      accent: "#f59e0b",
+      accentForeground: "#ffffff",
+
+      // Status colors
+      success: "#16a34a",
+      warning: "#ea580c",
+      error: "#dc2626",
+
+      // Text colors
+      textPrimary: "#78350f",
+      textSecondary: "#92400e",
+      textMuted: "#b45309",
+
+      // Border and background
+      border: "#fbbf24",
+      background: "#fffbeb",
+      foreground: "#78350f",
+    },
+  },
 };
 
 export const DEFAULT_THEME = THEME_PRESETS["classic-vegas"];
