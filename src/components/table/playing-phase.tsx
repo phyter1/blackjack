@@ -1,81 +1,19 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import type { ActionType } from "@/modules/game/action";
+import { ActionChip } from "@/components/chips";
 
 interface PlayingPhaseProps {
   availableActions: ActionType[];
   onAction: (action: ActionType) => void;
 }
 
-interface ActionButtonProps {
-  label: string;
-  color: string;
-  accentColor: string;
-  onClick: () => void;
-}
-
-function ActionButton({
-  label,
-  color,
-  accentColor,
-  onClick,
-}: ActionButtonProps) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className={cn(
-        "relative w-28 h-28 rounded-full transition-all duration-200",
-        "hover:scale-110 hover:shadow-xl cursor-pointer",
-        "active:scale-105",
-      )}
-      style={{
-        background: `radial-gradient(circle at 30% 30%, ${color} 0%, ${accentColor} 100%)`,
-      }}
-    >
-      {/* Outer ring */}
-      <div
-        className="absolute inset-0 rounded-full border-4"
-        style={{ borderColor: accentColor }}
-      >
-        {/* White dots around edge */}
-        <div className="absolute inset-0">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-2 h-2 bg-white rounded-full"
-              style={{
-                top: "50%",
-                left: "50%",
-                transform: `rotate(${i * 45}deg) translate(-50%, -50%) translateY(-48px)`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Center label */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-white font-bold text-base drop-shadow-lg font-serif uppercase">
-              {label}
-            </div>
-          </div>
-        </div>
-
-        {/* Inner decorative ring */}
-        <div className="absolute inset-3 rounded-full border-2 border-white opacity-40" />
-      </div>
-    </button>
-  );
-}
-
 const ACTION_STYLES = {
-  hit: { color: "#2563EB", accentColor: "#1E40AF" }, // Blue
-  stand: { color: "#DC2626", accentColor: "#991B1B" }, // Red
-  double: { color: "#8B5CF6", accentColor: "#6D28D9" }, // Purple
-  split: { color: "#F59E0B", accentColor: "#B45309" }, // Gold
-  surrender: { color: "#6B7280", accentColor: "#374151" }, // Gray
+  hit: { label: "Hit", color: "#2563EB", accentColor: "#1E40AF" }, // Blue
+  stand: { label: "Stand", color: "#DC2626", accentColor: "#991B1B" }, // Red
+  double: { label: "Double", color: "#F59E0B", accentColor: "#B45309" }, // Gold
+  split: { label: "Split", color: "#8B5CF6", accentColor: "#6D28D9" }, // Purple
+  surrender: { label: "Surrender", color: "#6B7280", accentColor: "#374151" }, // Gray
 };
 
 export function PlayingPhase({
@@ -88,42 +26,52 @@ export function PlayingPhase({
 
       <div className="flex gap-4">
         {availableActions.includes("hit") && (
-          <ActionButton
-            label="Hit"
+          <ActionChip
+            label={ACTION_STYLES.hit.label}
+            color={ACTION_STYLES.hit.color}
+            accentColor={ACTION_STYLES.hit.accentColor}
             onClick={() => onAction("hit")}
-            {...ACTION_STYLES.hit}
+            size={112}
           />
         )}
 
         {availableActions.includes("stand") && (
-          <ActionButton
-            label="Stand"
+          <ActionChip
+            label={ACTION_STYLES.stand.label}
+            color={ACTION_STYLES.stand.color}
+            accentColor={ACTION_STYLES.stand.accentColor}
             onClick={() => onAction("stand")}
-            {...ACTION_STYLES.stand}
+            size={112}
           />
         )}
 
         {availableActions.includes("double") && (
-          <ActionButton
-            label="Double"
+          <ActionChip
+            label={ACTION_STYLES.double.label}
+            color={ACTION_STYLES.double.color}
+            accentColor={ACTION_STYLES.double.accentColor}
             onClick={() => onAction("double")}
-            {...ACTION_STYLES.double}
+            size={112}
           />
         )}
 
         {availableActions.includes("split") && (
-          <ActionButton
-            label="Split"
+          <ActionChip
+            label={ACTION_STYLES.split.label}
+            color={ACTION_STYLES.split.color}
+            accentColor={ACTION_STYLES.split.accentColor}
             onClick={() => onAction("split")}
-            {...ACTION_STYLES.split}
+            size={112}
           />
         )}
 
         {availableActions.includes("surrender") && (
-          <ActionButton
-            label="Surrender"
+          <ActionChip
+            label={ACTION_STYLES.surrender.label}
+            color={ACTION_STYLES.surrender.color}
+            accentColor={ACTION_STYLES.surrender.accentColor}
             onClick={() => onAction("surrender")}
-            {...ACTION_STYLES.surrender}
+            size={112}
           />
         )}
       </div>

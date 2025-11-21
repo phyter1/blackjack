@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CasinoChip, CHIP_VALUES } from "@/components/casino-chip";
+import { CasinoChip, generateChipConfigs } from "@/components/casino-chip";
 import { cn } from "@/lib/utils";
 import { RoundActionButton } from "./round-action-button";
 
@@ -13,6 +13,7 @@ interface BettingPhaseProps {
   minBet?: number; // Minimum bet allowed at the table
   maxBet?: number; // Maximum bet allowed at the table
   betUnit?: number; // Bet unit/chip denomination
+  chipDenominations?: number[]; // Available chip denominations
   previousBets: number[] | null;
   onBet: (bets: number[]) => void;
   onSetPreviousBets: (bets: number[] | null) => void;
@@ -26,10 +27,15 @@ export function BettingPhase({
   minBet = 5,
   maxBet = 10000,
   betUnit = 1,
+  chipDenominations,
   previousBets,
   onBet,
   onSetPreviousBets,
 }: BettingPhaseProps) {
+  // Generate chip configs from denominations (canonical only)
+  const chipConfigs = chipDenominations
+    ? generateChipConfigs(chipDenominations)
+    : generateChipConfigs([5, 25, 100, 500, 1000, 5000]);
   // Always track all 5 positions
   const [handBets, setHandBets] = useState<number[]>([0, 0, 0, 0, 0]);
   const [selectedChipValue, setSelectedChipValue] = useState<number | null>(
@@ -259,33 +265,41 @@ export function BettingPhase({
 
       {/* Chips */}
       <div className="flex flex-col items-center gap-2">
-        {/* Top row - 3 chips */}
+        {/* Top row - first half of chips */}
         <div className="flex gap-2 justify-center">
-          {CHIP_VALUES.slice(0, 3).map((chip) => (
-            <CasinoChip
-              key={chip.value}
-              value={chip.value}
-              color={chip.color}
-              accentColor={chip.accentColor}
-              onClick={() => handleChipClick(chip.value)}
-              disabled={chip.value > availableBalance}
-              selected={selectedChipValue === chip.value}
-            />
-          ))}
+          {chipConfigs
+            .slice(0, Math.ceil(chipConfigs.length / 2))
+            .map((chip) => (
+              <CasinoChip
+                key={chip.value}
+                value={chip.value}
+                primary={chip.primary}
+                secondary={chip.secondary}
+                center={chip.center}
+                textColor={chip.textColor}
+                onClick={() => handleChipClick(chip.value)}
+                disabled={chip.value > availableBalance}
+                selected={selectedChipValue === chip.value}
+              />
+            ))}
         </div>
-        {/* Bottom row - 4 chips */}
+        {/* Bottom row - second half of chips */}
         <div className="flex gap-2 justify-center">
-          {CHIP_VALUES.slice(3).map((chip) => (
-            <CasinoChip
-              key={chip.value}
-              value={chip.value}
-              color={chip.color}
-              accentColor={chip.accentColor}
-              onClick={() => handleChipClick(chip.value)}
-              disabled={chip.value > availableBalance}
-              selected={selectedChipValue === chip.value}
-            />
-          ))}
+          {chipConfigs
+            .slice(Math.ceil(chipConfigs.length / 2))
+            .map((chip) => (
+              <CasinoChip
+                key={chip.value}
+                value={chip.value}
+                primary={chip.primary}
+                secondary={chip.secondary}
+                center={chip.center}
+                textColor={chip.textColor}
+                onClick={() => handleChipClick(chip.value)}
+                disabled={chip.value > availableBalance}
+                selected={selectedChipValue === chip.value}
+              />
+            ))}
         </div>
       </div>
 
