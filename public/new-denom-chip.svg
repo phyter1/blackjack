@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      /* Default color scheme - modify these to customize your chip */
+      .chip-body { fill: #000000; }
+      .center-circle { fill: #024313 }
+      .edge-marks { fill: #c02323; }
+      .suit-symbols { fill: #FFFFFF; }
+      
+      /* Using CSS classes allows easy color changes via CSS or JavaScript */
+    </style>
+  </defs>
+  
+  <!-- Main chip body (black outer circle) -->
+  <g class="chip-body" id="body">
+    <circle cx="150" cy="150" r="142"/>
+  </g>
+  
+  <!-- Edge marks (rectangular dashes) - 12 total offset by 15 degrees to sit between suit symbols -->
+  <g class="edge-marks" id="marks">
+    <!-- Offset by 15 degrees to position between suit symbols -->
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(15 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(45 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(75 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(105 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(135 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(165 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(195 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(225 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(255 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(285 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(315 150 150)"/>
+    <rect x="143" y="8" width="14" height="32" rx="2" transform="rotate(345 150 150)"/>
+  </g>
+  
+  <!-- Suit symbols - 12 symbols evenly distributed (3 of each suit) at 30-degree intervals -->
+  <g class="suit-symbols" id="suits">
+    <!-- 12 o'clock - Spade (0 degrees) -->
+    <text x="150" y="58" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(0 150 58)">♠</text>
+
+    <!-- 1 o'clock - Heart (30 degrees) -->
+    <text x="197.5" y="75" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(30 197.5 75)">♥</text>
+
+    <!-- 2 o'clock - Diamond (60 degrees) -->
+    <text x="231.5" y="108.5" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(60 231.5 108.5)">♦</text>
+
+    <!-- 3 o'clock - Club (90 degrees) -->
+    <text x="243" y="152" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(90 244 152)">♣</text>
+
+    <!-- 4 o'clock - Spade (120 degrees) -->
+    <text x="231.5" y="191.5" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(120 231.5 191.5)">♠</text>
+
+    <!-- 5 o'clock - Heart (150 degrees) -->
+    <text x="197.5" y="225" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(150 197.5 225)">♥</text>
+
+    <!-- 6 o'clock - Diamond (180 degrees) -->
+    <text x="150" y="246" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(180 150 244)">♦</text>
+
+    <!-- 7 o'clock - Club (210 degrees) -->
+    <text x="102.5" y="225" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(210 102.5 225)">♣</text>
+
+    <!-- 8 o'clock - Spade (240 degrees) -->
+    <text x="68.5" y="191.5" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(240 68.5 191.5)">♠</text>
+
+    <!-- 9 o'clock - Heart (270 degrees) -->
+    <text x="60" y="152" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(270 58 152)">♥</text>
+
+    <!-- 10 o'clock - Diamond (300 degrees) -->
+    <text x="68.5" y="108.5" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(300 68.5 108.5)">♦</text>
+
+    <!-- 11 o'clock - Club (330 degrees) -->
+    <text x="102.5" y="75" text-anchor="middle" dominant-baseline="middle"
+          style="font-family: Arial, sans-serif; font-size: 26px; font-weight: bold;"
+          transform="rotate(330 102.5 75)">♣</text>
+  </g>
+  
+  <!-- Center white circle -->
+  <g class="center-circle" id="center">
+    <circle cx="150" cy="150" r="75"/>
+  </g>
+</svg>
+
+<!-- 
+Usage Instructions:
+==================
+
+1. CSS Styling:
+   .chip-body { fill: #CC0000; }     /* Red chip body */
+   .edge-marks { fill: #FFFFFF; }    /* White edge marks */
+   .suit-symbols { fill: #FFCC00; }  /* Gold suit symbols */
+   .center-circle { fill: #FFFFFF; } /* White center */
+
+2. JavaScript:
+   document.querySelector('.chip-body').setAttribute('fill', '#0066CC');
+   
+3. Inline SVG:
+   <g class="chip-body" fill="#008800">...</g>
+
+4. Suit Symbol Reference:
+   ♠ = Spade (U+2660)
+   ♥ = Heart (U+2665)
+   ♦ = Diamond (U+2666)
+   ♣ = Club (U+2663)
+   
+   You can replace these with custom path elements or images if needed.
+-->

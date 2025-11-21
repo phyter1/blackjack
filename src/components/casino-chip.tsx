@@ -1,81 +1,102 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { getCanonicalChipColors } from "@/modules/chip/color";
+import { DenomChip } from "./chips";
 
 interface CasinoChipProps {
   value: number;
-  color: string;
-  accentColor: string;
+  primary: string;
+  secondary: string;
+  center: string;
+  textColor: string;
   onClick?: () => void;
   disabled?: boolean;
   selected?: boolean;
 }
 
+/**
+ * Casino chip component for betting denominations.
+ * Now uses the modular DenomChip with enhanced 3-color SVG design.
+ */
 export function CasinoChip({
   value,
-  color,
-  accentColor,
+  primary,
+  secondary,
+  center,
+  textColor,
   onClick,
   disabled = false,
   selected = false,
 }: CasinoChipProps) {
   return (
-    <button
-      type="button"
+    <DenomChip
+      value={value}
+      primary={primary}
+      secondary={secondary}
+      center={center}
+      textColor={textColor}
       onClick={onClick}
       disabled={disabled}
-      className={cn(
-        "relative w-24 h-24 rounded-full transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
-        !disabled && "hover:scale-110 hover:shadow-lg cursor-pointer",
-        selected && "scale-110 shadow-xl ring-2 ring-amber-400",
-      )}
-      style={{
-        background: `radial-gradient(circle at 30% 30%, ${color} 0%, ${accentColor} 100%)`,
-      }}
-    >
-      {/* Outer ring */}
-      <div
-        className="absolute inset-0 rounded-full border-4"
-        style={{ borderColor: accentColor }}
-      >
-        {/* White dots around edge */}
-        <div className="absolute inset-0">
-          {Array.from({ length: 8 }).map((_, i) => (
-            <div
-              key={i}
-              className="absolute w-1.5 h-1.5 bg-white"
-              style={{
-                top: "50%",
-                left: "50%",
-                transform: `rotate(${i * 45}deg) translate(-50%, -50%) translateY(-36px)`,
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Center value */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <div className="text-white font-bold text-sm drop-shadow-lg font-serif">
-              ${value}
-            </div>
-          </div>
-        </div>
-
-        {/* Inner decorative ring */}
-        <div className="absolute inset-2 rounded-full border-2 border-white opacity-40" />
-      </div>
-    </button>
+      selected={selected}
+    />
   );
 }
 
-// Predefined chip configurations
-export const CHIP_VALUES = [
-  { value: 5, color: "#DC2626", accentColor: "#991B1B" }, // Red
-  { value: 10, color: "#2563EB", accentColor: "#1E40AF" }, // Blue
-  { value: 25, color: "#16A34A", accentColor: "#15803D" }, // Green
-  { value: 100, color: "#1F2937", accentColor: "#111827" }, // Black
-  { value: 500, color: "#F59E0B", accentColor: "#B45309" }, // Gold
-  { value: 1000, color: "#8B5CF6", accentColor: "#6D28D9" }, // Purple
-  { value: 5000, color: "#14B8A6", accentColor: "#0D9488" }, // Teal
-];
+/**
+ * Get enhanced color configuration for a chip value
+ * Returns primary, secondary, center, and text colors
+ */
+export function getChipColor(value: number): {
+  primary: string;
+  secondary: string;
+  center: string;
+  textColor: string;
+} {
+  // Get canonical colors for this single value
+  const palette = getCanonicalChipColors([value]);
+
+  const chipColor = palette[0];
+  if (chipColor) {
+    return {
+      primary: chipColor.primary,
+      secondary: chipColor.secondary,
+      center: chipColor.center,
+      textColor: chipColor.textColor,
+    };
+  }
+
+  // Fallback
+  return {
+    primary: "#9CA3AF",
+    secondary: "#E5E7EB",
+    center: "#FFFFFF",
+    textColor: "#000000",
+  };
+}
+
+/**
+ * Generate chip configurations from denominations
+ * Uses enhanced 3-color casino-standard color palette
+ */
+export function generateChipConfigs(
+  denominations: number[],
+): Array<{
+  value: number;
+  primary: string;
+  secondary: string;
+  center: string;
+  textColor: string;
+}> {
+  const palette = getCanonicalChipColors(denominations);
+
+  return palette.map((chip) => ({
+    value: chip.value,
+    primary: chip.primary,
+    secondary: chip.secondary,
+    center: chip.center,
+    textColor: chip.textColor,
+  }));
+}
+
+// Legacy export for backward compatibility - uses only canonical denominations
+export const CHIP_VALUES = generateChipConfigs([5, 25, 100, 500, 1000, 5000]);

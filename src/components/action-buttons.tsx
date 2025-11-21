@@ -8,7 +8,7 @@ import {
   ACTION_STAND,
   ACTION_SURRENDER,
 } from "@/modules/game/action";
-import { Button } from "./ui/button";
+import { ActionChip } from "./chips";
 
 interface ActionButtonsProps {
   availableActions: ActionType[];
@@ -24,12 +24,13 @@ const actionLabels = {
   [ACTION_SURRENDER]: "Surrender",
 };
 
-const actionVariants = {
-  [ACTION_HIT]: "default" as const,
-  [ACTION_STAND]: "secondary" as const,
-  [ACTION_DOUBLE]: "default" as const,
-  [ACTION_SPLIT]: "default" as const,
-  [ACTION_SURRENDER]: "destructive" as const,
+// Action chip color schemes matching casino feel
+const actionColors = {
+  [ACTION_HIT]: { color: "#2563EB", accentColor: "#1E40AF" }, // Blue
+  [ACTION_STAND]: { color: "#DC2626", accentColor: "#991B1B" }, // Red
+  [ACTION_DOUBLE]: { color: "#F59E0B", accentColor: "#B45309" }, // Gold
+  [ACTION_SPLIT]: { color: "#8B5CF6", accentColor: "#6D28D9" }, // Purple
+  [ACTION_SURRENDER]: { color: "#4B5563", accentColor: "#374151" }, // Grey
 };
 
 export function ActionButtons({
@@ -42,17 +43,17 @@ export function ActionButtons({
   }
 
   return (
-    <div className="flex flex-wrap gap-2 justify-center pb-20">
+    <div className="flex flex-wrap gap-3 justify-center pb-20">
       {availableActions.map((action) => (
-        <Button
+        <ActionChip
           key={action}
+          label={actionLabels[action]}
+          color={actionColors[action].color}
+          accentColor={actionColors[action].accentColor}
           onClick={() => onAction(action)}
-          variant={actionVariants[action]}
           disabled={disabled}
-          className="min-w-32"
-        >
-          {actionLabels[action]}
-        </Button>
+          size={90}
+        />
       ))}
     </div>
   );

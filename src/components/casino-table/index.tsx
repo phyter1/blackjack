@@ -1,8 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { ActionType } from "@/modules/game/action";
+import { ChipConfigService } from "@/services/chip-config-service";
 import { useGameStore } from "@/stores/game";
 import { selectSettings, useSettingsStore } from "@/stores/settings";
 import { useTrainerStore } from "@/stores/trainer";
@@ -80,6 +81,21 @@ export function CasinoTable({
   const handleNextRound = useGameStore((state) => state.handleNextRound);
   const handleEndGame = useGameStore((state) => state.handleEndGame);
   const setShowCount = useGameStore((state) => state.setShowCount);
+
+  // Chip denominations based on table limits
+  const [chipDenominations, setChipDenominations] = useState<number[]>([]);
+
+  // Load chip denominations when rules change
+  useEffect(() => {
+    if (rules?.minBet && rules?.maxBet && rules?.betUnit) {
+      const config = ChipConfigService.getChipConfig({
+        minBet: rules.minBet,
+        maxBet: rules.maxBet,
+        betUnit: rules.betUnit,
+      });
+      setChipDenominations(config.denominations);
+    }
+  }, [rules?.minBet, rules?.maxBet, rules?.betUnit]);
 
   // Initialize game on mount
   useEffect(() => {
@@ -196,6 +212,7 @@ export function CasinoTable({
             minBet={rules?.minBet}
             maxBet={rules?.maxBet}
             betUnit={rules?.betUnit}
+            chipDenominations={chipDenominations}
             previousBets={previousBets}
             onBet={onBet}
             onSetPreviousBets={setPreviousBets}
