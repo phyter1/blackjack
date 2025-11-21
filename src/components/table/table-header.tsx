@@ -40,17 +40,15 @@ export function TableHeader({
         {/* Balance Display */}
         <div className="text-right">
           <div
-            className="text-sm"
-            style={{ color: "var(--theme-text-secondary)" }}
+            className="text-sm font-medium"
+            style={{ color: "var(--theme-text-primary)" }}
           >
             {isTrainerActive ? "Practice Balance" : "Balance"}
           </div>
           <div
             className={cn("text-xl font-bold")}
             style={{
-              color: isTrainerActive
-                ? "var(--theme-primary)"
-                : "var(--theme-success)",
+              color: "var(--theme-text-primary)",
             }}
           >
             $
