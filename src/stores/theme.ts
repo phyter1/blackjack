@@ -3,7 +3,7 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import { DEFAULT_THEME, THEME_PRESETS } from "@/lib/theme-presets";
+import { DEFAULT_THEME, THEME_PRESETS } from "@/lib/themes";
 import type { Theme, ThemeColors } from "@/types/theme";
 
 const THEME_STORAGE_KEY = "blackjack-theme";
