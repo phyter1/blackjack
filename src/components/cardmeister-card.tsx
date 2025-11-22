@@ -37,10 +37,10 @@ const RANK_MAP: Record<string, string> = {
 };
 
 const SIZE_MAP = {
-  sm: { width: "64px", height: "96px" },
-  md: { width: "80px", height: "112px" },
-  lg: { width: "96px", height: "128px" },
-  xl: { width: "104px", height: "146px" },
+  sm: { width: "48px", height: "67px" },
+  md: { width: "62px", height: "88px" },
+  lg: { width: "77px", height: "108px" },
+  xl: { width: "84px", height: "118px" },
 };
 
 /**
@@ -93,10 +93,10 @@ export function CardMeisterCard({
   if (!card || hidden) {
     // Use CardBack from the new cards library with themed colors
     const dimensions = {
-      sm: { width: 64, height: 96 },
-      md: { width: 80, height: 112 },
-      lg: { width: 96, height: 128 },
-      xl: { width: 104, height: 146 },
+      sm: { width: 48, height: 67 },
+      md: { width: 62, height: 88 },
+      lg: { width: 77, height: 108 },
+      xl: { width: 84, height: 118 },
     };
 
     const { width, height } = dimensions[size];

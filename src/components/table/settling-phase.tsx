@@ -36,9 +36,9 @@ export function SettlingPhase({
     player && player.bank.balance < 10 ? "Cash Out" : "Next Round";
 
   return (
-    <div className="flex flex-col items-center gap-6 pb-20">
+    <div className="flex flex-col items-center gap-4 md:gap-6 pb-8 md:pb-20">
       <div
-        className="font-serif text-xl"
+        className="font-serif text-lg md:text-xl"
         style={{ color: "var(--theme-text-primary)" }}
       >
         {getResultText()}

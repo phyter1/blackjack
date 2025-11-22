@@ -21,7 +21,7 @@ export function InsurancePhase({
     : "0";
 
   return (
-    <div className="flex flex-col items-center gap-6 pb-20">
+    <div className="flex flex-col items-center gap-4 md:gap-6 pb-8 md:pb-20">
       <div
         className="font-serif text-lg text-center"
         style={{ color: "var(--theme-text-primary)" }}

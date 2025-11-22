@@ -43,7 +43,7 @@ export function ActionButtons({
   }
 
   return (
-    <div className="flex flex-wrap gap-3 justify-center pb-20">
+    <div className="flex flex-wrap gap-2 md:gap-3 justify-center pb-8 md:pb-20">
       {availableActions.map((action) => (
         <ActionChip
           key={action}
@@ -52,7 +52,6 @@ export function ActionButtons({
           accentColor={actionColors[action].accentColor}
           onClick={() => onAction(action)}
           disabled={disabled}
-          size={90}
         />
       ))}
     </div>

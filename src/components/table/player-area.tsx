@@ -24,7 +24,7 @@ export function PlayerArea({
   if (!round) return null;
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-2 md:gap-4">
       <div
         className="font-serif text-lg"
         style={{ color: "var(--theme-text-primary)" }}
@@ -63,7 +63,7 @@ export function PlayerArea({
 
             <div
               className="relative flex"
-              style={{ minHeight: "146px" }}
+              style={{ minHeight: "118px" }}
               key={`hand-${hand.id}`}
             >
               {hand.cards.map((card, cardIdx) => {
@@ -74,7 +74,7 @@ export function PlayerArea({
                     key={cardKey}
                     className="transition-all duration-300"
                     style={{
-                      marginLeft: cardIdx > 0 ? "-55px" : "0",
+                      marginLeft: cardIdx > 0 ? "-42px" : "0",
                       zIndex: cardIdx,
                     }}
                   >

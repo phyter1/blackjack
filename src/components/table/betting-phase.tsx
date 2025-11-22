@@ -167,7 +167,7 @@ export function BettingPhase({
   const hasInvalidBets = handBets.some((bet) => bet > 0 && bet < minBet);
 
   return (
-    <div className="flex flex-col items-center gap-6 pb-20">
+    <div className="flex flex-col items-center gap-3 md:gap-6 pb-8 md:pb-20">
       {isTrainerActive && (
         <div
           className="px-4 py-2 border rounded-lg text-sm"
@@ -270,8 +270,8 @@ export function BettingPhase({
                   }}
                   disabled={selectedChipValue === null}
                   className={cn(
-                    "relative w-24 h-24 rounded-full transition-all duration-200 flex items-center justify-center",
-                    "border-4 font-serif font-bold",
+                    "relative w-16 h-16 md:w-20 md:h-20 rounded-full transition-all duration-200 flex items-center justify-center",
+                    "border-3 md:border-4 font-serif font-bold",
                     selectedChipValue !== null &&
                       "cursor-pointer hover:scale-105 hover:shadow-lg",
                     hasChips && "ring-2",
@@ -296,7 +296,7 @@ export function BettingPhase({
                   {hasChips ? (
                     <div className="text-center">
                       <div
-                        className="text-2xl font-bold drop-shadow-lg"
+                        className="text-sm md:text-xl font-bold drop-shadow-lg"
                         style={{ color: "var(--theme-accent)" }}
                       >
                         ${bet}
@@ -304,7 +304,7 @@ export function BettingPhase({
                     </div>
                   ) : (
                     <div
-                      className="text-4xl"
+                      className="text-xl md:text-3xl"
                       style={{ color: "var(--theme-text-muted)", opacity: 0.5 }}
                     >
                       +

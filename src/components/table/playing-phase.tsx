@@ -21,22 +21,21 @@ export function PlayingPhase({
   onAction,
 }: PlayingPhaseProps) {
   return (
-    <div className="flex flex-col items-center gap-6 pb-20">
+    <div className="flex flex-col items-center gap-3 md:gap-6 pb-8 md:pb-20">
       <div
-        className="font-serif text-lg"
+        className="font-serif text-base md:text-lg"
         style={{ color: "var(--theme-text-primary)" }}
       >
         Your Action
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-2 md:gap-4">
         {availableActions.includes("hit") && (
           <ActionChip
             label={ACTION_STYLES.hit.label}
             color={ACTION_STYLES.hit.color}
             accentColor={ACTION_STYLES.hit.accentColor}
             onClick={() => onAction("hit")}
-            size={112}
           />
         )}
 
@@ -46,7 +45,6 @@ export function PlayingPhase({
             color={ACTION_STYLES.stand.color}
             accentColor={ACTION_STYLES.stand.accentColor}
             onClick={() => onAction("stand")}
-            size={112}
           />
         )}
 
@@ -56,7 +54,6 @@ export function PlayingPhase({
             color={ACTION_STYLES.double.color}
             accentColor={ACTION_STYLES.double.accentColor}
             onClick={() => onAction("double")}
-            size={112}
           />
         )}
 
@@ -66,7 +63,6 @@ export function PlayingPhase({
             color={ACTION_STYLES.split.color}
             accentColor={ACTION_STYLES.split.accentColor}
             onClick={() => onAction("split")}
-            size={112}
           />
         )}
 
@@ -76,7 +72,6 @@ export function PlayingPhase({
             color={ACTION_STYLES.surrender.color}
             accentColor={ACTION_STYLES.surrender.accentColor}
             onClick={() => onAction("surrender")}
-            size={112}
           />
         )}
       </div>

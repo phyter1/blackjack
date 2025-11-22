@@ -168,27 +168,31 @@ export function CasinoTable({
         onEndGame={onEndGame}
       />
 
-      {/* Shoe Display - Right Side */}
+      {/* Shoe Display - Right Side - Hidden on mobile */}
       {shoeDetails && (
-        <ShoeDisplay
-          remainingCards={shoeDetails.remainingCards}
-          totalCards={shoeDetails.initialCardCount}
-          cutCardPosition={shoeDetails.cutCardPosition}
-          penetration={shoeDetails.penetration}
-          isComplete={shoeDetails.isComplete}
-        />
+        <div className="hidden md:block">
+          <ShoeDisplay
+            remainingCards={shoeDetails.remainingCards}
+            totalCards={shoeDetails.initialCardCount}
+            cutCardPosition={shoeDetails.cutCardPosition}
+            penetration={shoeDetails.penetration}
+            isComplete={shoeDetails.isComplete}
+          />
+        </div>
       )}
 
-      {/* Discard Tray - Left Side */}
+      {/* Discard Tray - Left Side - Hidden on mobile */}
       {shoeDetails && (
-        <DiscardTray
-          discardedCards={shoeDetails.discardedCards}
-          totalCards={shoeDetails.initialCardCount}
-        />
+        <div className="hidden md:block">
+          <DiscardTray
+            discardedCards={shoeDetails.discardedCards}
+            totalCards={shoeDetails.initialCardCount}
+          />
+        </div>
       )}
 
       {/* Main playing area */}
-      <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-12 p-8">
+      <div className="relative z-10 flex-1 flex flex-col items-center justify-center gap-4 md:gap-12 p-2 md:p-8">
         {/* Dealer area */}
         <DealerArea round={currentRound} phase={phase} />
 
@@ -203,7 +207,7 @@ export function CasinoTable({
 
       {/* Action area */}
       <div
-        className="relative z-10 p-6 backdrop-blur-sm"
+        className="relative z-10 p-2 md:p-6 backdrop-blur-sm"
         style={{
           background:
             "linear-gradient(to top, var(--theme-table-edge) / 0.8, transparent)",
