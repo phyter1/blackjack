@@ -1,6 +1,9 @@
 import type { EVCalculation, GameRules } from "./types";
 import { DEFAULT_RULES } from "./constants";
-import { calculateBaseHouseEdge, adjustForStrategyAccuracy } from "./house-edge";
+import {
+  calculateBaseHouseEdge,
+  adjustForStrategyAccuracy,
+} from "./house-edge";
 import { calculateCountAdvantage, calculateAverageTrueCount } from "./counting";
 
 /**

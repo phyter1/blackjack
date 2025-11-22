@@ -4,10 +4,7 @@ import type { Game } from "../../game/game";
 import type { BasicStrategyDecision } from "../basic-strategy";
 import { DecisionTracker, type PlayerDecision } from "../decision-tracker";
 import { type CountSnapshot, HiLoCounter } from "../hi-lo-counter";
-import {
-  evaluateAction,
-  getOptimalAction,
-} from "./action-evaluator";
+import { evaluateAction, getOptimalAction } from "./action-evaluator";
 import { submitCountGuess } from "./count-evaluator";
 import { getStats } from "./stats-calculator";
 import type {

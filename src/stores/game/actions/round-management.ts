@@ -1,10 +1,7 @@
 import type { UserBank } from "@/types/user";
 import type { GameStore } from "../types";
 
-export function createRoundManagementActions(
-  set: any,
-  get: () => GameStore,
-) {
+export function createRoundManagementActions(set: any, get: () => GameStore) {
   return {
     handleInsuranceAction: (takeInsurance: boolean) => {
       const state = get();

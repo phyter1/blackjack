@@ -79,15 +79,13 @@ describe("BetValidator", () => {
       const validResult = validateBet(5.25, quarterRules);
       expect(validResult.valid).toBe(true);
 
-      const invalidResult = validateBet(5.30, quarterRules);
+      const invalidResult = validateBet(5.3, quarterRules);
       expect(invalidResult.valid).toBe(false);
       expect(invalidResult.error).toContain("multiple of $0.25");
     });
 
     test("should accept any bet when unit is 1", () => {
-      const anyUnitRules = new RuleSet()
-        .setTableLimits(5, 1000, 1)
-        .build();
+      const anyUnitRules = new RuleSet().setTableLimits(5, 1000, 1).build();
 
       expect(validateBet(17, anyUnitRules).valid).toBe(true);
       expect(validateBet(99, anyUnitRules).valid).toBe(true);
@@ -95,18 +93,14 @@ describe("BetValidator", () => {
     });
 
     test("should handle no unit restriction (unit = 0)", () => {
-      const noUnitRules = new RuleSet()
-        .setTableLimits(5, 1000, 0)
-        .build();
+      const noUnitRules = new RuleSet().setTableLimits(5, 1000, 0).build();
 
       expect(validateBet(5.37, noUnitRules).valid).toBe(true);
       expect(validateBet(99.99, noUnitRules).valid).toBe(true);
     });
 
     test("should handle edge case: minimum equals maximum", () => {
-      const fixedBetRules = new RuleSet()
-        .setTableLimits(100, 100, 100)
-        .build();
+      const fixedBetRules = new RuleSet().setTableLimits(100, 100, 100).build();
 
       expect(validateBet(100, fixedBetRules).valid).toBe(true);
       expect(validateBet(99, fixedBetRules).valid).toBe(false);
@@ -125,9 +119,7 @@ describe("BetValidator", () => {
     });
 
     test("should validate penny bets correctly", () => {
-      const pennyRules = new RuleSet()
-        .setTableLimits(0.01, 10, 0.01)
-        .build();
+      const pennyRules = new RuleSet().setTableLimits(0.01, 10, 0.01).build();
 
       expect(validateBet(0.01, pennyRules).valid).toBe(true);
       expect(validateBet(5.47, pennyRules).valid).toBe(true);
@@ -166,9 +158,7 @@ describe("BetValidator", () => {
     });
 
     test("should return limits for different table", () => {
-      const vipRules = new RuleSet()
-        .setTableLimits(100, 50000, 25)
-        .build();
+      const vipRules = new RuleSet().setTableLimits(100, 50000, 25).build();
 
       const limits = getBettingLimits(vipRules);
       expect(limits.min).toBe(100);
@@ -177,9 +167,7 @@ describe("BetValidator", () => {
     });
 
     test("should return limits even with unit of 1", () => {
-      const flexibleRules = new RuleSet()
-        .setTableLimits(10, 5000, 1)
-        .build();
+      const flexibleRules = new RuleSet().setTableLimits(10, 5000, 1).build();
 
       const limits = getBettingLimits(flexibleRules);
       expect(limits.min).toBe(10);
@@ -190,9 +178,7 @@ describe("BetValidator", () => {
 
   describe("Floating point precision", () => {
     test("should handle floating point comparison correctly for valid bets", () => {
-      const rules = new RuleSet()
-        .setTableLimits(0.01, 100, 0.01)
-        .build();
+      const rules = new RuleSet().setTableLimits(0.01, 100, 0.01).build();
 
       // These should work despite floating point arithmetic
       expect(validateBet(0.03, rules).valid).toBe(true);
@@ -201,22 +187,18 @@ describe("BetValidator", () => {
     });
 
     test("should use tolerance for floating point errors", () => {
-      const rules = new RuleSet()
-        .setTableLimits(0.01, 100, 0.10)
-        .build();
+      const rules = new RuleSet().setTableLimits(0.01, 100, 0.1).build();
 
       // Test cases that might have floating point issues
-      expect(validateBet(1.20, rules).valid).toBe(true);
-      expect(validateBet(5.40, rules).valid).toBe(true);
-      expect(validateBet(10.10, rules).valid).toBe(true);
+      expect(validateBet(1.2, rules).valid).toBe(true);
+      expect(validateBet(5.4, rules).valid).toBe(true);
+      expect(validateBet(10.1, rules).valid).toBe(true);
     });
   });
 
   describe("Edge cases and boundary conditions", () => {
     test("should handle very small minimum bet", () => {
-      const microRules = new RuleSet()
-        .setTableLimits(0.001, 10, 0.001)
-        .build();
+      const microRules = new RuleSet().setTableLimits(0.001, 10, 0.001).build();
 
       expect(validateBet(0.001, microRules).valid).toBe(true);
       expect(validateBet(0.0005, microRules).valid).toBe(false);
@@ -232,9 +214,9 @@ describe("BetValidator", () => {
     });
 
     test("should validate boundary values precisely", () => {
-      expect(validateBet(5.00, standardRules).valid).toBe(true);
+      expect(validateBet(5.0, standardRules).valid).toBe(true);
       expect(validateBet(4.99, standardRules).valid).toBe(false);
-      expect(validateBet(1000.00, standardRules).valid).toBe(true);
+      expect(validateBet(1000.0, standardRules).valid).toBe(true);
       expect(validateBet(1000.01, standardRules).valid).toBe(false);
     });
   });

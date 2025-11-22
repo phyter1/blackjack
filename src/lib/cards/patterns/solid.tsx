@@ -13,7 +13,12 @@ export const SolidPattern: React.FC<PatternComponentProps> = ({
       xmlns="http://www.w3.org/2000/svg"
     >
       {/* Solid background */}
-      <rect width="225" height="315" fill={stockColor || colors.primary} rx="12" />
+      <rect
+        width="225"
+        height="315"
+        fill={stockColor || colors.primary}
+        rx="12"
+      />
 
       {/* Optional subtle border */}
       <rect

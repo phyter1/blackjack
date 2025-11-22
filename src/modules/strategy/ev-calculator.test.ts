@@ -208,9 +208,7 @@ describe("EV Calculator", () => {
     });
 
     test("should calculate average of single count", () => {
-      const data = JSON.stringify([
-        { countSnapshot: { trueCount: 2 } },
-      ]);
+      const data = JSON.stringify([{ countSnapshot: { trueCount: 2 } }]);
       const avg = calculateAverageTrueCount(data);
       expect(avg).toBe(2);
     });
@@ -693,7 +691,9 @@ describe("EV Calculator", () => {
     });
 
     test("AGGRESSIVE_SPREAD should have larger max bet than CONSERVATIVE", () => {
-      expect(AGGRESSIVE_SPREAD.maxBet).toBeGreaterThan(CONSERVATIVE_SPREAD.maxBet);
+      expect(AGGRESSIVE_SPREAD.maxBet).toBeGreaterThan(
+        CONSERVATIVE_SPREAD.maxBet,
+      );
     });
   });
 

@@ -1,7 +1,12 @@
 import { beforeEach, describe, expect, test } from "bun:test";
 import { TrainerMode, type TrainerDifficulty } from "./trainer";
 import type { Card } from "../game/cards";
-import { ACTION_HIT, ACTION_STAND, ACTION_DOUBLE, ACTION_SPLIT } from "../game/action";
+import {
+  ACTION_HIT,
+  ACTION_STAND,
+  ACTION_DOUBLE,
+  ACTION_SPLIT,
+} from "../game/action";
 
 // Create a minimal mock Game object
 function createMockGame() {
@@ -141,7 +146,10 @@ describe("TrainerMode", () => {
 
       // Make a decision
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -163,7 +171,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -212,7 +223,10 @@ describe("TrainerMode", () => {
   describe("getOptimalAction", () => {
     test("should return optimal action for hard 16 vs 7", () => {
       const optimal = trainer.getOptimalAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -226,7 +240,10 @@ describe("TrainerMode", () => {
 
     test("should return optimal action for hard 20", () => {
       const optimal = trainer.getOptimalAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -239,7 +256,10 @@ describe("TrainerMode", () => {
 
     test("should recommend split for pairs when available", () => {
       const optimal = trainer.getOptimalAction(
-        [{ rank: "8", suit: "♠" }, { rank: "8", suit: "♥" }],
+        [
+          { rank: "8", suit: "♠" },
+          { rank: "8", suit: "♥" },
+        ],
         16,
         { rank: "6", suit: "♦" },
         false,
@@ -256,7 +276,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       const feedback = trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -277,7 +300,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       const feedback = trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -299,7 +325,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       const feedback = trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -318,7 +347,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -346,7 +378,10 @@ describe("TrainerMode", () => {
       ]);
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -446,7 +481,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -495,7 +533,10 @@ describe("TrainerMode", () => {
 
       // 2 correct, 1 incorrect
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -508,7 +549,10 @@ describe("TrainerMode", () => {
       );
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -521,7 +565,10 @@ describe("TrainerMode", () => {
       );
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -559,7 +606,10 @@ describe("TrainerMode", () => {
 
       // Hard hand
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -573,7 +623,10 @@ describe("TrainerMode", () => {
 
       // Soft hand
       trainer.evaluateAction(
-        [{ rank: "A", suit: "♠" }, { rank: "7", suit: "♥" }],
+        [
+          { rank: "A", suit: "♠" },
+          { rank: "7", suit: "♥" },
+        ],
         18,
         { rank: "6", suit: "♦" },
         false,
@@ -596,7 +649,10 @@ describe("TrainerMode", () => {
       // Make 12 decisions (last 10 will be used)
       for (let i = 0; i < 12; i++) {
         trainer.evaluateAction(
-          [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "10", suit: "♥" },
+          ],
           20,
           { rank: "6", suit: "♦" },
           false,
@@ -620,7 +676,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -640,7 +699,10 @@ describe("TrainerMode", () => {
 
       // Correct
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -654,7 +716,10 @@ describe("TrainerMode", () => {
 
       // Incorrect
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -677,7 +742,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -738,7 +806,10 @@ describe("TrainerMode", () => {
       trainer.activate();
 
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "6", suit: "♥" },
+        ],
         16,
         { rank: "7", suit: "♦" },
         false,
@@ -779,7 +850,10 @@ describe("TrainerMode", () => {
 
       // Make a decision
       trainer.evaluateAction(
-        [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+        [
+          { rank: "10", suit: "♠" },
+          { rank: "10", suit: "♥" },
+        ],
         20,
         { rank: "6", suit: "♦" },
         false,
@@ -812,7 +886,10 @@ describe("TrainerMode", () => {
       // Make some decisions
       for (let i = 0; i < 5; i++) {
         trainer.evaluateAction(
-          [{ rank: "10", suit: "♠" }, { rank: "10", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "10", suit: "♥" },
+          ],
           20,
           { rank: "6", suit: "♦" },
           false,

@@ -34,9 +34,8 @@ export function getStats(
       .getGuesses()
       .filter((g) => g.isRunningCountCorrect).length,
     runningCountAccuracy: counter.getRunningCountAccuracy(),
-    correctTrueCounts: counter
-      .getGuesses()
-      .filter((g) => g.isTrueCountCorrect).length,
+    correctTrueCounts: counter.getGuesses().filter((g) => g.isTrueCountCorrect)
+      .length,
     trueCountAccuracy: counter.getTrueCountAccuracy(),
 
     // By hand type

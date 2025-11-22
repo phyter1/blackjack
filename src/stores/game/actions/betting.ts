@@ -1,9 +1,6 @@
 import type { GameStore } from "../types";
 
-export function createBettingActions(
-  set: any,
-  get: () => GameStore,
-) {
+export function createBettingActions(set: any, get: () => GameStore) {
   return {
     placeBets: async (bets: number[]) => {
       const state = get();

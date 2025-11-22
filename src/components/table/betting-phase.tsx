@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { CasinoChip, generateChipConfigs } from "@/components/casino-chip";
+import { useViewportHandLimit } from "@/hooks/use-viewport-hand-limit";
 import { cn } from "@/lib/utils";
 import { RoundActionButton } from "./round-action-button";
 
@@ -32,6 +33,9 @@ export function BettingPhase({
   onBet,
   onSetPreviousBets,
 }: BettingPhaseProps) {
+  // Determine viewport-based hand limit
+  const viewportHandLimit = useViewportHandLimit(maxPlayableHands);
+
   // Generate chip configs from denominations (canonical only)
   const chipConfigs = chipDenominations
     ? generateChipConfigs(chipDenominations)
@@ -54,16 +58,16 @@ export function BettingPhase({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [handBets]);
 
-  // Calculate which positions are playable based on maxPlayableHands
+  // Calculate which positions are playable based on viewport-adjusted hand limit
   const getPlayablePositions = (): number[] => {
     // If only 1 hand allowed, show center position (index 2)
-    if (maxPlayableHands === 1) return [2];
+    if (viewportHandLimit === 1) return [2];
     // If 2 hands, show positions 1 and 3
-    if (maxPlayableHands === 2) return [1, 3];
+    if (viewportHandLimit === 2) return [1, 3];
     // If 3 hands, show positions 1, 2, 3
-    if (maxPlayableHands === 3) return [1, 2, 3];
+    if (viewportHandLimit === 3) return [1, 2, 3];
     // If 4 hands, show positions 0, 1, 3, 4
-    if (maxPlayableHands === 4) return [0, 1, 3, 4];
+    if (viewportHandLimit === 4) return [0, 1, 3, 4];
     // If 5 hands, show all positions
     return [0, 1, 2, 3, 4];
   };

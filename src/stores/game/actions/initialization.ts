@@ -7,10 +7,7 @@ import { UserService } from "@/services/user-service";
 import type { TableRules, UserBank, UserProfile } from "@/types/user";
 import type { GameStore } from "../types";
 
-export function createInitializationActions(
-  set: any,
-  get: () => GameStore,
-) {
+export function createInitializationActions(set: any, get: () => GameStore) {
   return {
     initializeGame: async (
       user: UserProfile,

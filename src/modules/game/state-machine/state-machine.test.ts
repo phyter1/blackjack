@@ -191,7 +191,9 @@ describe("RoundStateMachine", () => {
     });
 
     test("should have correct phase description", () => {
-      expect(machine.getPhaseDescription()).toBe("Insurance offers in progress");
+      expect(machine.getPhaseDescription()).toBe(
+        "Insurance offers in progress",
+      );
     });
   });
 
@@ -455,10 +457,14 @@ describe("RoundStateMachine", () => {
   describe("phase descriptions", () => {
     test("should provide correct descriptions for all states", () => {
       const withInsurance = new RoundStateMachine(true);
-      expect(withInsurance.getPhaseDescription()).toBe("Insurance offers in progress");
+      expect(withInsurance.getPhaseDescription()).toBe(
+        "Insurance offers in progress",
+      );
 
       withInsurance.resolveInsurance(false);
-      expect(withInsurance.getPhaseDescription()).toBe("Players making decisions");
+      expect(withInsurance.getPhaseDescription()).toBe(
+        "Players making decisions",
+      );
 
       withInsurance.allPlayersDone();
       expect(withInsurance.getPhaseDescription()).toBe("Dealer playing hand");

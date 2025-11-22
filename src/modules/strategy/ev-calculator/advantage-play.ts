@@ -1,6 +1,18 @@
-import type { EVCalculation, GameRules, BettingSpread, AdvantagePlayLevel } from "./types";
-import { DEFAULT_RULES, CONSERVATIVE_SPREAD, AGGRESSIVE_SPREAD } from "./constants";
-import { calculateBaseHouseEdge, adjustForStrategyAccuracy } from "./house-edge";
+import type {
+  EVCalculation,
+  GameRules,
+  BettingSpread,
+  AdvantagePlayLevel,
+} from "./types";
+import {
+  DEFAULT_RULES,
+  CONSERVATIVE_SPREAD,
+  AGGRESSIVE_SPREAD,
+} from "./constants";
+import {
+  calculateBaseHouseEdge,
+  adjustForStrategyAccuracy,
+} from "./house-edge";
 import { calculateAverageTrueCount } from "./counting";
 
 /**

@@ -1,10 +1,7 @@
 import type { ActionType } from "@/modules/game/action";
 import type { GameStore } from "../types";
 
-export function createPlayingActions(
-  set: any,
-  get: () => GameStore,
-) {
+export function createPlayingActions(set: any, get: () => GameStore) {
   return {
     playAction: async (action: ActionType) => {
       const state = get();
