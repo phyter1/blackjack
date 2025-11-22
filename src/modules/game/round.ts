@@ -205,12 +205,18 @@ export class Round {
       throw new Error("Cannot play dealer turn - not dealer's turn");
     }
 
-    // Check if all player hands are busted - if so, dealer doesn't need to play
-    const allPlayersBusted = this.playerHands.every(
-      (h) => h.state === "busted",
+    // Check if all player hands have predetermined outcomes where dealer's hand won't matter:
+    // - Busted hands: already lost
+    // - Surrendered hands: already settled at half bet
+    // - Blackjack hands: will win (dealer can't have blackjack at this point, or we'd be in settling)
+    const allHandsSettled = this.playerHands.every(
+      (h) =>
+        h.state === "busted" ||
+        h.state === "surrendered" ||
+        h.state === "blackjack",
     );
 
-    if (allPlayersBusted) {
+    if (allHandsSettled) {
       this.state = "settling";
       return;
     }
