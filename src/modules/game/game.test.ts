@@ -162,11 +162,11 @@ describe("Game Integration", () => {
 
       expect(() => {
         game.startRound([{ playerId: player.id, amount: 0 }]);
-      }).toThrow("Invalid bet amount: 0");
+      }).toThrow("Bet amount must be greater than zero");
 
       expect(() => {
         game.startRound([{ playerId: player.id, amount: -50 }]);
-      }).toThrow("Invalid bet amount: -50");
+      }).toThrow("Bet amount must be greater than zero");
     });
 
     test("should throw error for insufficient funds", () => {
