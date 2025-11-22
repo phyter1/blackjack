@@ -16,6 +16,8 @@ import type { Card } from "@/modules/game/cards";
 import { selectSettings, useSettingsStore } from "@/stores/settings";
 import { SETTINGS_CONSTRAINTS } from "@/types/settings";
 import { AnimatedCard } from "./animated-card";
+import { CardBackSelector } from "./card-back-selector";
+import { CardStockSelector } from "./card-stock-selector";
 
 // Sample cards for preview
 const SAMPLE_CARDS: Card[] = [
@@ -89,7 +91,7 @@ export function SettingsDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Game Settings</DialogTitle>
           <DialogDescription>
@@ -98,6 +100,13 @@ export function SettingsDialog({
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
+          {/* Card Appearance Section */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">Card Appearance</h3>
+            <CardStockSelector />
+            <CardBackSelector />
+          </div>
+
           {/* Game Settings Section */}
           {(onToggleTrainer || onToggleCount) && (
             <div className="space-y-4">

@@ -57,10 +57,7 @@ export function TableHeader({
               : currentBalance.toFixed(2)}
           </div>
           {isTrainerActive && (
-            <div
-              className="text-xs"
-              style={{ color: "var(--theme-primary)" }}
-            >
+            <div className="text-xs" style={{ color: "var(--theme-primary)" }}>
               (Training Mode)
             </div>
           )}

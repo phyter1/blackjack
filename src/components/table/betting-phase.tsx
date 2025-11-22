@@ -268,18 +268,23 @@ export function BettingPhase({
                   className={cn(
                     "relative w-24 h-24 rounded-full transition-all duration-200 flex items-center justify-center",
                     "border-4 font-serif font-bold",
-                    selectedChipValue !== null && "cursor-pointer hover:scale-105 hover:shadow-lg",
+                    selectedChipValue !== null &&
+                      "cursor-pointer hover:scale-105 hover:shadow-lg",
                     hasChips && "ring-2",
                   )}
                   style={{
-                    borderColor: selectedChipValue !== null
-                      ? "var(--theme-accent)"
-                      : "var(--theme-border)",
-                    background: selectedChipValue !== null
-                      ? `radial-gradient(ellipse at center, var(--theme-table-felt-start), var(--theme-table-felt-end))`
-                      : `radial-gradient(ellipse at center, var(--theme-table-felt-end), var(--theme-background))`,
+                    borderColor:
+                      selectedChipValue !== null
+                        ? "var(--theme-accent)"
+                        : "var(--theme-border)",
+                    background:
+                      selectedChipValue !== null
+                        ? `radial-gradient(ellipse at center, var(--theme-table-felt-start), var(--theme-table-felt-end))`
+                        : `radial-gradient(ellipse at center, var(--theme-table-felt-end), var(--theme-background))`,
                     opacity: selectedChipValue !== null ? 0.9 : 0.5,
-                    ...(hasChips && { "--tw-ring-color": "var(--theme-accent)" }),
+                    ...(hasChips && {
+                      "--tw-ring-color": "var(--theme-accent)",
+                    }),
                   }}
                   title={`Right-click to clear • Bet: $${bet}`}
                 >
@@ -342,21 +347,19 @@ export function BettingPhase({
         </div>
         {/* Bottom row - second half of chips */}
         <div className="flex gap-2 justify-center">
-          {chipConfigs
-            .slice(Math.ceil(chipConfigs.length / 2))
-            .map((chip) => (
-              <CasinoChip
-                key={chip.value}
-                value={chip.value}
-                primary={chip.primary}
-                secondary={chip.secondary}
-                center={chip.center}
-                textColor={chip.textColor}
-                onClick={() => handleChipClick(chip.value)}
-                disabled={chip.value > availableBalance}
-                selected={selectedChipValue === chip.value}
-              />
-            ))}
+          {chipConfigs.slice(Math.ceil(chipConfigs.length / 2)).map((chip) => (
+            <CasinoChip
+              key={chip.value}
+              value={chip.value}
+              primary={chip.primary}
+              secondary={chip.secondary}
+              center={chip.center}
+              textColor={chip.textColor}
+              onClick={() => handleChipClick(chip.value)}
+              disabled={chip.value > availableBalance}
+              selected={selectedChipValue === chip.value}
+            />
+          ))}
         </div>
       </div>
 

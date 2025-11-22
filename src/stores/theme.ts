@@ -16,6 +16,7 @@ export interface ThemeActions {
   setTheme: (theme: Theme) => void;
   setThemeById: (themeId: string) => void;
   updateThemeColors: (colors: Partial<ThemeColors>) => void;
+  updateCardBackDesign: (design: string) => void;
   createCustomTheme: (name: string, colors: Partial<ThemeColors>) => void;
   resetTheme: () => void;
 }
@@ -59,10 +60,7 @@ const applyThemeToDOM = (theme: Theme) => {
     "--theme-dashboard-bg",
     theme.colors.dashboardBackground,
   );
-  root.style.setProperty(
-    "--theme-dashboard-card",
-    theme.colors.dashboardCard,
-  );
+  root.style.setProperty("--theme-dashboard-card", theme.colors.dashboardCard);
   root.style.setProperty(
     "--theme-dashboard-card-border",
     theme.colors.dashboardCardBorder,
@@ -96,16 +94,71 @@ const applyThemeToDOM = (theme: Theme) => {
 
   // Text colors
   root.style.setProperty("--theme-text-primary", theme.colors.textPrimary);
-  root.style.setProperty(
-    "--theme-text-secondary",
-    theme.colors.textSecondary,
-  );
+  root.style.setProperty("--theme-text-secondary", theme.colors.textSecondary);
   root.style.setProperty("--theme-text-muted", theme.colors.textMuted);
 
   // Border and background
   root.style.setProperty("--theme-border", theme.colors.border);
   root.style.setProperty("--theme-background", theme.colors.background);
   root.style.setProperty("--theme-foreground", theme.colors.foreground);
+
+  // Card theme - stock
+  root.style.setProperty(
+    "--theme-card-stock",
+    theme.colors.cards.stock?.color || "#1a1a1a",
+  );
+
+  // Card theme - back
+  root.style.setProperty(
+    "--theme-card-back-design",
+    theme.colors.cards.back.design,
+  );
+  root.style.setProperty(
+    "--theme-card-back-gradient-start",
+    theme.colors.cards.back.gradient.start,
+  );
+  root.style.setProperty(
+    "--theme-card-back-gradient-middle",
+    theme.colors.cards.back.gradient.middle,
+  );
+  root.style.setProperty(
+    "--theme-card-back-gradient-end",
+    theme.colors.cards.back.gradient.end,
+  );
+  root.style.setProperty(
+    "--theme-card-back-border",
+    theme.colors.cards.back.border,
+  );
+  root.style.setProperty(
+    "--theme-card-back-pattern",
+    theme.colors.cards.back.patternColor,
+  );
+  root.style.setProperty(
+    "--theme-card-back-medallion-border",
+    theme.colors.cards.back.medallionBorder,
+  );
+  root.style.setProperty(
+    "--theme-card-back-medallion-bg",
+    theme.colors.cards.back.medallionBackground,
+  );
+  root.style.setProperty(
+    "--theme-card-back-medallion-symbol",
+    theme.colors.cards.back.medallionSymbol,
+  );
+
+  // Card theme - face
+  root.style.setProperty(
+    "--theme-card-face-bg",
+    theme.colors.cards.face.background,
+  );
+  root.style.setProperty(
+    "--theme-card-face-border",
+    theme.colors.cards.face.border,
+  );
+  root.style.setProperty(
+    "--theme-card-face-font",
+    theme.colors.cards.face.fontFamily,
+  );
 };
 
 /**
@@ -140,6 +193,26 @@ export const useThemeStore = create<ThemeStore>()(
             colors: {
               ...state.theme.colors,
               ...colors,
+            },
+            isCustom: true,
+          };
+          state.theme = updatedTheme;
+          applyThemeToDOM(updatedTheme);
+        }),
+
+      updateCardBackDesign: (design) =>
+        set((state) => {
+          const updatedTheme = {
+            ...state.theme,
+            colors: {
+              ...state.theme.colors,
+              cards: {
+                ...state.theme.colors.cards,
+                back: {
+                  ...state.theme.colors.cards.back,
+                  design: design as any,
+                },
+              },
             },
             isCustom: true,
           };

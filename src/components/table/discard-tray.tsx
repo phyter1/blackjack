@@ -1,5 +1,7 @@
 "use client";
 
+import { MiniCardBack } from "../mini-card-back";
+
 interface DiscardTrayProps {
   discardedCards: number;
   totalCards: number;
@@ -69,38 +71,17 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
               return (
                 <div
                   key={index}
-                  className="absolute left-0 right-0 h-5 rounded-sm border-2 border-amber-900 shadow-sm transition-all duration-500 ease-out"
+                  className="absolute left-0 right-0 h-5 transition-all duration-500 ease-out overflow-hidden rounded-sm"
                   style={{
                     bottom: `${baseOffset}px`,
                     zIndex: cardIndex,
                     opacity: Math.max(0.8, 1 - cardIndex * 0.003), // Slight fade for depth
-                    background:
-                      "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)",
                     transform: "rotateX(-5deg) rotateY(-5deg)", // Slight 3D tilt - opposite of shoe
                     transformStyle: "preserve-3d",
                   }}
                 >
-                  {/* Vintage card back pattern - matching table cards */}
-                  <div className="absolute inset-0 flex items-center justify-center opacity-40">
-                    <div className="grid grid-cols-3 gap-0.5">
-                      {Array.from({ length: 9 }).map((_, i) => (
-                        <div
-                          key={i}
-                          className="w-1 h-1 rounded-full bg-amber-200"
-                          style={{ transform: `rotate(${i * 40}deg)` }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Center medallion */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full border border-amber-300 bg-amber-900 flex items-center justify-center">
-                      <span className="text-amber-200 text-[6px] font-serif">
-                        ★
-                      </span>
-                    </div>
-                  </div>
+                  {/* Use MiniCardBack component for actual design */}
+                  <MiniCardBack className="w-full h-full" />
                 </div>
               );
             })}

@@ -33,8 +33,12 @@ export function WinRateChart({ data }: WinRateChartProps) {
         }}
       >
         <CardHeader>
-          <CardTitle style={{ color: "var(--theme-text-primary)" }}>Win Rate Trends</CardTitle>
-          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>No session data available</CardDescription>
+          <CardTitle style={{ color: "var(--theme-text-primary)" }}>
+            Win Rate Trends
+          </CardTitle>
+          <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
+            No session data available
+          </CardDescription>
         </CardHeader>
       </Card>
     );
@@ -60,12 +64,13 @@ export function WinRateChart({ data }: WinRateChartProps) {
           Overall Win Rate:
           <span
             className={
-              avgWinRate >= 50
-                ? "ml-2 font-semibold"
-                : "ml-2 font-semibold"
+              avgWinRate >= 50 ? "ml-2 font-semibold" : "ml-2 font-semibold"
             }
             style={{
-              color: avgWinRate >= 50 ? "var(--theme-success)" : "var(--theme-error)",
+              color:
+                avgWinRate >= 50
+                  ? "var(--theme-success)"
+                  : "var(--theme-error)",
             }}
           >
             {avgWinRate.toFixed(1)}%

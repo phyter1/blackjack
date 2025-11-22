@@ -78,9 +78,7 @@ export function getChipColor(value: number): {
  * Generate chip configurations from denominations
  * Uses enhanced 3-color casino-standard color palette
  */
-export function generateChipConfigs(
-  denominations: number[],
-): Array<{
+export function generateChipConfigs(denominations: number[]): Array<{
   value: number;
   primary: string;
   secondary: string;

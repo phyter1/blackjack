@@ -44,10 +44,10 @@ export function PlayerArea({
             )}
             style={
               round.currentHandIndex === handIdx && phase === "playing"
-                ? {
+                ? ({
                     "--tw-ring-color": "var(--theme-accent)",
                     boxShadow: `0 0 20px var(--theme-accent)`,
-                  } as any
+                  } as any)
                 : undefined
             }
           >

@@ -18,7 +18,9 @@ export function getTableLimitsKey(limits: TableLimitsKey): string {
 /**
  * Canonical casino chip denominations with exact color mappings
  */
-const CANONICAL_CHIP_DENOMS = [0.01, 0.05, 0.25, 0.5, 1, 5, 25, 100, 500, 1000, 5000, 10000];
+const CANONICAL_CHIP_DENOMS = [
+  0.01, 0.05, 0.25, 0.5, 1, 5, 25, 100, 500, 1000, 5000, 10000,
+];
 
 /**
  * Generate default chip denominations based on table limits
@@ -64,7 +66,10 @@ export function validateChipDenominations(
   limits: TableLimitsKey,
 ): { valid: boolean; error?: string } {
   if (denominations.length === 0) {
-    return { valid: false, error: "At least one chip denomination is required" };
+    return {
+      valid: false,
+      error: "At least one chip denomination is required",
+    };
   }
 
   if (denominations.length > 7) {
