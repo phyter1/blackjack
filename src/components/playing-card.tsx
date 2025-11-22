@@ -2,6 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import type { Card as GameCard } from "@/modules/game/cards";
+import { CardBack, type CardBackDesign } from "@/lib/cards";
 
 interface PlayingCardProps {
   card?: GameCard;
@@ -47,37 +48,53 @@ export function PlayingCard({
   };
 
   if (!card || hidden || flipped) {
-    // Card back - vintage pattern
+    // Card back - use CardBack from cards library
+    const dimensions = {
+      sm: { width: 64, height: 96 },
+      md: { width: 80, height: 112 },
+      lg: { width: 96, height: 128 },
+      xl: { width: 104, height: 146 },
+    };
+
+    const { width, height } = dimensions[size];
+
+    // Get colors and design from CSS variables
+    const computedStyle = getComputedStyle(document.documentElement);
+    const primary =
+      computedStyle
+        .getPropertyValue("--theme-card-back-gradient-middle")
+        .trim() || "#991B1B";
+    const secondary =
+      computedStyle.getPropertyValue("--theme-card-back-pattern").trim() ||
+      "#fbbf24";
+    const background =
+      computedStyle
+        .getPropertyValue("--theme-card-back-gradient-start")
+        .trim() || "#7c2d12";
+    const border =
+      computedStyle.getPropertyValue("--theme-card-back-border").trim() ||
+      "#78350f";
+    const design = (computedStyle
+      .getPropertyValue("--theme-card-back-design")
+      .trim() || "bicycle-classic") as CardBackDesign;
+    const stockColor =
+      computedStyle.getPropertyValue("--theme-card-stock").trim() || "#1a1a1a";
+
     return (
-      <div
-        className={cn(
-          "relative rounded-lg border-2 border-amber-900 shadow-lg transition-all duration-300",
-          sizeClasses[size],
-          className,
-        )}
-        style={{
-          background:
-            "linear-gradient(135deg, #7C2D12 0%, #991B1B 50%, #7C2D12 100%)",
-        }}
-      >
-        {/* Ornate pattern */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-40">
-          <div className="grid grid-cols-3 gap-1 p-2">
-            {Array.from({ length: 9 }).map((_, i) => (
-              <div
-                key={i}
-                className="w-2 h-2 rounded-full bg-amber-200"
-                style={{ transform: `rotate(${i * 40}deg)` }}
-              />
-            ))}
-          </div>
-        </div>
-        {/* Center medallion */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-8 h-8 rounded-full border-2 border-amber-300 bg-amber-900 flex items-center justify-center">
-            <span className="text-amber-200 text-xs font-serif">★</span>
-          </div>
-        </div>
+      <div className={className}>
+        <CardBack
+          design={design}
+          colors={{
+            primary,
+            secondary,
+            background,
+            border,
+          }}
+          stockColor={stockColor}
+          width={width}
+          height={height}
+          borderRadius={12}
+        />
       </div>
     );
   }
@@ -88,10 +105,16 @@ export function PlayingCard({
   return (
     <div
       className={cn(
-        "relative rounded-lg border-2 border-gray-800 shadow-lg bg-amber-50 transition-all duration-300 hover:shadow-xl",
+        "relative rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl",
         sizeClasses[size],
         className,
       )}
+      style={{
+        backgroundColor: "var(--theme-card-face-bg)",
+        border: "3px solid var(--theme-card-stock)",
+        fontFamily: "var(--theme-card-face-font)",
+        boxSizing: "border-box",
+      }}
     >
       {/* Vintage paper texture overlay */}
       <div

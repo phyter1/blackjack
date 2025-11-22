@@ -200,7 +200,10 @@ export function BalancePanel({
             <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
               Current table rules:
             </p>
-            <p className="text-sm" style={{ color: "var(--theme-text-primary)" }}>
+            <p
+              className="text-sm"
+              style={{ color: "var(--theme-text-primary)" }}
+            >
               {formatRules(currentRules)}
             </p>
             <p className="text-xs" style={{ color: "var(--theme-accent)" }}>
@@ -284,7 +287,10 @@ export function BalancePanel({
               </Button>
             </div>
             {error && (
-              <p className="text-sm mt-2" style={{ color: "var(--theme-error)" }}>
+              <p
+                className="text-sm mt-2"
+                style={{ color: "var(--theme-error)" }}
+              >
                 {error}
               </p>
             )}

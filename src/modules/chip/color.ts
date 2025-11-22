@@ -47,27 +47,16 @@ export interface CasinoPaletteOptions {
  * These mirror typical chip ladders (pennies, quarters, $1, $5, $25, etc.).
  */
 export const STANDARD_DENOMS: number[] = [
-  0.01,
-  0.05,
-  0.25,
-  0.5,
-  1,
-  5,
-  25,
-  100,
-  500,
-  1000,
-  5000,
-  10000,
+  0.01, 0.05, 0.25, 0.5, 1, 5, 25, 100, 500, 1000, 5000, 10000,
 ];
 
 /**
  * Standard center spot colors for chip tiers
  */
 const CENTER_COLORS = {
-  LOW_TIER: { bg: "#E5E7EB", text: "#111827" },    // Light gray with dark text (0.01-0.5)
-  MID_TIER: { bg: "#FFF8DC", text: "#1F2937" },    // Cornsilk/cream with dark text (1-100)
-  HIGH_TIER: { bg: "#1F2937", text: "#FEF3C7" },   // Dark gray with cream text (500-10000)
+  LOW_TIER: { bg: "#E5E7EB", text: "#111827" }, // Light gray with dark text (0.01-0.5)
+  MID_TIER: { bg: "#FFF8DC", text: "#1F2937" }, // Cornsilk/cream with dark text (1-100)
+  HIGH_TIER: { bg: "#1F2937", text: "#FEF3C7" }, // Dark gray with cream text (500-10000)
 };
 
 interface CanonicalChipColor {
@@ -99,33 +88,105 @@ interface CanonicalChipColor {
  *  10000 → slate/gold (high roller)
  */
 const CANONICAL_CHIP_COLORS: CanonicalChipColor[] = [
-  { denom: 0.01, primary: "#B87333", secondary: "#CD7F32", center: CENTER_COLORS.LOW_TIER.bg, textColor: CENTER_COLORS.LOW_TIER.text }, // copper/bronze
-  { denom: 0.05, primary: "#A0522D", secondary: "#D2B48C", center: CENTER_COLORS.LOW_TIER.bg, textColor: CENTER_COLORS.LOW_TIER.text }, // sienna/tan
-  { denom: 0.25, primary: "#D97706", secondary: "#FBBF24", center: CENTER_COLORS.LOW_TIER.bg, textColor: CENTER_COLORS.LOW_TIER.text }, // orange/yellow
-  { denom: 0.5, primary: "#9CA3AF", secondary: "#E5E7EB", center: CENTER_COLORS.LOW_TIER.bg, textColor: CENTER_COLORS.LOW_TIER.text }, // grey/light grey
-  { denom: 1, primary: "#F9FAFB", secondary: "#3B82F6", center: CENTER_COLORS.MID_TIER.bg, textColor: CENTER_COLORS.MID_TIER.text }, // white/blue
-  { denom: 5, primary: "#DC2626", secondary: "#FFFFFF", center: CENTER_COLORS.MID_TIER.bg, textColor: CENTER_COLORS.MID_TIER.text }, // red/white
-  { denom: 25, primary: "#16A34A", secondary: "#FFFFFF", center: CENTER_COLORS.MID_TIER.bg, textColor: CENTER_COLORS.MID_TIER.text }, // green/white
-  { denom: 100, primary: "#111827", secondary: "#FBBF24", center: CENTER_COLORS.MID_TIER.bg, textColor: CENTER_COLORS.MID_TIER.text }, // black/gold
-  { denom: 500, primary: "#7C3AED", secondary: "#FBBF24", center: CENTER_COLORS.HIGH_TIER.bg, textColor: CENTER_COLORS.HIGH_TIER.text }, // purple/gold
-  { denom: 1000, primary: "#FACC15", secondary: "#111827", center: CENTER_COLORS.HIGH_TIER.bg, textColor: CENTER_COLORS.HIGH_TIER.text }, // yellow/black
-  { denom: 5000, primary: "#EA580C", secondary: "#111827", center: CENTER_COLORS.HIGH_TIER.bg, textColor: CENTER_COLORS.HIGH_TIER.text }, // orange/black
-  { denom: 10000, primary: "#4B5563", secondary: "#FBBF24", center: CENTER_COLORS.HIGH_TIER.bg, textColor: CENTER_COLORS.HIGH_TIER.text }, // slate/gold
+  {
+    denom: 0.01,
+    primary: "#B87333",
+    secondary: "#CD7F32",
+    center: CENTER_COLORS.LOW_TIER.bg,
+    textColor: CENTER_COLORS.LOW_TIER.text,
+  }, // copper/bronze
+  {
+    denom: 0.05,
+    primary: "#A0522D",
+    secondary: "#D2B48C",
+    center: CENTER_COLORS.LOW_TIER.bg,
+    textColor: CENTER_COLORS.LOW_TIER.text,
+  }, // sienna/tan
+  {
+    denom: 0.25,
+    primary: "#D97706",
+    secondary: "#FBBF24",
+    center: CENTER_COLORS.LOW_TIER.bg,
+    textColor: CENTER_COLORS.LOW_TIER.text,
+  }, // orange/yellow
+  {
+    denom: 0.5,
+    primary: "#9CA3AF",
+    secondary: "#E5E7EB",
+    center: CENTER_COLORS.LOW_TIER.bg,
+    textColor: CENTER_COLORS.LOW_TIER.text,
+  }, // grey/light grey
+  {
+    denom: 1,
+    primary: "#F9FAFB",
+    secondary: "#3B82F6",
+    center: CENTER_COLORS.MID_TIER.bg,
+    textColor: CENTER_COLORS.MID_TIER.text,
+  }, // white/blue
+  {
+    denom: 5,
+    primary: "#DC2626",
+    secondary: "#FFFFFF",
+    center: CENTER_COLORS.MID_TIER.bg,
+    textColor: CENTER_COLORS.MID_TIER.text,
+  }, // red/white
+  {
+    denom: 25,
+    primary: "#16A34A",
+    secondary: "#FFFFFF",
+    center: CENTER_COLORS.MID_TIER.bg,
+    textColor: CENTER_COLORS.MID_TIER.text,
+  }, // green/white
+  {
+    denom: 100,
+    primary: "#111827",
+    secondary: "#FBBF24",
+    center: CENTER_COLORS.MID_TIER.bg,
+    textColor: CENTER_COLORS.MID_TIER.text,
+  }, // black/gold
+  {
+    denom: 500,
+    primary: "#7C3AED",
+    secondary: "#FBBF24",
+    center: CENTER_COLORS.HIGH_TIER.bg,
+    textColor: CENTER_COLORS.HIGH_TIER.text,
+  }, // purple/gold
+  {
+    denom: 1000,
+    primary: "#FACC15",
+    secondary: "#111827",
+    center: CENTER_COLORS.HIGH_TIER.bg,
+    textColor: CENTER_COLORS.HIGH_TIER.text,
+  }, // yellow/black
+  {
+    denom: 5000,
+    primary: "#EA580C",
+    secondary: "#111827",
+    center: CENTER_COLORS.HIGH_TIER.bg,
+    textColor: CENTER_COLORS.HIGH_TIER.text,
+  }, // orange/black
+  {
+    denom: 10000,
+    primary: "#4B5563",
+    secondary: "#FBBF24",
+    center: CENTER_COLORS.HIGH_TIER.bg,
+    textColor: CENTER_COLORS.HIGH_TIER.text,
+  }, // slate/gold
 ];
 
 /**
  * List of canonical chip denominations that have defined colors.
  * Use these for UI selectors to ensure exact color matching.
  */
-export const CANONICAL_DENOMS: number[] = CANONICAL_CHIP_COLORS.map(c => c.denom);
+export const CANONICAL_DENOMS: number[] = CANONICAL_CHIP_COLORS.map(
+  (c) => c.denom,
+);
 
 /**
  * Get canonical casino chip colors without any theming.
  * Returns the enhanced 3-color casino chip design for given denominations.
  */
-export function getCanonicalChipColors(
-  denominations: number[],
-): ChipColor[] {
+export function getCanonicalChipColors(denominations: number[]): ChipColor[] {
   if (denominations.length === 0) {
     return [];
   }
@@ -169,9 +230,9 @@ export function generateStandardCasinoChipPalette(
       .sort((a, b) => a - b);
   } else {
     // Use the standard ladder
-    denominations = STANDARD_DENOMS
-      .filter((v) => v >= min && v <= max)
-      .sort((a, b) => a - b);
+    denominations = STANDARD_DENOMS.filter((v) => v >= min && v <= max).sort(
+      (a, b) => a - b,
+    );
   }
 
   if (denominations.length === 0) {
@@ -192,10 +253,7 @@ export function generateStandardCasinoChipPalette(
  * Optional helper: generate a 1–2–5-style ladder between min and max
  * if you want more granular denominations than the standard set.
  */
-export function generate125Denominations(
-  min: number,
-  max: number,
-): number[] {
+export function generate125Denominations(min: number, max: number): number[] {
   if (min <= 0 || max <= 0 || min > max) {
     throw new Error("min and max must be > 0 and min <= max");
   }
@@ -343,9 +401,7 @@ function hslToRgb(h: number, s: number, l: number): Rgb {
 
 function rgbToHex(r: number, g: number, b: number): string {
   const toHex = (v: number) =>
-    clamp(Math.round(v), 0, 255)
-      .toString(16)
-      .padStart(2, "0");
+    clamp(Math.round(v), 0, 255).toString(16).padStart(2, "0");
 
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }

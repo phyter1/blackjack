@@ -10,5 +10,10 @@
 export { SvgChip } from "./svg-chip";
 export type { ChipSvgType } from "./svg-chip";
 
-export { DenomChip, CHIP_VALUES, getChipColor, generateChipConfigs } from "./denom-chip";
+export {
+  DenomChip,
+  CHIP_VALUES,
+  getChipColor,
+  generateChipConfigs,
+} from "./denom-chip";
 export { ActionChip } from "./action-chip";

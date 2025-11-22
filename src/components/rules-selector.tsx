@@ -242,7 +242,9 @@ export function RulesSelector({
 
   // Get available denominations for dropdown (excluding already selected ones)
   const getAvailableDenominations = () => {
-    return CANONICAL_DENOMS.filter((denom) => !chipDenominations.includes(denom));
+    return CANONICAL_DENOMS.filter(
+      (denom) => !chipDenominations.includes(denom),
+    );
   };
 
   // Chip configuration handlers
@@ -268,7 +270,9 @@ export function RulesSelector({
       return;
     }
 
-    const newDenominations = [...chipDenominations, value].sort((a, b) => a - b);
+    const newDenominations = [...chipDenominations, value].sort(
+      (a, b) => a - b,
+    );
     setChipDenominations(newDenominations);
     setSelectedDenom("");
     setChipError(null);
@@ -531,7 +535,8 @@ export function RulesSelector({
               </div>
             </div>
             <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
-              All bets must be multiples of the bet unit and within the table limits
+              All bets must be multiples of the bet unit and within the table
+              limits
             </p>
           </div>
 
@@ -567,9 +572,10 @@ export function RulesSelector({
             {showChipConfig && (
               <div className="space-y-3 p-3 bg-blue-950/20 rounded border border-blue-800">
                 <p className="text-xs text-blue-300">
-                  Select from authentic casino chip denominations with exact color
-                  matching. Only canonical denominations ($0.01, $0.05, $0.25, $0.50,
-                  $1, $5, $25, $100, $500, $1000, $5000, $10000) are available.
+                  Select from authentic casino chip denominations with exact
+                  color matching. Only canonical denominations ($0.01, $0.05,
+                  $0.25, $0.50, $1, $5, $25, $100, $500, $1000, $5000, $10000)
+                  are available.
                 </p>
 
                 <div className="flex gap-2">
@@ -599,7 +605,8 @@ export function RulesSelector({
                               value={denom.toString()}
                               className="text-white hover:bg-gray-700"
                             >
-                              ${denom >= 1 ? denom.toString() : denom.toFixed(2)}
+                              $
+                              {denom >= 1 ? denom.toString() : denom.toFixed(2)}
                             </SelectItem>
                           ))}
                           {getAvailableDenominations().length === 0 && (
@@ -618,7 +625,10 @@ export function RulesSelector({
                         onClick={handleAddChip}
                         size="sm"
                         className="bg-blue-600 hover:bg-blue-700"
-                        disabled={!selectedDenom || getAvailableDenominations().length === 0}
+                        disabled={
+                          !selectedDenom ||
+                          getAvailableDenominations().length === 0
+                        }
                       >
                         Add
                       </Button>
@@ -1039,10 +1049,10 @@ export function RulesSelector({
                       onChange={(e) => setPresetName(e.target.value)}
                       placeholder="e.g., My Favorite Table"
                       style={{
-                      background: "var(--theme-background)",
-                      color: "var(--theme-text-primary)",
-                      borderColor: "var(--theme-border)",
-                    }}
+                        background: "var(--theme-background)",
+                        color: "var(--theme-text-primary)",
+                        borderColor: "var(--theme-border)",
+                      }}
                     />
                   </div>
                   <div>
@@ -1059,10 +1069,10 @@ export function RulesSelector({
                       onChange={(e) => setPresetDescription(e.target.value)}
                       placeholder="e.g., Player-friendly rules with low house edge"
                       style={{
-                      background: "var(--theme-background)",
-                      color: "var(--theme-text-primary)",
-                      borderColor: "var(--theme-border)",
-                    }}
+                        background: "var(--theme-background)",
+                        color: "var(--theme-text-primary)",
+                        borderColor: "var(--theme-border)",
+                      }}
                     />
                   </div>
                   <p className="text-xs text-cyan-300">
@@ -1080,10 +1090,10 @@ export function RulesSelector({
               <Button
                 onClick={handleSaveAsPreset}
                 style={{
-                background: "var(--theme-primary)",
-                color: "var(--theme-primary-foreground)",
-              }}
-              className="flex-1 hover:opacity-90"
+                  background: "var(--theme-primary)",
+                  color: "var(--theme-primary-foreground)",
+                }}
+                className="flex-1 hover:opacity-90"
               >
                 Save Preset & Start Game
               </Button>

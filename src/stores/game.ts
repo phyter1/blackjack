@@ -181,12 +181,12 @@ export const useGameStore = create<GameStore>()(
         ruleSet.setRule({ type: "max_split", times: rules.maxSplits });
 
         // Apply table limits from rules if provided
-        if (rules.minBet !== undefined && rules.maxBet !== undefined && rules.betUnit !== undefined) {
-          ruleSet.setTableLimits(
-            rules.minBet,
-            rules.maxBet,
-            rules.betUnit,
-          );
+        if (
+          rules.minBet !== undefined &&
+          rules.maxBet !== undefined &&
+          rules.betUnit !== undefined
+        ) {
+          ruleSet.setTableLimits(rules.minBet, rules.maxBet, rules.betUnit);
         }
       }
 

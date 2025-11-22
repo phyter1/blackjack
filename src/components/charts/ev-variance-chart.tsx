@@ -158,7 +158,10 @@ export function EVVarianceChart({
                 >
                   {formatCurrency(variance)}
                 </span>
-                <span className="ml-2" style={{ color: "var(--theme-text-muted)" }}>
+                <span
+                  className="ml-2"
+                  style={{ color: "var(--theme-text-muted)" }}
+                >
                   ({variance >= 0 ? "+" : ""}
                   {totalEV !== 0
                     ? ((variance / Math.abs(totalEV)) * 100).toFixed(1)
@@ -189,7 +192,10 @@ export function EVVarianceChart({
 
           {/* Advantage Play Level Selector */}
           <div className="flex items-center gap-3">
-            <span className="text-sm" style={{ color: "var(--theme-text-muted)" }}>
+            <span
+              className="text-sm"
+              style={{ color: "var(--theme-text-muted)" }}
+            >
               Advantage Play:
             </span>
             <Select
@@ -237,7 +243,10 @@ export function EVVarianceChart({
           </div>
 
           {/* Description of selected advantage play level */}
-          <div className="text-sm italic" style={{ color: "var(--theme-text-muted)" }}>
+          <div
+            className="text-sm italic"
+            style={{ color: "var(--theme-text-muted)" }}
+          >
             {getAdvantagePlayDescription(advantageLevel)}
           </div>
         </div>

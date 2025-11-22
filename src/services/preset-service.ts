@@ -39,7 +39,9 @@ export class PresetService {
   /**
    * Save a new custom preset
    */
-  static savePreset(preset: Omit<RulesPreset, "id" | "createdAt">): RulesPreset {
+  static savePreset(
+    preset: Omit<RulesPreset, "id" | "createdAt">,
+  ): RulesPreset {
     const customPresets = this.getCustomPresets();
 
     // Generate unique ID

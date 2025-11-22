@@ -64,7 +64,7 @@ export function SvgChip({
           alt=""
           className="w-full h-full object-contain"
           style={{
-            filter: 'brightness(0) saturate(100%) invert(0)',
+            filter: "brightness(0) saturate(100%) invert(0)",
             opacity: 0.3,
           }}
         />
@@ -76,13 +76,13 @@ export function SvgChip({
           className="absolute inset-0 rounded-full overflow-hidden"
           style={{
             WebkitMaskImage: `url(${svgPath})`,
-            WebkitMaskSize: 'contain',
-            WebkitMaskPosition: 'center',
-            WebkitMaskRepeat: 'no-repeat',
+            WebkitMaskSize: "contain",
+            WebkitMaskPosition: "center",
+            WebkitMaskRepeat: "no-repeat",
             maskImage: `url(${svgPath})`,
-            maskSize: 'contain',
-            maskPosition: 'center',
-            maskRepeat: 'no-repeat',
+            maskSize: "contain",
+            maskPosition: "center",
+            maskRepeat: "no-repeat",
             background: accentColor,
             opacity: 0.4,
           }}

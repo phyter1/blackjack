@@ -1,3 +1,32 @@
+import type { CardBackDesign } from "@/lib/cards";
+
+export interface CardTheme {
+  // Card stock (outer edge visible on both front and back)
+  stock: {
+    color: string; // Outer border color visible around the card
+  };
+  // Card back design
+  back: {
+    design: CardBackDesign;
+    gradient: {
+      start: string;
+      middle: string;
+      end: string;
+    };
+    border: string;
+    patternColor: string;
+    medallionBorder: string;
+    medallionBackground: string;
+    medallionSymbol: string;
+  };
+  // Card face design
+  face: {
+    background: string;
+    border: string;
+    fontFamily: string;
+  };
+}
+
 export interface ThemeColors {
   // Table colors
   tableFelt: {
@@ -35,6 +64,9 @@ export interface ThemeColors {
   border: string;
   background: string;
   foreground: string;
+
+  // Card theme
+  cards: CardTheme;
 }
 
 export interface Theme {

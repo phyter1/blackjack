@@ -54,7 +54,10 @@ export function PresetSelector({
         }}
       >
         <CardHeader className="flex-shrink-0">
-          <CardTitle className="text-2xl" style={{ color: "var(--theme-accent)" }}>
+          <CardTitle
+            className="text-2xl"
+            style={{ color: "var(--theme-accent)" }}
+          >
             Select Table Rules
           </CardTitle>
           <CardDescription
@@ -195,7 +198,10 @@ export function PresetSelector({
           )}
 
           {/* Custom Game Button */}
-          <div className="pt-4 border-t" style={{ borderColor: "var(--theme-border)" }}>
+          <div
+            className="pt-4 border-t"
+            style={{ borderColor: "var(--theme-border)" }}
+          >
             <Button
               onClick={onCustomGame}
               style={{

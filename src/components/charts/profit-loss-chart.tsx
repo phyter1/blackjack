@@ -64,7 +64,9 @@ export function ProfitLossChart({ data }: ProfitLossChartProps) {
             className="ml-2 font-semibold"
             style={{
               color:
-                finalProfit >= 0 ? "var(--theme-success)" : "var(--theme-error)",
+                finalProfit >= 0
+                  ? "var(--theme-success)"
+                  : "var(--theme-error)",
             }}
           >
             {formatCurrency(finalProfit)}

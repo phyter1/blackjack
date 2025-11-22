@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Card as GameCard } from "@/modules/game/cards";
-import { PlayingCard } from "./playing-card";
+import { CardMeisterCard } from "./cardmeister-card";
 
 interface AnimatedCardProps {
   card?: GameCard;
@@ -71,7 +71,7 @@ export function AnimatedCard({
           transformStyle: "preserve-3d",
         }}
       >
-        <PlayingCard card={card} hidden={isFlipped} size={size} />
+        <CardMeisterCard card={card} hidden={isFlipped} size={size} />
       </div>
     </div>
   );
