@@ -203,7 +203,7 @@ export function BettingControls({
             onClick={() => handleChipClick(value)}
             disabled={disabled || totalBet >= balance}
             className={cn(
-              "h-16 w-16 rounded-full text-white font-bold shadow-lg",
+              "h-14 w-14 rounded-full text-white font-bold shadow-lg text-sm",
               "transition-all hover:scale-110 active:scale-95",
               "disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100",
               "border-4 border-white/20",

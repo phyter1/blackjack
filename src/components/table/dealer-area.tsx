@@ -28,7 +28,7 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
       : `Total: ${round.dealerHand.handValue}`;
 
   return (
-    <div className="flex flex-col items-center gap-4">
+    <div className="flex flex-col items-center gap-2 md:gap-4">
       <div
         className="font-serif text-lg"
         style={{ color: "var(--theme-text-primary)" }}
@@ -36,13 +36,13 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
         Dealer
       </div>
 
-      <div className="relative flex" style={{ minHeight: "146px" }}>
+      <div className="relative flex" style={{ minHeight: "118px" }}>
         {round.dealerHand.cards.map((card, idx) => (
           <div
             key={`card-${idx}-${card.rank}-${card.suit}`}
             className="transition-all duration-300"
             style={{
-              marginLeft: idx > 0 ? "-55px" : "0",
+              marginLeft: idx > 0 ? "-42px" : "0",
               zIndex: idx,
             }}
           >

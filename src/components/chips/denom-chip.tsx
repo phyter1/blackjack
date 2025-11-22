@@ -22,6 +22,8 @@ interface DenomChipProps {
  * - secondary for edge marks
  * - center for center circle
  * - textColor for high-contrast denomination text
+ *
+ * Responsive sizing: 50px on mobile, 80px on desktop
  */
 export function DenomChip({
   value,
@@ -32,7 +34,7 @@ export function DenomChip({
   onClick,
   disabled = false,
   selected = false,
-  size = 96,
+  size,
 }: DenomChipProps) {
   return (
     <button
@@ -43,11 +45,17 @@ export function DenomChip({
         "relative transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
         !disabled && "hover:scale-110 hover:shadow-lg cursor-pointer",
         selected && "scale-110 shadow-xl ring-2 ring-amber-400",
+        // Responsive sizing: 60px mobile, 80px desktop (20% larger on mobile)
+        size === undefined && "w-[60px] h-[60px] md:w-[80px] md:h-[80px]",
       )}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-      }}
+      style={
+        size !== undefined
+          ? {
+              width: `${size}px`,
+              height: `${size}px`,
+            }
+          : undefined
+      }
     >
       <CasinoChip
         chipBodyColor={primary}
@@ -55,7 +63,7 @@ export function DenomChip({
         edgeMarkColor={secondary}
         denomination={value}
         denominationColor={textColor}
-        denominationSize={size * 0.16}
+        denominationSize={(size || 60) * 0.16}
         className="w-full h-full"
       />
     </button>
