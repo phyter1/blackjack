@@ -7,11 +7,26 @@ import { cn } from "@/lib/utils";
 import { Label } from "./ui/label";
 
 const STOCK_COLORS = [
-  { id: "dark", name: "Dark", color: "#1a1a1a", description: "Classic dark edge" },
+  {
+    id: "dark",
+    name: "Dark",
+    color: "#1a1a1a",
+    description: "Classic dark edge",
+  },
   { id: "black", name: "Black", color: "#000000", description: "Pure black" },
-  { id: "charcoal", name: "Charcoal", color: "#2d2d2d", description: "Soft charcoal" },
+  {
+    id: "charcoal",
+    name: "Charcoal",
+    color: "#2d2d2d",
+    description: "Soft charcoal",
+  },
   { id: "navy", name: "Navy", color: "#1e3a8a", description: "Dark navy blue" },
-  { id: "burgundy", name: "Burgundy", color: "#7f1d1d", description: "Deep red" },
+  {
+    id: "burgundy",
+    name: "Burgundy",
+    color: "#7f1d1d",
+    description: "Deep red",
+  },
   { id: "forest", name: "Forest", color: "#14532d", description: "Dark green" },
   { id: "slate", name: "Slate", color: "#1e293b", description: "Blue-gray" },
   { id: "ivory", name: "Ivory", color: "#fffbeb", description: "Warm white" },

@@ -114,7 +114,9 @@ export function RulesSelector({
       return;
     }
 
-    const newDenominations = [...chipDenominations, value].sort((a, b) => a - b);
+    const newDenominations = [...chipDenominations, value].sort(
+      (a, b) => a - b,
+    );
     setChipDenominations(newDenominations);
     setSelectedDenom("");
     setChipError(null);
@@ -176,7 +178,9 @@ export function RulesSelector({
                   >
                     {preset
                       .split("-")
-                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .map(
+                        (word) => word.charAt(0).toUpperCase() + word.slice(1),
+                      )
                       .join(" ")}
                   </Button>
                 ),

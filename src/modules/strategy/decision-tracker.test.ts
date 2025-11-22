@@ -7,7 +7,13 @@ import {
   type BasicStrategyDecision,
 } from "./decision-tracker";
 import type { Card } from "../game/cards";
-import { ACTION_HIT, ACTION_STAND, ACTION_DOUBLE, ACTION_SPLIT, ACTION_SURRENDER } from "../game/action";
+import {
+  ACTION_HIT,
+  ACTION_STAND,
+  ACTION_DOUBLE,
+  ACTION_SPLIT,
+  ACTION_SURRENDER,
+} from "../game/action";
 
 describe("Decision Tracker", () => {
   describe("calculateGrade", () => {
@@ -563,7 +569,10 @@ describe("Decision Tracker", () => {
         };
 
         tracker.recordDecision(
-          [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "6", suit: "♥" },
+          ],
           16,
           { rank: "7", suit: "♦" },
           "hand-1",
@@ -577,7 +586,10 @@ describe("Decision Tracker", () => {
         );
 
         tracker.recordDecision(
-          [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "6", suit: "♥" },
+          ],
           16,
           { rank: "7", suit: "♦" },
           "hand-2",
@@ -591,7 +603,10 @@ describe("Decision Tracker", () => {
         );
 
         tracker.recordDecision(
-          [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "6", suit: "♥" },
+          ],
           16,
           { rank: "7", suit: "♦" },
           "hand-3",
@@ -619,7 +634,10 @@ describe("Decision Tracker", () => {
         };
 
         tracker.recordDecision(
-          [{ rank: "10", suit: "♠" }, { rank: "2", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "2", suit: "♥" },
+          ],
           12,
           { rank: "3", suit: "♦" },
           "hand-1",
@@ -645,7 +663,10 @@ describe("Decision Tracker", () => {
         };
 
         tracker.recordDecision(
-          [{ rank: "A", suit: "♠" }, { rank: "7", suit: "♥" }],
+          [
+            { rank: "A", suit: "♠" },
+            { rank: "7", suit: "♥" },
+          ],
           18,
           { rank: "6", suit: "♦" },
           "hand-1",
@@ -671,7 +692,10 @@ describe("Decision Tracker", () => {
         };
 
         tracker.recordDecision(
-          [{ rank: "8", suit: "♠" }, { rank: "8", suit: "♥" }],
+          [
+            { rank: "8", suit: "♠" },
+            { rank: "8", suit: "♥" },
+          ],
           16,
           { rank: "6", suit: "♦" },
           "hand-1",
@@ -693,7 +717,10 @@ describe("Decision Tracker", () => {
       test("should calculate accuracy separately for each type", () => {
         // Hard: 1 correct, 1 incorrect
         tracker.recordDecision(
-          [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "6", suit: "♥" },
+          ],
           16,
           { rank: "7", suit: "♦" },
           "hand-1",
@@ -707,7 +734,10 @@ describe("Decision Tracker", () => {
         );
 
         tracker.recordDecision(
-          [{ rank: "10", suit: "♠" }, { rank: "6", suit: "♥" }],
+          [
+            { rank: "10", suit: "♠" },
+            { rank: "6", suit: "♥" },
+          ],
           16,
           { rank: "7", suit: "♦" },
           "hand-2",
@@ -722,7 +752,10 @@ describe("Decision Tracker", () => {
 
         // Soft: 2 correct
         tracker.recordDecision(
-          [{ rank: "A", suit: "♠" }, { rank: "7", suit: "♥" }],
+          [
+            { rank: "A", suit: "♠" },
+            { rank: "7", suit: "♥" },
+          ],
           18,
           { rank: "6", suit: "♦" },
           "hand-3",
@@ -736,7 +769,10 @@ describe("Decision Tracker", () => {
         );
 
         tracker.recordDecision(
-          [{ rank: "A", suit: "♠" }, { rank: "6", suit: "♥" }],
+          [
+            { rank: "A", suit: "♠" },
+            { rank: "6", suit: "♥" },
+          ],
           17,
           { rank: "3", suit: "♦" },
           "hand-4",
@@ -751,7 +787,10 @@ describe("Decision Tracker", () => {
 
         // Pair: 1 incorrect
         tracker.recordDecision(
-          [{ rank: "5", suit: "♠" }, { rank: "5", suit: "♥" }],
+          [
+            { rank: "5", suit: "♠" },
+            { rank: "5", suit: "♥" },
+          ],
           10,
           { rank: "6", suit: "♦" },
           "hand-5",

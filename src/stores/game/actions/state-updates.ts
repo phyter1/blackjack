@@ -1,10 +1,7 @@
 import type { GamePhase } from "@/components/table/types";
 import type { GameStore } from "../types";
 
-export function createStateUpdateActions(
-  set: any,
-  get: () => GameStore,
-) {
+export function createStateUpdateActions(set: any, get: () => GameStore) {
   return {
     setPhase: (phase: GamePhase) =>
       set((state: GameStore) => {

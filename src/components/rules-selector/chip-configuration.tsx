@@ -89,7 +89,10 @@ export function ChipConfiguration({
                 Add Chip Denomination
               </Label>
               <div className="flex gap-2">
-                <Select value={selectedDenom} onValueChange={onSelectedDenomChange}>
+                <Select
+                  value={selectedDenom}
+                  onValueChange={onSelectedDenomChange}
+                >
                   <SelectTrigger
                     id="chipValue"
                     className="bg-gray-800 text-white border-gray-700 flex-1"

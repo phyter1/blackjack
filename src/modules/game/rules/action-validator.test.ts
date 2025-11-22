@@ -205,8 +205,7 @@ describe("ActionValidator", () => {
       const noDasRules = new RuleSet()
         .setDealerStand("s17")
         .setDoubleRestriction("9-11")
-        .setDoubleAfterSplit(false)
-        ;
+        .setDoubleAfterSplit(false);
 
       const hand = createMockHand({
         cards: [
@@ -236,8 +235,7 @@ describe("ActionValidator", () => {
     test("should allow double when no range restriction", () => {
       const anyDoubleRules = new RuleSet()
         .setDealerStand("s17")
-        .setDoubleRestriction("any")
-        ;
+        .setDoubleRestriction("any");
 
       const hand = createMockHand({
         cards: [
@@ -253,8 +251,7 @@ describe("ActionValidator", () => {
     test("should not allow double when doubling is disabled", () => {
       const noDoubleRules = new RuleSet()
         .setDealerStand("s17")
-        .setRule(doubleOnTwoRule(false))
-        ;
+        .setRule(doubleOnTwoRule(false));
 
       const hand = createMockHand({
         cards: [
@@ -314,7 +311,11 @@ describe("ActionValidator", () => {
         ],
       });
 
-      const actions = standardRules.getRuleBasedActions(hand as any, undefined, 0);
+      const actions = standardRules.getRuleBasedActions(
+        hand as any,
+        undefined,
+        0,
+      );
       expect(actions).toContain(ACTION_SPLIT);
     });
 
@@ -326,7 +327,11 @@ describe("ActionValidator", () => {
         ],
       });
 
-      const actions = standardRules.getRuleBasedActions(hand as any, undefined, 1);
+      const actions = standardRules.getRuleBasedActions(
+        hand as any,
+        undefined,
+        1,
+      );
       expect(actions).not.toContain(ACTION_SPLIT);
     });
 
@@ -334,8 +339,7 @@ describe("ActionValidator", () => {
       const rsaRules = new RuleSet()
         .setDealerStand("s17")
         .setRule(rsaRule(true))
-        .setRule(maxSplitRule(3))
-        ;
+        .setRule(maxSplitRule(3));
 
       const hand = createMockHand({
         cards: [
@@ -356,7 +360,11 @@ describe("ActionValidator", () => {
         ],
       });
 
-      const actions = standardRules.getRuleBasedActions(hand as any, undefined, 3);
+      const actions = standardRules.getRuleBasedActions(
+        hand as any,
+        undefined,
+        3,
+      );
       expect(actions).not.toContain(ACTION_SPLIT);
     });
 
@@ -384,15 +392,17 @@ describe("ActionValidator", () => {
       });
 
       const dealerUpCard: Card = { rank: "10", suit: "♦" };
-      const actions = standardRules.getRuleBasedActions(hand as any, dealerUpCard);
+      const actions = standardRules.getRuleBasedActions(
+        hand as any,
+        dealerUpCard,
+      );
       expect(actions).toContain(ACTION_SURRENDER);
     });
 
     test("should allow surrender with early surrender", () => {
       const earlyRules = new RuleSet()
         .setDealerStand("s17")
-        .setSurrender("early")
-        ;
+        .setSurrender("early");
 
       const hand = createMockHand({
         cards: [
@@ -416,7 +426,10 @@ describe("ActionValidator", () => {
       });
 
       const dealerUpCard: Card = { rank: "10", suit: "♣" };
-      const actions = standardRules.getRuleBasedActions(hand as any, dealerUpCard);
+      const actions = standardRules.getRuleBasedActions(
+        hand as any,
+        dealerUpCard,
+      );
       expect(actions).not.toContain(ACTION_SURRENDER);
     });
 
@@ -430,15 +443,17 @@ describe("ActionValidator", () => {
       });
 
       const dealerUpCard: Card = { rank: "10", suit: "♦" };
-      const actions = standardRules.getRuleBasedActions(hand as any, dealerUpCard);
+      const actions = standardRules.getRuleBasedActions(
+        hand as any,
+        dealerUpCard,
+      );
       expect(actions).not.toContain(ACTION_SURRENDER);
     });
 
     test("should not allow surrender when disabled", () => {
       const noSurrenderRules = new RuleSet()
         .setDealerStand("s17")
-        .setSurrender("none")
-        ;
+        .setSurrender("none");
 
       const hand = createMockHand({
         cards: [
@@ -448,7 +463,10 @@ describe("ActionValidator", () => {
       });
 
       const dealerUpCard: Card = { rank: "10", suit: "♦" };
-      const actions = noSurrenderRules.getRuleBasedActions(hand as any, dealerUpCard);
+      const actions = noSurrenderRules.getRuleBasedActions(
+        hand as any,
+        dealerUpCard,
+      );
       expect(actions).not.toContain(ACTION_SURRENDER);
     });
   });
@@ -471,8 +489,7 @@ describe("ActionValidator", () => {
     test("should allow hit on split aces when hit split aces enabled", () => {
       const hitSplitAcesRules = new RuleSet()
         .setDealerStand("s17")
-        .setRule(hitSplitAceRule(true))
-        ;
+        .setRule(hitSplitAceRule(true));
 
       const hand = createMockHand({
         cards: [
