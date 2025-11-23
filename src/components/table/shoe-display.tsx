@@ -1,6 +1,7 @@
 "use client";
 
 import { MiniCardBack } from "../mini-card-back";
+import { selectCardScale, useSettingsStore } from "@/stores/settings";
 
 interface ShoeDisplayProps {
   remainingCards: number;
@@ -16,6 +17,8 @@ export function ShoeDisplay({
   cutCardPosition,
   isComplete,
 }: ShoeDisplayProps) {
+  const cardScale = useSettingsStore(selectCardScale);
+
   // Calculate deck count and proportional sizing
   const deckCount = Math.round(totalCards / 52);
 
@@ -50,7 +53,11 @@ export function ShoeDisplay({
     currentLayers - Math.ceil(cutCardPosition / cardsPerLayer);
 
   return (
-    <div className="fixed right-4 top-1/2 -translate-y-1/2 z-20">
+    <div
+      className="fixed right-4 top-1/2 -translate-y-1/2 z-20"
+      data-shoe-display="true"
+      style={{ transform: `translateY(-50%) scale(${cardScale / 100})`, transformOrigin: "center" }}
+    >
       <div className="flex flex-col items-center gap-2">
         {/* Shoe label */}
         <div

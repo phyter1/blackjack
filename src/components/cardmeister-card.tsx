@@ -43,6 +43,13 @@ const SIZE_MAP = {
   xl: { width: "84px", height: "118px" },
 };
 
+const SIZE_MAP_DESKTOP = {
+  sm: { width: "72px", height: "100px" },
+  md: { width: "93px", height: "132px" },
+  lg: { width: "115px", height: "162px" },
+  xl: { width: "126px", height: "177px" },
+};
+
 /**
  * Calculate luminance of a color to determine if it's dark
  * Returns true if color is dark (needs light text for contrast)
@@ -69,6 +76,7 @@ export function CardMeisterCard({
 }: CardMeisterCardProps) {
   const scriptLoaded = useRef(false);
   const themeColors = useThemeStore(selectThemeColors);
+  const [isDesktop, setIsDesktop] = React.useState(false);
 
   useEffect(() => {
     if (!scriptLoaded.current) {
@@ -80,7 +88,16 @@ export function CardMeisterCard({
     }
   }, []);
 
-  const sizeStyle = SIZE_MAP[size];
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 768); // md breakpoint
+    };
+    checkDesktop();
+    window.addEventListener("resize", checkDesktop);
+    return () => window.removeEventListener("resize", checkDesktop);
+  }, []);
+
+  const sizeStyle = isDesktop ? SIZE_MAP_DESKTOP[size] : SIZE_MAP[size];
 
   // Fallback colors if cards theme is not defined (backward compatibility)
   const cardBackColor = themeColors.cards?.back.gradient.middle || "#991B1B";
@@ -99,7 +116,16 @@ export function CardMeisterCard({
       xl: { width: 84, height: 118 },
     };
 
-    const { width, height } = dimensions[size];
+    const dimensionsDesktop = {
+      sm: { width: 72, height: 100 },
+      md: { width: 93, height: 132 },
+      lg: { width: 115, height: 162 },
+      xl: { width: 126, height: 177 },
+    };
+
+    const { width, height } = isDesktop
+      ? dimensionsDesktop[size]
+      : dimensions[size];
 
     return (
       <div className={cn("inline-block", className)} style={{ padding: "6px" }}>

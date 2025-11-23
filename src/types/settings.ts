@@ -18,11 +18,20 @@ export interface TableLimitsSettings {
   betUnit: number;
 }
 
+export interface UISizeSettings {
+  /** Card size scale multiplier (50-150%) */
+  cardScale: number;
+  /** Chip and button size scale multiplier (50-150%) */
+  chipScale: number;
+}
+
 export interface GameSettings {
   /** Animation-related settings */
   animations: AnimationSettings;
   /** Table betting limits */
   tableLimits: TableLimitsSettings;
+  /** UI size settings */
+  uiSize: UISizeSettings;
   /** Sound settings (future) */
   // sounds: SoundSettings;
   /** Gameplay settings (future) */
@@ -63,6 +72,10 @@ export const DEFAULT_SETTINGS: GameSettings = {
     maxBet: 1000,
     betUnit: 5,
   },
+  uiSize: {
+    cardScale: 100, // 100% = default size
+    chipScale: 100, // 100% = default size
+  },
 };
 
 /** Min and max values for settings */
@@ -89,6 +102,18 @@ export const SETTINGS_CONSTRAINTS = {
       min: 1,
       max: 100,
       step: 1,
+    },
+  },
+  uiSize: {
+    cardScale: {
+      min: 50,
+      max: 150,
+      step: 10,
+    },
+    chipScale: {
+      min: 50,
+      max: 150,
+      step: 10,
     },
   },
 } as const;

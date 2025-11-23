@@ -46,6 +46,9 @@ export function SettingsDialog({
   const updateAnimationSettings = useSettingsStore(
     (state) => state.updateAnimationSettings,
   );
+  const updateUISizeSettings = useSettingsStore(
+    (state) => state.updateUISizeSettings,
+  );
   const resetSettings = useSettingsStore((state) => state.resetSettings);
   const [previewKey, setPreviewKey] = useState(0);
 
@@ -53,10 +56,17 @@ export function SettingsDialog({
   const [localAnimationSettings, setLocalAnimationSettings] = useState(
     settings.animations,
   );
+  const [localUISizeSettings, setLocalUISizeSettings] = useState(
+    settings.uiSize,
+  );
 
   useEffect(() => {
     setLocalAnimationSettings(settings.animations);
   }, [settings.animations]);
+
+  useEffect(() => {
+    setLocalUISizeSettings(settings.uiSize);
+  }, [settings.uiSize]);
 
   const handleDealingSpeedChange = (value: number[]) => {
     const newSpeed = value[0];
@@ -74,19 +84,30 @@ export function SettingsDialog({
     setPreviewKey((prev) => prev + 1);
   };
 
+  const handleCardScaleChange = (value: number[]) => {
+    setLocalUISizeSettings((prev) => ({ ...prev, cardScale: value[0] }));
+  };
+
+  const handleChipScaleChange = (value: number[]) => {
+    setLocalUISizeSettings((prev) => ({ ...prev, chipScale: value[0] }));
+  };
+
   const handleSave = () => {
     updateAnimationSettings(localAnimationSettings);
+    updateUISizeSettings(localUISizeSettings);
     onOpenChange(false);
   };
 
   const handleCancel = () => {
     setLocalAnimationSettings(settings.animations);
+    setLocalUISizeSettings(settings.uiSize);
     onOpenChange(false);
   };
 
   const handleReset = () => {
     resetSettings();
     setLocalAnimationSettings(settings.animations);
+    setLocalUISizeSettings(settings.uiSize);
   };
 
   return (
@@ -133,6 +154,59 @@ export function SettingsDialog({
               {/* Card count display is currently not supported. Toggle removed. */}
             </div>
           )}
+
+          {/* UI Size Settings Section */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">UI Size</h3>
+
+            {/* Card Scale Slider */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="card-scale">Card Size</Label>
+                <span className="text-sm text-muted-foreground">
+                  {localUISizeSettings.cardScale}%
+                </span>
+              </div>
+              <Slider
+                id="card-scale"
+                min={SETTINGS_CONSTRAINTS.uiSize.cardScale.min}
+                max={SETTINGS_CONSTRAINTS.uiSize.cardScale.max}
+                step={SETTINGS_CONSTRAINTS.uiSize.cardScale.step}
+                value={[localUISizeSettings.cardScale]}
+                onValueChange={handleCardScaleChange}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Small (50%)</span>
+                <span>Default (100%)</span>
+                <span>Large (150%)</span>
+              </div>
+            </div>
+
+            {/* Chip Scale Slider */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="chip-scale">Chip & Button Size</Label>
+                <span className="text-sm text-muted-foreground">
+                  {localUISizeSettings.chipScale}%
+                </span>
+              </div>
+              <Slider
+                id="chip-scale"
+                min={SETTINGS_CONSTRAINTS.uiSize.chipScale.min}
+                max={SETTINGS_CONSTRAINTS.uiSize.chipScale.max}
+                step={SETTINGS_CONSTRAINTS.uiSize.chipScale.step}
+                value={[localUISizeSettings.chipScale]}
+                onValueChange={handleChipScaleChange}
+                className="w-full"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground">
+                <span>Small (50%)</span>
+                <span>Default (100%)</span>
+                <span>Large (150%)</span>
+              </div>
+            </div>
+          </div>
 
           {/* Animation Settings Section */}
           <div className="space-y-4">

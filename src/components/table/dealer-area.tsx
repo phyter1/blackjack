@@ -2,8 +2,10 @@
 
 import React from "react";
 import { AnimatedCard } from "@/components/animated-card";
+import { useShoePosition } from "@/hooks/use-shoe-position";
 import type { SerializedRound } from "@/stores/game";
 import { selectSettings, useSettingsStore } from "@/stores/settings";
+import { getCardDealOrder } from "@/utils/dealing-sequence";
 import type { GamePhase } from "./types";
 
 interface DealerAreaProps {
@@ -14,6 +16,7 @@ interface DealerAreaProps {
 
 export function DealerArea({ round, phase, version }: DealerAreaProps) {
   const settings = useSettingsStore(selectSettings);
+  const shoePosition = useShoePosition();
   const [, forceUpdate] = React.useReducer((x) => x + 1, 0);
 
   React.useEffect(() => {
@@ -37,32 +40,41 @@ export function DealerArea({ round, phase, version }: DealerAreaProps) {
       </div>
 
       <div className="relative flex" style={{ minHeight: "118px" }}>
-        {round.dealerHand.cards.map((card, idx) => (
-          <div
-            key={`card-${idx}-${card.rank}-${card.suit}`}
-            className="transition-all duration-300"
-            style={{
-              marginLeft: idx > 0 ? "-42px" : "0",
-              zIndex: idx,
-            }}
-          >
-            <AnimatedCard
-              card={card}
-              hidden={
-                idx > 0 &&
-                (phase === "dealing" ||
-                  phase === "playing" ||
-                  phase === "insurance")
-              }
-              size="xl"
-              dealDelay={
-                settings.animations.enableAnimations
-                  ? idx * settings.animations.dealingSpeed
-                  : 0
-              }
-            />
-          </div>
-        ))}
+        {round.dealerHand.cards.map((card, idx) => {
+          // Calculate proper deal order based on number of player hands
+          const numPlayerHands = round.playerHands.length;
+          const dealOrder = getCardDealOrder("dealer", idx, numPlayerHands);
+
+          return (
+            <div
+              key={`card-${idx}-${card.rank}-${card.suit}`}
+              className="transition-all duration-300"
+              style={{
+                marginLeft: idx > 0 ? "-42px" : "0",
+                zIndex: idx,
+              }}
+            >
+              <AnimatedCard
+                card={card}
+                hidden={
+                  idx === 1 &&
+                  (phase === "dealing" ||
+                    phase === "playing" ||
+                    phase === "insurance")
+                }
+                size="xl"
+                dealDelay={
+                  settings.animations.enableAnimations
+                    ? dealOrder * settings.animations.dealingSpeed
+                    : 0
+                }
+                sourcePosition={
+                  settings.animations.enableAnimations ? shoePosition : null
+                }
+              />
+            </div>
+          );
+        })}
       </div>
 
       {phase !== "betting" && (

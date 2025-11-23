@@ -15,6 +15,7 @@ export interface SettingsActions {
     updates: Partial<GameSettings["animations"]>,
   ) => void;
   updateTableLimits: (updates: Partial<GameSettings["tableLimits"]>) => void;
+  updateUISizeSettings: (updates: Partial<GameSettings["uiSize"]>) => void;
   resetSettings: () => void;
 }
 
@@ -55,6 +56,14 @@ export const useSettingsStore = create<SettingsStore>()(
           };
         }),
 
+      updateUISizeSettings: (updates) =>
+        set((state) => {
+          state.settings.uiSize = {
+            ...state.settings.uiSize,
+            ...updates,
+          };
+        }),
+
       resetSettings: () =>
         set((state) => {
           state.settings = DEFAULT_SETTINGS;
@@ -66,24 +75,37 @@ export const useSettingsStore = create<SettingsStore>()(
       partialize: (state) => ({
         settings: state.settings,
       }),
-      // Migration function to handle old settings without tableLimits
+      // Migration function to handle old settings without tableLimits or uiSize
       migrate: (persistedState: unknown, version: number) => {
         const state = persistedState as SettingsState;
 
-        // If tableLimits is missing, add it from defaults
-        if (state?.settings && !state.settings.tableLimits) {
-          return {
-            ...state,
-            settings: {
-              ...state.settings,
-              tableLimits: DEFAULT_SETTINGS.tableLimits,
-            },
-          };
+        if (state?.settings) {
+          let needsMigration = false;
+          const migratedSettings = { ...state.settings };
+
+          // If tableLimits is missing, add it from defaults
+          if (!state.settings.tableLimits) {
+            migratedSettings.tableLimits = DEFAULT_SETTINGS.tableLimits;
+            needsMigration = true;
+          }
+
+          // If uiSize is missing, add it from defaults
+          if (!state.settings.uiSize) {
+            migratedSettings.uiSize = DEFAULT_SETTINGS.uiSize;
+            needsMigration = true;
+          }
+
+          if (needsMigration) {
+            return {
+              ...state,
+              settings: migratedSettings,
+            };
+          }
         }
 
         return state as SettingsState;
       },
-      version: 1,
+      version: 2,
     },
   ),
 );
@@ -98,3 +120,9 @@ export const selectDealingSpeed = (state: SettingsStore) =>
   state.settings.animations.dealingSpeed;
 export const selectTableLimits = (state: SettingsStore) =>
   state.settings.tableLimits;
+export const selectUISizeSettings = (state: SettingsStore) =>
+  state.settings.uiSize;
+export const selectCardScale = (state: SettingsStore) =>
+  state.settings.uiSize.cardScale;
+export const selectChipScale = (state: SettingsStore) =>
+  state.settings.uiSize.chipScale;
