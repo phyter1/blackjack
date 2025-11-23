@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ActionType } from "@/modules/game/action";
 import { ChipConfigService } from "@/services/chip-config-service";
 import { useGameStore } from "@/stores/game";
@@ -22,6 +22,7 @@ import { ShoeDisplay } from "../table/shoe-display";
 import { TableBackground } from "../table/table-background";
 import { TableHeader } from "../table/table-header";
 import { TrainerSidebar } from "../table/trainer-sidebar";
+import { useFullscreen } from "./use-fullscreen";
 
 interface CasinoTableProps {
   user: UserProfile;
@@ -40,6 +41,10 @@ export function CasinoTable({
 }: CasinoTableProps) {
   const _settings = useSettingsStore(selectSettings);
   const searchParams = useSearchParams();
+
+  // Fullscreen functionality
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { isFullscreen, toggleFullscreen } = useFullscreen(containerRef);
 
   // UI state from store
   const showTrainerSidebar = useUIStore((state) => state.showTrainerSidebar);
@@ -154,7 +159,10 @@ export function CasinoTable({
   };
 
   return (
-    <div className="h-screen flex flex-col relative overflow-hidden">
+    <div
+      ref={containerRef}
+      className="h-screen flex flex-col relative overflow-hidden"
+    >
       {/* Casino table background */}
       <TableBackground />
 
@@ -164,7 +172,9 @@ export function CasinoTable({
         currentBalance={currentBalance}
         practiceBalance={practiceBalance}
         isTrainerActive={isTrainerActive}
+        isFullscreen={isFullscreen}
         onOpenSettings={() => setShowSettingsDialog(true)}
+        onToggleFullscreen={toggleFullscreen}
         onEndGame={onEndGame}
       />
 
