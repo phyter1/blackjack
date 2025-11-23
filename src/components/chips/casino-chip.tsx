@@ -2,21 +2,45 @@ interface CasinoChipProps {
   chipBodyColor: string;
   centerCircleColor: string;
   edgeMarkColor: string;
+  suitColor: string;
   denomination?: string | number;
   denominationColor?: string;
   denominationSize?: number;
+  circularText?: string;
+  circularTextColor?: string;
+  circularTextSize?: number;
+  circularTextRadius?: number;
   className?: string;
 }
+
+const SUITS = ["♠", "♥", "♦", "♣"];
+const CENTER = 150;
+const RADIUS = 92;
 
 export function CasinoChip({
   chipBodyColor,
   centerCircleColor,
   edgeMarkColor,
+  suitColor = "#FFFFFF",
   denomination,
   denominationColor = "#000000",
   denominationSize = 128,
+  circularText,
+  circularTextColor = "#FFFFFF",
+  circularTextSize = 16,
+  circularTextRadius = 60,
   className = "",
 }: CasinoChipProps) {
+  const edgeMarks = Array.from({ length: 12 }, (_, i) => i * 30 + 15);
+  const suitSymbols = Array.from({ length: 12 }, (_, i) => {
+    const angle = i * 30;
+    const radians = (angle * Math.PI) / 180;
+    const x = CENTER + RADIUS * Math.sin(radians);
+    const y = CENTER - RADIUS * Math.cos(radians);
+    const suit = SUITS[i % 4];
+    return { angle, x, y, suit };
+  });
+
   return (
     <svg
       width="300"
@@ -26,345 +50,131 @@ export function CasinoChip({
       className={className}
     >
       <title>Casino Chip</title>
-      {/* Main chip body (outer circle) */}
-      <g id="body">
-        <circle cx="150" cy="150" r="142" fill={chipBodyColor} />
-      </g>
 
-      {/* Edge marks (rectangular dashes) - 12 total offset by 15 degrees to sit between suit symbols */}
+      {/* Main chip body */}
+      <circle cx={CENTER} cy={CENTER} r="142" fill={chipBodyColor} />
+
+      {/* Edge marks - offset by 15 degrees to sit between suit symbols */}
       <g id="marks">
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(15 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(45 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(75 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(105 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(135 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(165 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(195 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(225 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(255 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(285 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(315 150 150)"
-          fill={edgeMarkColor}
-        />
-        <rect
-          x="143"
-          y="8"
-          width="14"
-          height="32"
-          rx="2"
-          transform="rotate(345 150 150)"
-          fill={edgeMarkColor}
-        />
+        {edgeMarks.map((angle) => (
+          <rect
+            key={angle}
+            x="143"
+            y="8"
+            width="14"
+            height="32"
+            rx="2"
+            transform={`rotate(${angle} ${CENTER} ${CENTER})`}
+            fill={edgeMarkColor}
+          />
+        ))}
       </g>
 
-      {/* Suit symbols - 12 symbols evenly distributed (3 of each suit) at 30-degree intervals */}
+      {/* Suit symbols - 12 symbols evenly distributed at 30-degree intervals */}
       <g id="suits">
-        {/* 12 o'clock - Spade (0 degrees) */}
-        <text
-          x="150"
-          y="58"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(0 150 58)"
-        >
-          ♠
-        </text>
-
-        {/* 1 o'clock - Heart (30 degrees) */}
-        <text
-          x="197.5"
-          y="75"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(30 197.5 75)"
-        >
-          ♥
-        </text>
-
-        {/* 2 o'clock - Diamond (60 degrees) */}
-        <text
-          x="231.5"
-          y="108.5"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(60 231.5 108.5)"
-        >
-          ♦
-        </text>
-
-        {/* 3 o'clock - Club (90 degrees) */}
-        <text
-          x="243"
-          y="152"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(90 244 152)"
-        >
-          ♣
-        </text>
-
-        {/* 4 o'clock - Spade (120 degrees) */}
-        <text
-          x="231.5"
-          y="191.5"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(120 231.5 191.5)"
-        >
-          ♠
-        </text>
-
-        {/* 5 o'clock - Heart (150 degrees) */}
-        <text
-          x="197.5"
-          y="225"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(150 197.5 225)"
-        >
-          ♥
-        </text>
-
-        {/* 6 o'clock - Diamond (180 degrees) */}
-        <text
-          x="150"
-          y="246"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(180 150 244)"
-        >
-          ♦
-        </text>
-
-        {/* 7 o'clock - Club (210 degrees) */}
-        <text
-          x="102.5"
-          y="225"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(210 102.5 225)"
-        >
-          ♣
-        </text>
-
-        {/* 8 o'clock - Spade (240 degrees) */}
-        <text
-          x="68.5"
-          y="191.5"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(240 68.5 191.5)"
-        >
-          ♠
-        </text>
-
-        {/* 9 o'clock - Heart (270 degrees) */}
-        <text
-          x="60"
-          y="152"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(270 58 152)"
-        >
-          ♥
-        </text>
-
-        {/* 10 o'clock - Diamond (300 degrees) */}
-        <text
-          x="68.5"
-          y="108.5"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(300 68.5 108.5)"
-        >
-          ♦
-        </text>
-
-        {/* 11 o'clock - Club (330 degrees) */}
-        <text
-          x="102.5"
-          y="75"
-          textAnchor="middle"
-          dominantBaseline="middle"
-          fill="#FFFFFF"
-          style={{
-            fontFamily: "Arial, sans-serif",
-            fontSize: "2.5rem",
-            fontWeight: "bold",
-          }}
-          transform="rotate(330 102.5 75)"
-        >
-          ♣
-        </text>
+        {suitSymbols.map(({ angle, x, y, suit }) => (
+          <text
+            key={angle}
+            x={x}
+            y={y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fill={suitColor}
+            style={{
+              fontFamily: "Arial, sans-serif",
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+            }}
+            transform={`rotate(${angle} ${x} ${y})`}
+          >
+            {suit}
+          </text>
+        ))}
       </g>
 
       {/* Center circle */}
-      <g id="center">
-        <circle cx="150" cy="150" r="75" fill={centerCircleColor} />
-      </g>
+      <circle cx={CENTER} cy={CENTER} r="75" fill={centerCircleColor} />
 
-      {/* Denomination text (optional) */}
+      {/* Circular text paths */}
+      {circularText && (
+        <defs>
+          {/* Left side path - from bottom to top */}
+          <path
+            id="circlePathLeft"
+            d={`M ${CENTER},${
+              CENTER + circularTextRadius
+            } a ${circularTextRadius},${circularTextRadius} 0 0,1 0,-${
+              circularTextRadius * 2
+            }`}
+          />
+          {/* Right side path - from top to bottom */}
+          <path
+            id="circlePathRight"
+            d={`M ${CENTER},${
+              CENTER - circularTextRadius
+            } a ${circularTextRadius},${circularTextRadius} 0 0,1 0,${
+              circularTextRadius * 2
+            }`}
+          />
+        </defs>
+      )}
+
+      {/* Circular text - left side */}
+      {circularText && (
+        <text
+          fill={circularTextColor}
+          // className={mrsSaintDelafield.className}
+          style={{
+            fontSize: `${circularTextSize}px`,
+            fontWeight: "normal",
+            letterSpacing: "3px",
+            fontFamily: "Arial, sans-serif",
+          }}
+          transform={`rotate(40 ${CENTER} ${CENTER})`}
+        >
+          <textPath
+            href="#circlePathLeft"
+            startOffset="50%"
+            textAnchor="middle"
+          >
+            {circularText}
+          </textPath>
+        </text>
+      )}
+
+      {/* Circular text - right side (mirrored) */}
+      {circularText && (
+        <text
+          fill={circularTextColor}
+          // className={mrsSaintDelafield.className}
+          style={{
+            fontSize: `${circularTextSize}px`,
+            fontWeight: "normal",
+            letterSpacing: "3px",
+            fontFamily: "Arial, sans-serif",
+          }}
+          transform={`rotate(40 ${CENTER} ${CENTER})`}
+        >
+          <textPath
+            href="#circlePathRight"
+            startOffset="50%"
+            textAnchor="middle"
+          >
+            {circularText}
+          </textPath>
+        </text>
+      )}
+
+      {/* Denomination text */}
       {denomination && (
         <text
-          x="150"
+          x={CENTER}
           y="155"
           textAnchor="middle"
           dominantBaseline="middle"
           style={{
             fontFamily: "Arial, sans-serif",
-            fontSize: "48px", //`${denominationSize}px`,
+            fontSize: `${denominationSize}px`,
             fontWeight: "bold",
             fill: denominationColor,
           }}
