@@ -17,3 +17,5 @@ export {
   generateChipConfigs,
 } from "./denom-chip";
 export { ActionChip } from "./action-chip";
+export { CasinoChip } from "./casino-chip";
+export { CasinoChip3D } from "./casino-chip-3d";
