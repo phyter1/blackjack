@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings } from "lucide-react";
+import { Maximize, Minimize, Settings } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,7 +11,9 @@ interface TableHeaderProps {
   currentBalance: number;
   practiceBalance: number;
   isTrainerActive: boolean;
+  isFullscreen?: boolean;
   onOpenSettings: () => void;
+  onToggleFullscreen?: () => void;
   onEndGame: () => void;
 }
 
@@ -19,7 +21,9 @@ export function TableHeader({
   currentBalance,
   practiceBalance,
   isTrainerActive,
+  isFullscreen = false,
   onOpenSettings,
+  onToggleFullscreen,
   onEndGame,
 }: TableHeaderProps) {
   return (
@@ -62,6 +66,28 @@ export function TableHeader({
             </div>
           )}
         </div>
+
+        {/* Fullscreen Button */}
+        {onToggleFullscreen && (
+          <Button
+            onClick={onToggleFullscreen}
+            variant="outline"
+            size="icon"
+            style={{
+              borderColor: "var(--theme-border)",
+              background: "var(--theme-background)",
+              color: "var(--theme-text-primary)",
+            }}
+            className="hover:opacity-80"
+            title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+          >
+            {isFullscreen ? (
+              <Minimize className="h-4 w-4" />
+            ) : (
+              <Maximize className="h-4 w-4" />
+            )}
+          </Button>
+        )}
 
         {/* Settings Button */}
         <Button
