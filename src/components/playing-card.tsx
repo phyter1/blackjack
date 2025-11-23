@@ -3,6 +3,7 @@
 import { cn } from "@/lib/utils";
 import type { Card as GameCard } from "@/modules/game/cards";
 import { CardBack, type CardBackDesign } from "@/lib/cards";
+import { selectCardScale, useSettingsStore } from "@/stores/settings";
 
 interface PlayingCardProps {
   card?: GameCard;
@@ -33,6 +34,8 @@ export function PlayingCard({
   flipped = false,
   size = "md",
 }: PlayingCardProps) {
+  const cardScale = useSettingsStore(selectCardScale);
+
   const sizeClasses = {
     sm: "w-16 h-24",
     md: "w-20 h-28",
@@ -45,6 +48,12 @@ export function PlayingCard({
     md: { rank: "text-xl", suit: "text-3xl" },
     lg: { rank: "text-2xl", suit: "text-4xl" },
     xl: { rank: "text-3xl", suit: "text-5xl" },
+  };
+
+  // Apply card scale from settings
+  const scaleStyle = {
+    transform: `scale(${cardScale / 100})`,
+    transformOrigin: "center",
   };
 
   if (!card || hidden || flipped) {
@@ -81,7 +90,7 @@ export function PlayingCard({
       computedStyle.getPropertyValue("--theme-card-stock").trim() || "#1a1a1a";
 
     return (
-      <div className={className}>
+      <div className={className} style={scaleStyle}>
         <CardBack
           design={design}
           colors={{
@@ -114,6 +123,7 @@ export function PlayingCard({
         border: "3px solid var(--theme-card-stock)",
         fontFamily: "var(--theme-card-face-font)",
         boxSizing: "border-box",
+        ...scaleStyle,
       }}
     >
       {/* Vintage paper texture overlay */}

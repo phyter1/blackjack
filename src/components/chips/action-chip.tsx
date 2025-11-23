@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { selectChipScale, useSettingsStore } from "@/stores/settings";
 
 interface ActionChipProps {
   label: string;
@@ -24,6 +25,7 @@ export function ActionChip({
   disabled = false,
   size,
 }: ActionChipProps) {
+  const chipScale = useSettingsStore(selectChipScale);
   const svgPath = "/action-chip.svg";
 
   return (
@@ -42,8 +44,11 @@ export function ActionChip({
           ? {
               width: `${size}px`,
               height: `${size}px`,
+              transform: `scale(${chipScale / 100})`,
             }
-          : undefined
+          : {
+              transform: `scale(${chipScale / 100})`,
+            }
       }
     >
       {/* Base layer with primary color */}

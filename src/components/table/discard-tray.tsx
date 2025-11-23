@@ -1,6 +1,7 @@
 "use client";
 
 import { MiniCardBack } from "../mini-card-back";
+import { selectCardScale, useSettingsStore } from "@/stores/settings";
 
 interface DiscardTrayProps {
   discardedCards: number;
@@ -8,6 +9,8 @@ interface DiscardTrayProps {
 }
 
 export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
+  const cardScale = useSettingsStore(selectCardScale);
+
   // Calculate deck count and proportional sizing (matching shoe)
   const deckCount = Math.round(totalCards / 52);
 
@@ -26,7 +29,10 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
   const discardedLayers = Math.ceil(discardedCards / cardsPerLayer);
 
   return (
-    <div className="fixed left-4 top-1/2 -translate-y-1/2 z-20">
+    <div
+      className="fixed left-4 top-1/2 -translate-y-1/2 z-20"
+      style={{ transform: `translateY(-50%) scale(${cardScale / 100})`, transformOrigin: "center" }}
+    >
       <div className="flex flex-col items-center gap-2">
         {/* Discard tray label */}
         <div

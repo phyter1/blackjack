@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import type { Card as GameCard } from "@/modules/game/cards";
 import { CardMeisterCard } from "./cardmeister-card";
@@ -12,6 +12,7 @@ interface AnimatedCardProps {
   dealDelay?: number; // Delay before dealing animation starts (ms)
   flipDelay?: number; // Delay before flip animation starts (ms)
   onAnimationComplete?: () => void;
+  sourcePosition?: { x: number; y: number } | null; // Starting position (e.g., from shoe)
 }
 
 export function AnimatedCard({
@@ -21,12 +22,53 @@ export function AnimatedCard({
   dealDelay = 0,
   flipDelay,
   onAnimationComplete,
+  sourcePosition,
 }: AnimatedCardProps) {
+  const [isVisible, setIsVisible] = useState(dealDelay === 0);
   const [isDealing, setIsDealing] = useState(true);
   const [isFlipped, setIsFlipped] = useState(hidden);
+  const [animationPhase, setAnimationPhase] = useState<
+    "traveling" | "settling" | "complete"
+  >(sourcePosition ? "traveling" : "complete");
+  const targetRef = useRef<HTMLDivElement>(null);
+  const [travelTransform, setTravelTransform] = useState<string>("");
+
+  // Handle delayed visibility - card doesn't render until it's time to deal
+  useEffect(() => {
+    if (dealDelay === 0) {
+      setIsVisible(true);
+      return;
+    }
+
+    const visibilityTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, dealDelay);
+
+    return () => clearTimeout(visibilityTimer);
+  }, [dealDelay]);
 
   useEffect(() => {
-    // Deal animation
+    // Calculate travel distance from source to target
+    if (sourcePosition && targetRef.current && animationPhase === "traveling") {
+      const targetRect = targetRef.current.getBoundingClientRect();
+      const deltaX = sourcePosition.x - targetRect.left;
+      const deltaY = sourcePosition.y - targetRect.top;
+      setTravelTransform(`translate(${deltaX}px, ${deltaY}px)`);
+
+      // Start the traveling animation after a brief moment
+      const travelTimer = setTimeout(() => {
+        setTravelTransform("translate(0, 0)");
+        setAnimationPhase("settling");
+      }, 50);
+
+      return () => clearTimeout(travelTimer);
+    }
+  }, [sourcePosition, animationPhase]);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    // Deal animation - starts immediately after card becomes visible
     const dealTimer = setTimeout(() => {
       setIsDealing(false);
 
@@ -40,38 +82,79 @@ export function AnimatedCard({
         }, flipDelay);
         return () => clearTimeout(flipTimer);
       } else if (onAnimationComplete) {
-        setTimeout(onAnimationComplete, 300); // After deal completes
+        const completeTimer = setTimeout(
+          onAnimationComplete,
+          sourcePosition ? 500 : 300,
+        ); // Longer delay for travel animation
+        return () => clearTimeout(completeTimer);
       }
-    }, dealDelay);
+    }, 50); // Small delay to allow DOM to render before animation starts
 
     return () => clearTimeout(dealTimer);
-  }, [dealDelay, flipDelay, onAnimationComplete]);
+  }, [isVisible, flipDelay, onAnimationComplete, sourcePosition]);
 
   // Update flipped state when hidden prop changes
   useEffect(() => {
     setIsFlipped(hidden);
   }, [hidden]);
 
-  return (
-    <div
-      className={cn(
-        "transition-all duration-300",
-        isDealing && "opacity-0 -translate-y-8 scale-90",
-      )}
-      style={{
-        animation: isDealing ? "none" : "cardDeal 0.3s ease-out forwards",
-      }}
-    >
+  // Don't render until it's time to deal this card
+  if (!isVisible) {
+    return null;
+  }
+
+  // Simple fade-in animation (no source position)
+  if (!sourcePosition) {
+    return (
       <div
         className={cn(
           "transition-all duration-300",
-          isFlipped && flipDelay !== undefined && "rotate-y-180",
+          isDealing && "opacity-0 -translate-y-8 scale-90",
         )}
         style={{
-          transformStyle: "preserve-3d",
+          animation: isDealing ? "none" : "cardDeal 0.3s ease-out forwards",
         }}
       >
-        <CardMeisterCard card={card} hidden={isFlipped} size={size} />
+        <div
+          className={cn(
+            "transition-all duration-300",
+            isFlipped && flipDelay !== undefined && "rotate-y-180",
+          )}
+          style={{
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <CardMeisterCard card={card} hidden={isFlipped} size={size} />
+        </div>
+      </div>
+    );
+  }
+
+  // Travel animation (from shoe to hand)
+  return (
+    <div ref={targetRef} className="relative">
+      <div
+        className={cn(
+          "transition-all",
+          animationPhase === "traveling" && "opacity-0",
+          animationPhase === "settling" && "opacity-100 duration-500 ease-out",
+          animationPhase === "complete" && "opacity-100",
+        )}
+        style={{
+          transform: travelTransform,
+        }}
+      >
+        <div
+          className={cn(
+            "transition-all duration-300",
+            isFlipped && flipDelay !== undefined && "rotate-y-180",
+          )}
+          style={{
+            transformStyle: "preserve-3d",
+          }}
+        >
+          <CardMeisterCard card={card} hidden={isFlipped} size={size} />
+        </div>
       </div>
     </div>
   );

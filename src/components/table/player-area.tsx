@@ -1,9 +1,11 @@
 "use client";
 
 import { AnimatedCard } from "@/components/animated-card";
+import { useShoePosition } from "@/hooks/use-shoe-position";
 import { cn } from "@/lib/utils";
 import type { SerializedRound } from "@/stores/game";
 import { selectSettings, useSettingsStore } from "@/stores/settings";
+import { getCardDealOrder } from "@/utils/dealing-sequence";
 import type { GamePhase } from "./types";
 
 interface PlayerAreaProps {
@@ -20,6 +22,7 @@ export function PlayerArea({
   version,
 }: PlayerAreaProps) {
   const settings = useSettingsStore(selectSettings);
+  const shoePosition = useShoePosition();
 
   if (!round) return null;
 
@@ -67,6 +70,15 @@ export function PlayerArea({
               key={`hand-${hand.id}`}
             >
               {hand.cards.map((card, cardIdx) => {
+                // Calculate proper deal order based on hand position and card index
+                const numPlayerHands = round.playerHands.length;
+                const dealOrder = getCardDealOrder(
+                  "player",
+                  cardIdx,
+                  numPlayerHands,
+                  handIdx,
+                );
+
                 // Use hand.id to create stable keys that survive re-renders
                 const cardKey = `${hand.id}-card-${cardIdx}-${card.rank}-${card.suit}`;
                 return (
@@ -83,8 +95,13 @@ export function PlayerArea({
                       size="xl"
                       dealDelay={
                         settings.animations.enableAnimations
-                          ? cardIdx * settings.animations.dealingSpeed + 100
+                          ? dealOrder * settings.animations.dealingSpeed
                           : 0
+                      }
+                      sourcePosition={
+                        settings.animations.enableAnimations
+                          ? shoePosition
+                          : null
                       }
                     />
                   </div>

@@ -25,7 +25,7 @@ export function CasinoChip({
   denomination,
   denominationColor = "#000000",
   denominationSize = 128,
-  circularText,
+  circularText = "PHYTERTEK CASINO",
   circularTextColor = "#FFFFFF",
   circularTextSize = 16,
   circularTextRadius = 60,

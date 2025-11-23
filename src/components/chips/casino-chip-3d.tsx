@@ -6,6 +6,7 @@ interface CasinoChip3DProps {
   chipBodyColor: string;
   centerCircleColor: string;
   edgeMarkColor: string;
+  suitColor?: string;
   denomination?: string | number;
   denominationColor?: string;
   denominationSize?: number;
@@ -22,6 +23,7 @@ export function CasinoChip3D({
   chipBodyColor,
   centerCircleColor,
   edgeMarkColor,
+  suitColor = "#FFFFFF",
   denomination,
   denominationColor,
   denominationSize,
@@ -86,6 +88,7 @@ export function CasinoChip3D({
             chipBodyColor={chipBodyColor}
             centerCircleColor={centerCircleColor}
             edgeMarkColor={edgeMarkColor}
+            suitColor={suitColor}
             denomination={denomination}
             denominationColor={denominationColor}
             denominationSize={denominationSize}
@@ -111,6 +114,7 @@ export function CasinoChip3D({
             chipBodyColor={chipBodyColor}
             centerCircleColor={centerCircleColor}
             edgeMarkColor={edgeMarkColor}
+            suitColor={suitColor}
             denomination={denomination}
             denominationColor={denominationColor}
             denominationSize={denominationSize}
@@ -120,7 +124,6 @@ export function CasinoChip3D({
             circularTextRadius={circularTextRadius}
           />
         </div>
-
       </div>
 
       <style jsx>

@@ -9,6 +9,7 @@ interface CasinoChipProps {
   secondary: string;
   center: string;
   textColor: string;
+  circularTextColor: string;
   onClick?: () => void;
   disabled?: boolean;
   selected?: boolean;

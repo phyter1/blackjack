@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CasinoChip, generateChipConfigs } from "@/components/casino-chip";
+import { DenomChip, generateChipConfigs } from "@/components/chips/denom-chip";
 import { useViewportHandLimit } from "@/hooks/use-viewport-hand-limit";
 import { cn } from "@/lib/utils";
 import { RoundActionButton } from "./round-action-button";
+import { selectChipScale, useSettingsStore } from "@/stores/settings";
 
 interface BettingPhaseProps {
   currentBalance: number;
@@ -33,6 +34,8 @@ export function BettingPhase({
   onBet,
   onSetPreviousBets,
 }: BettingPhaseProps) {
+  const chipScale = useSettingsStore(selectChipScale);
+
   // Determine viewport-based hand limit
   const viewportHandLimit = useViewportHandLimit(maxPlayableHands);
 
@@ -271,7 +274,7 @@ export function BettingPhase({
                   disabled={selectedChipValue === null}
                   className={cn(
                     "relative w-16 h-16 md:w-20 md:h-20 rounded-full transition-all duration-200 flex items-center justify-center",
-                    "border-3 md:border-4 font-serif font-bold",
+                    "border-3 font-serif font-bold",
                     selectedChipValue !== null &&
                       "cursor-pointer hover:scale-105 hover:shadow-lg",
                     hasChips && "ring-2",
@@ -286,6 +289,7 @@ export function BettingPhase({
                         ? `radial-gradient(ellipse at center, var(--theme-table-felt-start), var(--theme-table-felt-end))`
                         : `radial-gradient(ellipse at center, var(--theme-table-felt-end), var(--theme-background))`,
                     opacity: selectedChipValue !== null ? 0.9 : 0.5,
+                    transform: `scale(${chipScale / 100})`,
                     ...(hasChips && {
                       "--tw-ring-color": "var(--theme-accent)",
                     }),
@@ -304,7 +308,7 @@ export function BettingPhase({
                     </div>
                   ) : (
                     <div
-                      className="text-xl md:text-3xl"
+                      className="text-xl md:text-2xl"
                       style={{ color: "var(--theme-text-muted)", opacity: 0.5 }}
                     >
                       +
@@ -336,7 +340,7 @@ export function BettingPhase({
           {chipConfigs
             .slice(0, Math.ceil(chipConfigs.length / 2))
             .map((chip) => (
-              <CasinoChip
+              <DenomChip
                 key={chip.value}
                 value={chip.value}
                 primary={chip.primary}
@@ -352,7 +356,7 @@ export function BettingPhase({
         {/* Bottom row - second half of chips */}
         <div className="flex gap-2 justify-center">
           {chipConfigs.slice(Math.ceil(chipConfigs.length / 2)).map((chip) => (
-            <CasinoChip
+            <DenomChip
               key={chip.value}
               value={chip.value}
               primary={chip.primary}
