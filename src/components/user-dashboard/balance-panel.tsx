@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import type { TableRules, UserBank } from "@/types/user";
 import { Button } from "../ui/button";
 import {
@@ -28,6 +29,7 @@ export function BalancePanel({
   onWithdraw,
   onStartGame,
 }: BalancePanelProps) {
+  const router = useRouter();
   const [showDeposit, setShowDeposit] = useState(false);
   const [showWithdraw, setShowWithdraw] = useState(false);
   const [amount, setAmount] = useState("");
@@ -163,7 +165,7 @@ export function BalancePanel({
             Withdraw
           </Button>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-2 mb-2">
           <Button
             onClick={() => onStartGame("graphical")}
             style={{
@@ -187,6 +189,16 @@ export function BalancePanel({
             💻 Terminal
           </Button>
         </div>
+        <Button
+          onClick={() => router.push("/count-trainer")}
+          className="w-full hover:opacity-90"
+          style={{
+            background: "var(--theme-warning)",
+            color: "var(--theme-text-primary)",
+          }}
+        >
+          🎓 Count Trainer
+        </Button>
 
         {/* Current Rules Display */}
         {currentRules && (

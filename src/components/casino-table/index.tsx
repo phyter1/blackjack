@@ -43,7 +43,7 @@ export function CasinoTable({
   const searchParams = useSearchParams();
 
   // Fullscreen functionality
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
   const { isFullscreen, toggleFullscreen } = useFullscreen(containerRef);
 
   // UI state from store
