@@ -10,6 +10,7 @@ interface TableHeaderProps {
   player: Player | null;
   currentBalance: number;
   practiceBalance: number;
+  startingBalance: number;
   isTrainerActive: boolean;
   isFullscreen?: boolean;
   onOpenSettings: () => void;
@@ -20,12 +21,21 @@ interface TableHeaderProps {
 export function TableHeader({
   currentBalance,
   practiceBalance,
+  startingBalance,
   isTrainerActive,
   isFullscreen = false,
   onOpenSettings,
   onToggleFullscreen,
   onEndGame,
 }: TableHeaderProps) {
+  const sessionBalance = currentBalance - startingBalance;
+  const sessionBalanceColor =
+    sessionBalance > 0
+      ? "var(--theme-success)"
+      : sessionBalance < 0
+        ? "var(--theme-error)"
+        : "var(--theme-text-muted)";
+
   return (
     <div
       className="relative z-10 flex justify-between items-center p-4"
@@ -60,9 +70,13 @@ export function TableHeader({
               ? practiceBalance.toLocaleString()
               : currentBalance.toFixed(2)}
           </div>
-          {isTrainerActive && (
+          {isTrainerActive ? (
             <div className="text-xs" style={{ color: "var(--theme-primary)" }}>
               (Training Mode)
+            </div>
+          ) : (
+            <div className="text-xs font-medium" style={{ color: sessionBalanceColor }}>
+              Session: {sessionBalance >= 0 ? "+" : ""}${Math.abs(sessionBalance).toFixed(2)}
             </div>
           )}
         </div>
