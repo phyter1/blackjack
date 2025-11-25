@@ -68,6 +68,7 @@ export function CasinoTable({
   const player = useGameStore((state) => state.player);
   const phase = useGameStore((state) => state.phase);
   const currentBalance = useGameStore((state) => state.currentBalance);
+  const originalBalance = useGameStore((state) => state.originalBalance);
   const currentRound = useGameStore((state) => state.currentRound);
   const currentActions = useGameStore((state) => state.currentActions);
   const shoeDetails = useGameStore((state) => state.shoeDetails);
@@ -171,6 +172,7 @@ export function CasinoTable({
         player={player}
         currentBalance={currentBalance}
         practiceBalance={practiceBalance}
+        startingBalance={originalBalance}
         isTrainerActive={isTrainerActive}
         isFullscreen={isFullscreen}
         onOpenSettings={() => setShowSettingsDialog(true)}
