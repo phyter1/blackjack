@@ -96,15 +96,15 @@ export function LifetimeStatsCharts({ sessions }: LifetimeStatsChartsProps) {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       <div>
         <h2
-          className="text-2xl font-bold tracking-tight"
+          className="text-lg font-bold"
           style={{ color: "var(--theme-text-primary)" }}
         >
           Lifetime Statistics
         </h2>
-        <p style={{ color: "var(--theme-text-secondary)" }}>
+        <p className="text-sm" style={{ color: "var(--theme-text-secondary)" }}>
           Track your performance across {sessions.length} session
           {sessions.length !== 1 ? "s" : ""}
         </p>
