@@ -18,6 +18,7 @@ import { SETTINGS_CONSTRAINTS } from "@/types/settings";
 import { AnimatedCard } from "./animated-card";
 import { CardBackSelector } from "./card-back-selector";
 import { CardStockSelector } from "./card-stock-selector";
+import { ThemeSelector } from "./theme-selector";
 
 // Sample cards for preview
 const SAMPLE_CARDS: Card[] = [
@@ -121,6 +122,12 @@ export function SettingsDialog({
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
+          {/* Theme Section */}
+          <div className="space-y-4">
+            <h3 className="text-sm font-medium">Theme</h3>
+            <ThemeSelector compact />
+          </div>
+
           {/* Card Appearance Section */}
           <div className="space-y-4">
             <h3 className="text-sm font-medium">Card Appearance</h3>

@@ -20,7 +20,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
   if (!stats) return null;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
       <Card
         style={{
           background: "var(--theme-dashboard-card)",
@@ -29,7 +29,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
       >
         <CardHeader className="pb-2">
           <CardTitle
-            className="text-sm"
+            className="text-xs"
             style={{ color: "var(--theme-text-secondary)" }}
           >
             Total Sessions
@@ -37,13 +37,13 @@ export function StatsPanel({ stats }: StatsPanelProps) {
         </CardHeader>
         <CardContent>
           <div
-            className="text-3xl font-bold"
+            className="text-2xl font-bold"
             style={{ color: "var(--theme-text-primary)" }}
           >
             {stats.totalSessionsPlayed}
           </div>
           <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
-            {stats.totalRoundsPlayed} rounds played
+            {stats.totalRoundsPlayed} rounds
           </p>
         </CardContent>
       </Card>
@@ -56,7 +56,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
       >
         <CardHeader className="pb-2">
           <CardTitle
-            className="text-sm"
+            className="text-xs"
             style={{ color: "var(--theme-text-secondary)" }}
           >
             Win Rate
@@ -64,7 +64,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
         </CardHeader>
         <CardContent>
           <div
-            className="text-3xl font-bold"
+            className="text-2xl font-bold"
             style={{ color: "var(--theme-text-primary)" }}
           >
             {stats.winRate.toFixed(1)}%
@@ -83,7 +83,7 @@ export function StatsPanel({ stats }: StatsPanelProps) {
       >
         <CardHeader className="pb-2">
           <CardTitle
-            className="text-sm"
+            className="text-xs"
             style={{ color: "var(--theme-text-secondary)" }}
           >
             Total Play Time
@@ -91,13 +91,13 @@ export function StatsPanel({ stats }: StatsPanelProps) {
         </CardHeader>
         <CardContent>
           <div
-            className="text-3xl font-bold"
+            className="text-2xl font-bold"
             style={{ color: "var(--theme-text-primary)" }}
           >
             {formatDuration(stats.totalTimePlayedMs)}
           </div>
           <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
-            Time at the tables
+            Time at tables
           </p>
         </CardContent>
       </Card>

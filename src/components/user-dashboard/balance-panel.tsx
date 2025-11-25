@@ -81,34 +81,30 @@ export function BalancePanel({
 
   return (
     <Card
-      className="mb-6"
       style={{
         background: "var(--theme-dashboard-card)",
         borderColor: "var(--theme-dashboard-accent)",
       }}
     >
-      <CardHeader>
-        <CardTitle style={{ color: "var(--theme-accent)" }}>
+      <CardHeader className="pb-3">
+        <CardTitle className="text-base" style={{ color: "var(--theme-accent)" }}>
           Your Balance
         </CardTitle>
-        <CardDescription style={{ color: "var(--theme-text-secondary)" }}>
-          Current account balance
-        </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3">
         <div
-          className="text-5xl font-bold mb-4"
+          className="text-4xl font-bold"
           style={{ color: "var(--theme-text-primary)" }}
         >
           ${bank.balance.toFixed(2)}
         </div>
-        <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
+        <div className="grid grid-cols-2 gap-3 text-sm">
           <div>
             <p style={{ color: "var(--theme-text-secondary)" }}>
               Lifetime Profit/Loss
             </p>
             <p
-              className="text-xl font-semibold"
+              className="text-lg font-semibold"
               style={{
                 color:
                   bank.lifetimeProfit >= 0
@@ -125,14 +121,14 @@ export function BalancePanel({
               Total Deposited
             </p>
             <p
-              className="text-xl font-semibold"
+              className="text-lg font-semibold"
               style={{ color: "var(--theme-text-primary)" }}
             >
               ${bank.totalDeposited.toFixed(2)}
             </p>
           </div>
         </div>
-        <div className="grid grid-cols-2 gap-2 mb-2">
+        <div className="grid grid-cols-2 gap-2">
           <Button
             onClick={() => {
               setShowDeposit(true);
@@ -165,7 +161,7 @@ export function BalancePanel({
             Withdraw
           </Button>
         </div>
-        <div className="grid grid-cols-2 gap-2 mb-2">
+        <div className="grid grid-cols-2 gap-2">
           <Button
             onClick={() => onStartGame("graphical")}
             style={{
@@ -203,22 +199,21 @@ export function BalancePanel({
         {/* Current Rules Display */}
         {currentRules && (
           <div
-            className="mt-2 p-2 rounded border"
+            className="p-2 rounded border text-xs"
             style={{
               background: "var(--theme-dashboard-bg)",
               borderColor: "var(--theme-border)",
             }}
           >
-            <p className="text-xs" style={{ color: "var(--theme-text-muted)" }}>
+            <p style={{ color: "var(--theme-text-muted)" }}>
               Current table rules:
             </p>
             <p
-              className="text-sm"
               style={{ color: "var(--theme-text-primary)" }}
             >
               {formatRules(currentRules)}
             </p>
-            <p className="text-xs" style={{ color: "var(--theme-accent)" }}>
+            <p style={{ color: "var(--theme-accent)" }}>
               House Edge: {currentRules.houseEdge?.toFixed(2)}%
             </p>
           </div>
@@ -227,7 +222,7 @@ export function BalancePanel({
         {/* Deposit/Withdraw Form */}
         {(showDeposit || showWithdraw) && (
           <div
-            className="mt-4 p-4 rounded border"
+            className="p-3 rounded border"
             style={{
               background: "var(--theme-dashboard-bg)",
               borderColor: "var(--theme-border)",

@@ -14,7 +14,6 @@ import { LifetimeStatsCharts } from "../lifetime-stats-charts";
 import { PresetSelector } from "../preset-selector";
 import { RulesSelector } from "../rules-selector";
 import { SessionReplay } from "../session-replay";
-import { ThemeSelector } from "../theme-selector";
 import { Button } from "../ui/button";
 import { BalancePanel } from "./balance-panel";
 import { SessionsPanel } from "./sessions-panel";
@@ -106,26 +105,27 @@ export function UserDashboard({
 
   return (
     <div
-      className="h-screen p-4 overflow-y-auto"
+      className="h-screen p-3 overflow-y-auto"
       style={{ background: "var(--theme-dashboard-bg)" }}
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto space-y-3">
         {/* Header */}
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center">
           <div>
             <h1
-              className="text-3xl font-bold"
+              className="text-2xl font-bold"
               style={{ color: "var(--theme-primary)" }}
             >
               ♠ 21 ♠
             </h1>
-            <p style={{ color: "var(--theme-text-secondary)" }}>
+            <p className="text-sm" style={{ color: "var(--theme-text-secondary)" }}>
               Welcome back, {user.name}!
             </p>
           </div>
           <Button
             onClick={onLogout}
             variant="outline"
+            size="sm"
             style={{
               borderColor: "var(--theme-border)",
               color: "var(--theme-text-muted)",
@@ -148,16 +148,9 @@ export function UserDashboard({
         {/* Stats Panel */}
         <StatsPanel stats={stats} />
 
-        {/* Theme Selector */}
-        <div className="mb-6">
-          <ThemeSelector />
-        </div>
-
         {/* Lifetime Stats Charts */}
         {allSessions.length > 0 && (
-          <div className="mb-6">
-            <LifetimeStatsCharts sessions={allSessions} />
-          </div>
+          <LifetimeStatsCharts sessions={allSessions} />
         )}
 
         {/* Sessions Panel */}
