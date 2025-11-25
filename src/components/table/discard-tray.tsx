@@ -45,104 +45,21 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
         {/* Discard tray container with stacked cards */}
         <div
           className="relative w-20"
-          style={{
-            height: `${containerHeight}px`,
-            perspective: "500px",
-            perspectiveOrigin: "50% 60%",
-          }}
+          style={{ height: `${containerHeight}px` }}
         >
-          {/* 3D Tray Structure */}
+          {/* Tray base/holder */}
           <div
-            className="absolute inset-0"
+            className="absolute inset-0 rounded-lg border-2 shadow-lg"
             style={{
-              transformStyle: "preserve-3d",
-              transform: "rotateX(5deg) rotateY(3deg)",
+              background: `linear-gradient(to bottom, var(--theme-table-edge), var(--theme-secondary))`,
+              borderColor: "var(--theme-table-edge-accent)",
             }}
-          >
-            {/* Base platform */}
-            <div
-              className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-sm"
-              style={{
-                width: "85px",
-                height: "12px",
-                background: "linear-gradient(to bottom, #1a0f0a 0%, #0d0705 100%)",
-                transform: "translateZ(-8px) rotateX(-90deg)",
-                transformOrigin: "center top",
-                boxShadow: "0 4px 8px rgba(0,0,0,0.5)",
-              }}
-            />
-
-            {/* Back edge - lower profile than shoe */}
-            <div
-              className="absolute inset-x-0 rounded-t-lg"
-              style={{
-                top: "8px",
-                height: "20px",
-                background: `linear-gradient(135deg, #2c1810 0%, #1f1108 40%, #1a0f0a 100%)`,
-                transform: "translateZ(-6px)",
-                boxShadow: "inset 0 1px 3px rgba(0,0,0,0.3)",
-                border: "1px solid #0d0705",
-              }}
-            />
-
-            {/* Left side wall - shorter */}
-            <div
-              className="absolute left-0 rounded-l-lg"
-              style={{
-                top: "8px",
-                bottom: "8px",
-                width: "8px",
-                background: "linear-gradient(to right, #0d0705 0%, #1a0f0a 100%)",
-                transform: "translateZ(-6px) rotateY(88deg)",
-                transformOrigin: "left center",
-                boxShadow: "inset 1px 0 3px rgba(0,0,0,0.4)",
-              }}
-            />
-
-            {/* Right side wall - shorter */}
-            <div
-              className="absolute right-0 rounded-r-lg"
-              style={{
-                top: "8px",
-                bottom: "8px",
-                width: "8px",
-                background: "linear-gradient(to left, #0d0705 0%, #1a0f0a 100%)",
-                transform: "translateZ(-6px) rotateY(-88deg)",
-                transformOrigin: "right center",
-                boxShadow: "inset -1px 0 3px rgba(0,0,0,0.4)",
-              }}
-            />
-
-            {/* Front edge */}
-            <div
-              className="absolute inset-x-0 bottom-0 rounded-b-lg"
-              style={{
-                height: "20px",
-                background: "linear-gradient(to bottom, #1a0f0a 0%, #0d0705 100%)",
-                transform: "translateZ(-6px)",
-                boxShadow: "inset 0 -1px 3px rgba(0,0,0,0.3)",
-                border: "1px solid #0d0705",
-              }}
-            />
-
-            {/* Inner felt base (visible inside tray) */}
-            <div
-              className="absolute inset-x-2 inset-y-2 rounded-sm"
-              style={{
-                background: "linear-gradient(to bottom, #0f4d3a 0%, #0a3326 100%)",
-                transform: "translateZ(-5px)",
-                opacity: 0.7,
-              }}
-            />
-          </div>
+          />
 
           {/* Stacked discarded cards visualization - from bottom up */}
           <div
             className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16"
-            style={{
-              height: `calc(${containerHeight}px - 1rem)`,
-              transformStyle: "preserve-3d",
-            }}
+            style={{ height: `calc(${containerHeight}px - 1rem)` }}
           >
             {Array.from({ length: maxVisibleLayers }).map((_, index) => {
               // Only show cards that have been discarded
@@ -157,71 +74,20 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
               const spacing = Math.min(2, totalHeight / maxVisibleLayers); // Dynamic spacing
               const baseOffset = cardIndex * spacing;
 
-              // Add slight random variation for realism (but consistent per card)
-              const randomSeed = (cardIndex * 43) % 100; // Deterministic "random"
-              const randomRotation = (randomSeed / 100 - 0.5) * 1.5; // ±0.75 degrees (slightly more chaos than shoe)
-              const randomOffset = (randomSeed / 100 - 0.5) * 1.2; // ±0.6px
-
-              // Cards in discard tray are nearly flat with very slight forward tilt
-              const leanAngle = 3;
-
-              // Slight expansion effect - cards spread slightly as more are added
-              const expansionFactor = 1 + (cardIndex / maxVisibleLayers) * 0.05;
-
-              // Add Z-depth to prevent overlap artifacts
-              // Each card should be behind the next one in 3D space
-              const zDepth = cardIndex * 0.5;
-
               return (
                 <div
-                  key={`discard-${cardIndex}`}
-                  className="absolute left-0 right-0 transition-all duration-500 ease-out"
+                  key={index}
+                  className="absolute left-0 right-0 h-5 transition-all duration-500 ease-out overflow-hidden rounded-sm"
                   style={{
                     bottom: `${baseOffset}px`,
                     zIndex: cardIndex,
+                    opacity: Math.max(0.8, 1 - cardIndex * 0.003), // Slight fade for depth
+                    transform: "rotateX(-5deg) rotateY(-5deg)", // Slight 3D tilt - opposite of shoe
                     transformStyle: "preserve-3d",
                   }}
                 >
-                  {/* Card with thickness */}
-                  <div
-                    className="relative rounded-sm"
-                    style={{
-                      height: `${20 * expansionFactor}px`,
-                      transform: `
-                        translateZ(${zDepth}px)
-                        rotateX(${leanAngle}deg)
-                        rotateZ(${randomRotation}deg)
-                        translateX(${randomOffset}px)
-                      `,
-                      transformStyle: "preserve-3d",
-                      transformOrigin: "center bottom",
-                      opacity: Math.max(0.85, 1 - cardIndex * 0.002),
-                    }}
-                  >
-                    {/* Card front (back design) */}
-                    <div
-                      className="absolute inset-0 overflow-hidden rounded-sm"
-                      style={{
-                        transform: "translateZ(0.5px)",
-                        boxShadow: "0 1px 2px rgba(0,0,0,0.4)",
-                      }}
-                    >
-                      <MiniCardBack className="w-full h-full" />
-                    </div>
-
-                    {/* Card thickness/edge - white paper stock */}
-                    <div
-                      className="absolute inset-x-0 rounded-b-sm"
-                      style={{
-                        bottom: "-1px",
-                        height: "2px",
-                        background: "linear-gradient(to bottom, #f5f5f5 0%, #e5e5e5 50%, #d0d0d0 100%)",
-                        transform: "rotateX(90deg)",
-                        transformOrigin: "center top",
-                        boxShadow: "inset 0 1px 0 rgba(0,0,0,0.1)",
-                      }}
-                    />
-                  </div>
+                  {/* Use MiniCardBack component for actual design */}
+                  <MiniCardBack className="w-full h-full" />
                 </div>
               );
             })}
