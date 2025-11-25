@@ -40,10 +40,11 @@ export const ArtDecoSunburstPattern: React.FC<PatternComponentProps> = ({
         {Array.from({ length: rays }).map((_, i) => {
           const angle = (i * 360) / rays;
           const rad = (angle * Math.PI) / 180;
-          const x1 = centerX + Math.cos(rad) * 60;
-          const y1 = centerY + Math.sin(rad) * 60;
-          const x2 = centerX + Math.cos(rad) * 200;
-          const y2 = centerY + Math.sin(rad) * 200;
+          // Round to 2 decimal places to avoid hydration mismatches
+          const x1 = Math.round((centerX + Math.cos(rad) * 60) * 100) / 100;
+          const y1 = Math.round((centerY + Math.sin(rad) * 60) * 100) / 100;
+          const x2 = Math.round((centerX + Math.cos(rad) * 200) * 100) / 100;
+          const y2 = Math.round((centerY + Math.sin(rad) * 200) * 100) / 100;
 
           return (
             <line
