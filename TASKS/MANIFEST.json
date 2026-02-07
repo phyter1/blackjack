@@ -62,7 +62,7 @@
     "content": "int-mobile-scroll-tests-005.md",
     "test_criteria": "int-mobile-scroll-tests-005-tests.md",
     "context": "int-mobile-scroll-tests-005-context.md",
-    "status": "pending",
+    "status": "completed",
     "priority": "high",
     "id": "int-mobile-scroll-tests-005",
     "dependencies": [

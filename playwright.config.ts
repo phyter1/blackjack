@@ -36,8 +36,46 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: "chromium",
+      name: "Desktop Chrome",
       use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "Desktop Firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "Desktop Safari",
+      use: { ...devices["Desktop Safari"] },
+    },
+
+    /* Mobile device testing */
+    {
+      name: "Mobile iPhone SE",
+      use: {
+        ...devices["iPhone SE"],
+        viewport: { width: 375, height: 667 },
+      },
+    },
+    {
+      name: "Mobile iPhone 12",
+      use: {
+        ...devices["iPhone 12 Pro"],
+        viewport: { width: 390, height: 844 },
+      },
+    },
+    {
+      name: "Mobile Android",
+      use: {
+        ...devices["Pixel 5"],
+        viewport: { width: 360, height: 800 },
+      },
+    },
+    {
+      name: "Tablet iPad",
+      use: {
+        ...devices["iPad Pro"],
+        viewport: { width: 768, height: 1024 },
+      },
     },
   ],
 
