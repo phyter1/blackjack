@@ -126,15 +126,6 @@ export function PlayingCard({
         ...scaleStyle,
       }}
     >
-      {/* Vintage paper texture overlay */}
-      <div
-        className="absolute inset-0 rounded-lg opacity-10"
-        style={{
-          backgroundImage:
-            'url(\'data:image/svg+xml,%3Csvg width="100" height="100" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" /%3E%3C/filter%3E%3Crect width="100" height="100" filter="url(%23noise)" opacity="0.3"/%3E%3C/svg%3E\')',
-        }}
-      />
-
       {/* Top-left rank and suit - positioned at edge for visibility when overlapped */}
       <div className="absolute top-0.5 left-0.5 flex flex-col items-center leading-none px-1 py-0.5">
         <span
@@ -147,13 +138,6 @@ export function PlayingCard({
           className={cn("font-serif", fontSize[size].rank)}
           style={{ color: suitColor }}
         >
-          {suitSymbol}
-        </span>
-      </div>
-
-      {/* Center suit - subtle background */}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-6xl opacity-10" style={{ color: suitColor }}>
           {suitSymbol}
         </span>
       </div>

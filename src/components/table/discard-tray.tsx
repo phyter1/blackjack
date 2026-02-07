@@ -12,16 +12,9 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
   const cardScale = useSettingsStore(selectCardScale);
 
   // Calculate deck count and proportional sizing (matching shoe)
+  // Formula: 42px base + 26px per deck for responsive height scaling
   const deckCount = Math.round(totalCards / 52);
-
-  const deckHeights = {
-    1: 68,
-    2: 94,
-    4: 146,
-    6: 198,
-    8: 250,
-  };
-  const containerHeight = deckHeights[deckCount as keyof typeof deckHeights];
+  const containerHeight = 42 + deckCount * 26;
 
   // Calculate card layers - use same sizing as shoe
   const cardsPerLayer = 4;

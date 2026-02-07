@@ -276,7 +276,7 @@ export function BettingPhase({
                     "relative w-16 h-16 md:w-20 md:h-20 rounded-full transition-all duration-200 flex items-center justify-center",
                     "border-3 font-serif font-bold",
                     selectedChipValue !== null &&
-                      "cursor-pointer hover:scale-105 hover:shadow-lg",
+                      "cursor-pointer hover:scale-105",
                     hasChips && "ring-2",
                   )}
                   style={{

@@ -83,7 +83,7 @@ export function PresetSelector({
                   key={preset.id}
                   type="button"
                   onClick={() => handleSelectPreset(preset)}
-                  className={`text-left p-4 rounded-lg border-2 transition-all hover:scale-105 ${getPresetColor(preset)} hover:shadow-lg`}
+                  className={`text-left p-4 rounded-lg border-2 transition-all hover:scale-105 ${getPresetColor(preset)}`}
                 >
                   <div className="flex items-start justify-between mb-2">
                     <h4
@@ -151,7 +151,7 @@ export function PresetSelector({
                     key={preset.id}
                     type="button"
                     onClick={() => handleSelectPreset(preset)}
-                    className="text-left p-4 rounded-lg border-2 border-cyan-500 bg-cyan-950/20 transition-all hover:scale-105 hover:shadow-lg relative"
+                    className="text-left p-4 rounded-lg border-2 border-cyan-500 bg-cyan-950/20 transition-all hover:scale-105 relative"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <h4

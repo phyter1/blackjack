@@ -15,7 +15,7 @@ interface ActionChipProps {
 /**
  * Action chip component for game actions (Deal, Re-bet, Clear, etc.).
  * Uses the hexagonal action-chip.svg design with dynamic coloring.
- * Responsive sizing: 45px on mobile, 70px on desktop
+ * Responsive sizing: 48px on mobile, 64px on desktop
  */
 export function ActionChip({
   label,
@@ -35,9 +35,9 @@ export function ActionChip({
       disabled={disabled}
       className={cn(
         "relative transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center",
-        !disabled && "hover:scale-110 hover:shadow-lg cursor-pointer",
-        // Responsive sizing: 45px mobile, 70px desktop
-        size === undefined && "w-[45px] h-[45px] md:w-[70px] md:h-[70px]",
+        !disabled && "hover:scale-110 cursor-pointer",
+        // Responsive sizing: 48px mobile, 64px desktop
+        size === undefined && "w-12 h-12 md:w-16 md:h-16",
       )}
       style={
         size !== undefined
