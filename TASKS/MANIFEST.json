@@ -1,0 +1,84 @@
+[
+  {
+    "content": "ui-viewport-meta-001.md",
+    "test_criteria": "ui-viewport-meta-001-tests.md",
+    "context": "ui-viewport-meta-001-context.md",
+    "status": "completed",
+    "priority": "high",
+    "id": "ui-viewport-meta-001",
+    "dependencies": [],
+    "tags": ["ui-fix", "mobile", "configuration", "metadata", "high-priority", "quick-win"],
+    "estimated_hours": 0.5,
+    "can_parallelize": true,
+    "resource_conflicts": ["src/app/layout.tsx"]
+  },
+  {
+    "content": "ui-casino-scroll-002.md",
+    "test_criteria": "ui-casino-scroll-002-tests.md",
+    "context": "ui-casino-scroll-002-context.md",
+    "status": "pending",
+    "priority": "high",
+    "id": "ui-casino-scroll-002",
+    "dependencies": ["ui-viewport-meta-001"],
+    "tags": ["ui", "mobile", "responsive", "bugfix", "critical"],
+    "estimated_hours": 2,
+    "can_parallelize": true,
+    "resource_conflicts": ["src/components/casino-table/index.tsx"]
+  },
+  {
+    "content": "ui-dashboard-scroll-003.md",
+    "test_criteria": "ui-dashboard-scroll-003-tests.md",
+    "context": "ui-dashboard-scroll-003-context.md",
+    "status": "pending",
+    "priority": "high",
+    "id": "ui-dashboard-scroll-003",
+    "dependencies": ["ui-viewport-meta-001"],
+    "tags": ["ui", "mobile", "ios", "safari", "bugfix", "ux"],
+    "estimated_hours": 2,
+    "can_parallelize": true,
+    "resource_conflicts": ["src/components/user-dashboard/index.tsx"]
+  },
+  {
+    "content": "ui-modal-scroll-004.md",
+    "test_criteria": "ui-modal-scroll-004-tests.md",
+    "context": "ui-modal-scroll-004-context.md",
+    "status": "pending",
+    "priority": "high",
+    "id": "ui-modal-scroll-004",
+    "dependencies": ["ui-viewport-meta-001"],
+    "tags": ["frontend", "ui", "bugfix", "modal", "ux"],
+    "estimated_hours": 2,
+    "can_parallelize": true,
+    "resource_conflicts": ["src/components/session-replay/index.tsx"]
+  },
+  {
+    "content": "int-mobile-scroll-tests-005.md",
+    "test_criteria": "int-mobile-scroll-tests-005-tests.md",
+    "context": "int-mobile-scroll-tests-005-context.md",
+    "status": "pending",
+    "priority": "high",
+    "id": "int-mobile-scroll-tests-005",
+    "dependencies": [
+      "ui-casino-scroll-002",
+      "ui-dashboard-scroll-003",
+      "ui-modal-scroll-004"
+    ],
+    "tags": [
+      "integration",
+      "testing",
+      "e2e",
+      "mobile",
+      "playwright",
+      "scrolling",
+      "viewport",
+      "accessibility"
+    ],
+    "estimated_hours": 7,
+    "can_parallelize": false,
+    "resource_conflicts": [
+      "playwright.config.ts",
+      "e2e/",
+      "package.json"
+    ]
+  }
+]
