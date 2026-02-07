@@ -49,7 +49,7 @@
     "content": "ui-modal-scroll-004.md",
     "test_criteria": "ui-modal-scroll-004-tests.md",
     "context": "ui-modal-scroll-004-context.md",
-    "status": "pending",
+    "status": "completed",
     "priority": "high",
     "id": "ui-modal-scroll-004",
     "dependencies": ["ui-viewport-meta-001"],
