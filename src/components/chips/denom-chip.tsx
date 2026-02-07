@@ -46,8 +46,8 @@ export function DenomChip({
       disabled={disabled}
       className={cn(
         "relative transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed",
-        !disabled && "hover:scale-110 hover:shadow-lg cursor-pointer",
-        selected && "scale-110 shadow-xl ring-2 ring-amber-400",
+        !disabled && "hover:scale-110 hover:shadow-md cursor-pointer",
+        selected && "scale-110 shadow-lg ring-2 ring-amber-400",
         // Responsive sizing: 60px mobile, 80px desktop
         size === undefined && "w-[60px] h-[60px] md:w-20 md:h-20",
       )}

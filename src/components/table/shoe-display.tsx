@@ -108,13 +108,6 @@ export function ShoeDisplay({
                     top: `${baseOffset}px`,
                     zIndex: maxVisibleLayers - cardIndex,
                     opacity: Math.max(0.8, 1 - cardIndex * 0.003), // Slight fade for depth
-                    transform: "rotateX(-5deg) rotateY(5deg)", // Slight 3D tilt - opposite direction
-                    transformStyle: "preserve-3d",
-                    filter: atCutCard
-                      ? "none"
-                      : nearCutCard
-                        ? "hue-rotate(20deg) brightness(1.2)"
-                        : "none",
                   }}
                 >
                   {/* Use MiniCardBack component for actual design */}
@@ -126,16 +119,13 @@ export function ShoeDisplay({
                       {/* Yellow indicator on the card itself */}
                       <div
                         className={`absolute inset-0 border-2 border-yellow-400 rounded-sm ${nearCutCard ? "animate-pulse" : ""}`}
-                        style={{ boxShadow: "0 0 8px rgba(250, 204, 21, 0.6)" }}
                       />
 
                       {/* Arrow pointing to cut card */}
                       <div className="absolute -right-4 top-1/2 -translate-y-1/2 flex items-center gap-1">
-                        <div
-                          className={`w-2 h-2 bg-yellow-400 rotate-45 ${nearCutCard ? "animate-pulse" : ""}`}
-                        />
+                        <div className="w-2 h-2 bg-yellow-400 rotate-45" />
                         {nearCutCard && (
-                          <div className="text-[8px] font-bold text-yellow-400 whitespace-nowrap animate-pulse">
+                          <div className="text-[8px] font-bold text-yellow-400 whitespace-nowrap">
                             CUT
                           </div>
                         )}
@@ -150,22 +140,28 @@ export function ShoeDisplay({
           {/* Shuffle warning overlay */}
           {isComplete && (
             <div className="absolute inset-0 bg-red-900/20 backdrop-blur-[1px] rounded-lg flex items-center justify-center animate-in fade-in duration-500">
-              <div className="text-red-400 text-xs font-bold rotate-[-90deg] whitespace-nowrap animate-pulse">
+              <div className="text-red-400 text-xs font-bold rotate-[-90deg] whitespace-nowrap">
                 SHUFFLE
               </div>
             </div>
           )}
+
+          {/* Warning color overlay (replaces CSS filters) */}
+          {nearCutCard && !atCutCard && (
+            <div
+              className="absolute inset-0 pointer-events-none rounded-lg"
+              style={{
+                background: "linear-gradient(180deg, rgba(250,204,21,0.1) 0%, transparent 100%)",
+              }}
+            />
+          )}
         </div>
 
-        {/* Card count display - animated */}
+        {/* Card count display */}
         <div className="flex flex-col items-center gap-1 text-center">
           <div
             className={`text-xl font-bold transition-all duration-300 ${
-              atCutCard
-                ? "animate-pulse scale-110"
-                : nearCutCard
-                  ? "animate-pulse"
-                  : ""
+              atCutCard ? "scale-110" : ""
             }`}
             style={{
               color: atCutCard
@@ -178,7 +174,7 @@ export function ShoeDisplay({
             {remainingCards}
           </div>
           <div
-            className={`text-[10px] leading-tight transition-colors duration-300`}
+            className="text-[10px] leading-tight transition-colors duration-300"
             style={{
               color: atCutCard
                 ? "var(--theme-error)"
@@ -196,8 +192,8 @@ export function ShoeDisplay({
         {/* Warning indicators */}
         {nearCutCard && !atCutCard && (
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-yellow-400 rounded-full animate-pulse" />
-            <div className="text-[9px] text-yellow-400 font-semibold animate-pulse">
+            <div className="w-2 h-2 bg-yellow-400 rounded-full" />
+            <div className="text-[9px] text-yellow-400 font-semibold">
               NEAR CUT
             </div>
           </div>
@@ -206,8 +202,8 @@ export function ShoeDisplay({
         {/* Reshuffle warning when at cut card */}
         {atCutCard && (
           <div className="flex items-center gap-1">
-            <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-            <div className="text-[9px] text-red-400 font-semibold animate-pulse">
+            <div className="w-2 h-2 bg-red-500 rounded-full" />
+            <div className="text-[9px] text-red-400 font-semibold">
               RESHUFFLE
             </div>
           </div>

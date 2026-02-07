@@ -170,7 +170,7 @@ export function CardMeisterCard({
         borderline="0"
         borderradius="8px"
         style={sizeStyle}
-        class="shadow-lg transition-all duration-300 hover:shadow-xl"
+        class="shadow-sm transition-all duration-300 hover:shadow-md"
       />
     </div>
   );

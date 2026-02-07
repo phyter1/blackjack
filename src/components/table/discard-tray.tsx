@@ -59,7 +59,10 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
           {/* Stacked discarded cards visualization - from bottom up */}
           <div
             className="absolute bottom-2 left-1/2 -translate-x-1/2 w-16"
-            style={{ height: `calc(${containerHeight}px - 1rem)` }}
+            style={{
+              height: `calc(${containerHeight}px - 1rem)`,
+              transform: "perspective(1000px) rotateX(-5deg)",
+            }}
           >
             {Array.from({ length: maxVisibleLayers }).map((_, index) => {
               // Only show cards that have been discarded
@@ -82,8 +85,6 @@ export function DiscardTray({ discardedCards, totalCards }: DiscardTrayProps) {
                     bottom: `${baseOffset}px`,
                     zIndex: cardIndex,
                     opacity: Math.max(0.8, 1 - cardIndex * 0.003), // Slight fade for depth
-                    transform: "rotateX(-5deg) rotateY(-5deg)", // Slight 3D tilt - opposite of shoe
-                    transformStyle: "preserve-3d",
                   }}
                 >
                   {/* Use MiniCardBack component for actual design */}

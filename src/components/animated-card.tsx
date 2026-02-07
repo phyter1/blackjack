@@ -28,7 +28,7 @@ export function AnimatedCard({
   const [isDealing, setIsDealing] = useState(true);
   const [isFlipped, setIsFlipped] = useState(hidden);
   const [animationPhase, setAnimationPhase] = useState<
-    "traveling" | "settling" | "complete"
+    "traveling" | "complete"
   >(sourcePosition ? "traveling" : "complete");
   const targetRef = useRef<HTMLDivElement>(null);
   const [travelTransform, setTravelTransform] = useState<string>("");
@@ -58,7 +58,7 @@ export function AnimatedCard({
       // Start the traveling animation after a brief moment
       const travelTimer = setTimeout(() => {
         setTravelTransform("translate(0, 0)");
-        setAnimationPhase("settling");
+        setAnimationPhase("complete");
       }, 50);
 
       return () => clearTimeout(travelTimer);
@@ -136,8 +136,7 @@ export function AnimatedCard({
       <div
         className={cn(
           "transition-all",
-          animationPhase === "traveling" && "opacity-0",
-          animationPhase === "settling" && "opacity-100 duration-500 ease-out",
+          animationPhase === "traveling" && "opacity-0 duration-500 ease-out",
           animationPhase === "complete" && "opacity-100",
         )}
         style={{
