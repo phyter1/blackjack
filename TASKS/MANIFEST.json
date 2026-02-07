@@ -36,7 +36,7 @@
     "content": "ui-dashboard-scroll-003.md",
     "test_criteria": "ui-dashboard-scroll-003-tests.md",
     "context": "ui-dashboard-scroll-003-context.md",
-    "status": "pending",
+    "status": "completed",
     "priority": "high",
     "id": "ui-dashboard-scroll-003",
     "dependencies": ["ui-viewport-meta-001"],
