@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import type { PlayerDecision } from "@/modules/strategy/decision-tracker";
 import type { GameSession } from "@/types/user";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 import {
   Card,
   CardContent,
@@ -71,7 +72,15 @@ export function SessionReplay({ session, onClose }: SessionReplayProps) {
 
   if (decisions.length === 0) {
     return (
-      <div className="fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+      <div
+        className={cn(
+          "fixed bg-black/90 z-50 flex items-center justify-center",
+          // Mobile: Bottom drawer
+          "inset-x-0 bottom-0 top-auto max-h-[90vh] rounded-t-2xl",
+          // Desktop: Full screen
+          "md:inset-0 md:max-h-none md:rounded-none"
+        )}
+      >
         <Card className="bg-gray-900 border-green-500 max-w-lg w-full mx-4">
           <CardHeader>
             <CardTitle className="text-green-500">Session Replay</CardTitle>
@@ -96,7 +105,15 @@ export function SessionReplay({ session, onClose }: SessionReplayProps) {
   const currentDecision = decisions[currentIndex];
 
   return (
-    <div className="fixed inset-0 bg-black/95 overflow-y-auto z-50">
+    <div
+      className={cn(
+        "fixed bg-black/95 z-50 overflow-y-auto",
+        // Mobile: Bottom drawer (90vh)
+        "inset-x-0 bottom-0 top-auto max-h-[90vh] rounded-t-2xl",
+        // Desktop: Full screen
+        "md:inset-0 md:max-h-none md:rounded-none"
+      )}
+    >
       <div className="p-4">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
