@@ -105,7 +105,7 @@ export function UserDashboard({
 
   return (
     <div
-      className="h-screen p-3 overflow-y-auto"
+      className="min-h-screen p-3 overflow-y-auto"
       style={{ background: "var(--theme-dashboard-bg)" }}
     >
       <div className="max-w-6xl mx-auto space-y-3">
@@ -118,7 +118,10 @@ export function UserDashboard({
             >
               ♠ 21 ♠
             </h1>
-            <p className="text-sm" style={{ color: "var(--theme-text-secondary)" }}>
+            <p
+              className="text-sm"
+              style={{ color: "var(--theme-text-secondary)" }}
+            >
               Welcome back, {user.name}!
             </p>
           </div>

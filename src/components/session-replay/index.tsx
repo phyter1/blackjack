@@ -97,7 +97,7 @@ export function SessionReplay({ session, onClose }: SessionReplayProps) {
 
   return (
     <div className="fixed inset-0 bg-black/95 overflow-y-auto z-50">
-      <div className="min-h-screen p-4">
+      <div className="p-4">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">

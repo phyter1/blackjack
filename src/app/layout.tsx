@@ -1,5 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeInitializer } from "@/components/theme-initializer";
 import "./globals.css";
@@ -18,6 +18,12 @@ export const metadata: Metadata = {
   title: "Blackjack",
   description:
     "A Blackjack training and simulation with bankroll management, stats, and more.",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
 };
 
 export default function RootLayout({
