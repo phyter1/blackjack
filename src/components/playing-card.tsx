@@ -114,7 +114,7 @@ export function PlayingCard({
   return (
     <div
       className={cn(
-        "relative rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl",
+        "relative rounded-lg shadow-sm transition-all duration-300 hover:shadow-md",
         sizeClasses[size],
         className,
       )}

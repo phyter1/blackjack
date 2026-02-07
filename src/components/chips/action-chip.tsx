@@ -92,7 +92,7 @@ export function ActionChip({
       {/* Content overlay (text) */}
       <div className="relative z-10 flex items-center justify-center w-full h-full">
         <div className="text-center px-0.5">
-          <div className="text-white font-bold text-[7px] md:text-[10px] drop-shadow-lg font-serif uppercase leading-tight">
+          <div className="text-white font-bold text-[7px] md:text-[10px] font-serif uppercase leading-tight">
             {label}
           </div>
         </div>

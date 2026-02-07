@@ -284,10 +284,10 @@ export function BettingPhase({
                       selectedChipValue !== null
                         ? "var(--theme-accent)"
                         : "var(--theme-border)",
-                    background:
+                    backgroundColor:
                       selectedChipValue !== null
-                        ? `radial-gradient(ellipse at center, var(--theme-table-felt-start), var(--theme-table-felt-end))`
-                        : `radial-gradient(ellipse at center, var(--theme-table-felt-end), var(--theme-background))`,
+                        ? "var(--theme-table-felt-end)"
+                        : "var(--theme-background)",
                     opacity: selectedChipValue !== null ? 0.9 : 0.5,
                     transform: `scale(${chipScale / 100})`,
                     ...(hasChips && {
@@ -300,7 +300,7 @@ export function BettingPhase({
                   {hasChips ? (
                     <div className="text-center">
                       <div
-                        className="text-sm md:text-xl font-bold drop-shadow-lg"
+                        className="text-sm md:text-xl font-bold"
                         style={{ color: "var(--theme-accent)" }}
                       >
                         ${bet}

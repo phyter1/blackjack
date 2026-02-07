@@ -125,3 +125,32 @@
     padding-right: env(safe-area-inset-right);
   }
 }
+
+/* Reduced motion support for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+  Performance optimization: will-change
+
+  Use will-change sparingly and only during active animations:
+  - Add will-change-transform or will-change-opacity when animation starts
+  - Remove it when animation completes (use onAnimationEnd callback)
+  - Never apply will-change permanently as it can hurt performance
+
+  Example:
+    const [isAnimating, setIsAnimating] = useState(false);
+    <div
+      className={cn(isAnimating && "will-change-transform")}
+      onAnimationStart={() => setIsAnimating(true)}
+      onAnimationEnd={() => setIsAnimating(false)}
+    />
+*/
