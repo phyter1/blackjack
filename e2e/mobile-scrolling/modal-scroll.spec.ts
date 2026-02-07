@@ -1,12 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { createAndLoginUser } from "../helpers/game-setup";
 import {
-  VIEWPORTS,
-  type ViewportKey,
   getWindowScrollPosition,
   isBodyScrollLocked,
   setViewport,
-  simulateTouchScroll,
+  VIEWPORTS,
+  type ViewportKey,
 } from "../helpers/viewport-helpers";
 
 test.describe("Modal Scrolling - Body Scroll Lock", () => {
@@ -95,7 +94,9 @@ test.describe("Modal Scrolling - Body Scroll Lock", () => {
 
       // Scroll position should be maintained
       const scrollAfterModal = await getWindowScrollPosition(page);
-      expect(Math.abs(scrollAfterModal.y - scrollBeforeModal.y)).toBeLessThan(10);
+      expect(Math.abs(scrollAfterModal.y - scrollBeforeModal.y)).toBeLessThan(
+        10,
+      );
     });
   }
 });
@@ -259,7 +260,9 @@ test.describe("Modal Scrolling - Nested Scroll Prevention", () => {
     await page.waitForSelector("text=Welcome back", { timeout: 10000 });
   });
 
-  test("should prevent scroll chaining from modal to body", async ({ page }) => {
+  test("should prevent scroll chaining from modal to body", async ({
+    page,
+  }) => {
     await setViewport(page, "mobile_common");
 
     // Scroll body

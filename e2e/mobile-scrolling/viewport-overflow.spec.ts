@@ -1,11 +1,11 @@
 import { expect, test } from "@playwright/test";
 import { createAndLoginUser, goToCasinoTable } from "../helpers/game-setup";
 import {
-  VIEWPORTS,
-  type ViewportKey,
   checkHorizontalOverflow,
   getHorizontalOverflowAmount,
   setViewport,
+  VIEWPORTS,
+  type ViewportKey,
 } from "../helpers/viewport-helpers";
 
 test.describe("Viewport Overflow Detection - Dashboard", () => {
@@ -49,9 +49,7 @@ test.describe("Viewport Overflow Detection - Dashboard", () => {
           if (rect.right > viewportWidth) {
             // Get a meaningful identifier for the element
             const identifier =
-              el.id ||
-              el.className ||
-              el.tagName.toLowerCase();
+              el.id || el.className || el.tagName.toLowerCase();
             outOfBounds.push(
               `${identifier} extends ${Math.round(rect.right - viewportWidth)}px beyond viewport`,
             );
@@ -213,11 +211,10 @@ test.describe("Viewport Overflow Detection - Interactive Elements", () => {
             const rect = el.getBoundingClientRect();
             if (rect.right > viewportWidth + 1) {
               // +1px tolerance
-              const id =
-                (el as HTMLElement).id ||
-                el.className ||
-                selector;
-              outOfBounds.push(`${id}: ${Math.round(rect.right - viewportWidth)}px overflow`);
+              const id = (el as HTMLElement).id || el.className || selector;
+              outOfBounds.push(
+                `${id}: ${Math.round(rect.right - viewportWidth)}px overflow`,
+              );
             }
           });
         });
@@ -227,10 +224,7 @@ test.describe("Viewport Overflow Detection - Interactive Elements", () => {
 
       // No interactive elements should be out of bounds
       if (interactiveElements.length > 0) {
-        console.log(
-          "Elements out of bounds:",
-          interactiveElements,
-        );
+        console.log("Elements out of bounds:", interactiveElements);
       }
       expect(interactiveElements.length).toBe(0);
     });
@@ -374,7 +368,9 @@ test.describe("Viewport Overflow Detection - Casino Table Components", () => {
 
       // Chip buttons should be visible
       const chipButton = page.locator('button:has-text("$")').first();
-      const isVisible = await chipButton.isVisible({ timeout: 2000 }).catch(() => false);
+      const isVisible = await chipButton
+        .isVisible({ timeout: 2000 })
+        .catch(() => false);
 
       if (isVisible) {
         const hasOverflow = await checkHorizontalOverflow(page);

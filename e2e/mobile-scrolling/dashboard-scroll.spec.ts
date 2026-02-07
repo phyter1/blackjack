@@ -1,14 +1,14 @@
 import { expect, test } from "@playwright/test";
 import { createAndLoginUser } from "../helpers/game-setup";
 import {
-  VIEWPORTS,
-  type ViewportKey,
   checkHorizontalOverflow,
   getDocumentHeight,
   getViewportHeight,
   getWindowScrollPosition,
   measureLayoutShift,
   setViewport,
+  VIEWPORTS,
+  type ViewportKey,
 } from "../helpers/viewport-helpers";
 
 test.describe("Dashboard Scrolling - Viewport Stability", () => {
@@ -81,7 +81,9 @@ test.describe("Dashboard Scrolling - Viewport Stability", () => {
       const scrollPositionAfter = await getWindowScrollPosition(page);
 
       // Position should be very close (allow small variance)
-      expect(Math.abs(scrollPositionAfter.y - scrollPositionBefore.y)).toBeLessThan(5);
+      expect(
+        Math.abs(scrollPositionAfter.y - scrollPositionBefore.y),
+      ).toBeLessThan(5);
     });
 
     test(`should have smooth scroll behavior on ${viewport.name}`, async ({
@@ -100,7 +102,7 @@ test.describe("Dashboard Scrolling - Viewport Stability", () => {
       });
 
       // Either html or body should have smooth scrolling
-      const hasSmoothScroll =
+      const _hasSmoothScroll =
         scrollBehavior.html === "smooth" || scrollBehavior.body === "smooth";
 
       // Note: Default is 'auto', so we'll check if it's not explicitly set to something bad
@@ -160,7 +162,10 @@ test.describe("Dashboard Scrolling - Layout Stability", () => {
 
       // Scroll through the page
       await page.evaluate(() => {
-        window.scrollTo({ top: document.body.scrollHeight / 2, behavior: "instant" });
+        window.scrollTo({
+          top: document.body.scrollHeight / 2,
+          behavior: "instant",
+        });
       });
 
       await page.waitForTimeout(300);
@@ -249,12 +254,16 @@ test.describe("Dashboard Scrolling - Content Overflow", () => {
     await setViewport(page, "mobile_common");
 
     // Dashboard uses overflow-y-auto on the main container
-    const dashboardContainer = page.locator(".min-h-screen.p-3.overflow-y-auto");
+    const dashboardContainer = page.locator(
+      ".min-h-screen.p-3.overflow-y-auto",
+    );
     await expect(dashboardContainer).toBeVisible();
 
     // Check overflow properties
     const overflowStyles = await page.evaluate(() => {
-      const container = document.querySelector(".min-h-screen.p-3.overflow-y-auto");
+      const container = document.querySelector(
+        ".min-h-screen.p-3.overflow-y-auto",
+      );
       if (!container) return null;
 
       const styles = window.getComputedStyle(container);

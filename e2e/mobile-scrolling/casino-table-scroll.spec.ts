@@ -1,13 +1,13 @@
 import { expect, test } from "@playwright/test";
 import { createAndLoginUser, goToCasinoTable } from "../helpers/game-setup";
 import {
-  VIEWPORTS,
-  type ViewportKey,
   checkHorizontalOverflow,
   getElementScrollPosition,
   isElementScrollable,
   setViewport,
   simulateTouchScroll,
+  VIEWPORTS,
+  type ViewportKey,
 } from "../helpers/viewport-helpers";
 
 test.describe("Casino Table Scrolling - Mobile Viewports", () => {
@@ -64,7 +64,9 @@ test.describe("Casino Table Scrolling - Mobile Viewports", () => {
       );
 
       // Verify scrolling occurred
-      expect(scrolledPosition.scrollTop).toBeGreaterThan(initialScroll.scrollTop);
+      expect(scrolledPosition.scrollTop).toBeGreaterThan(
+        initialScroll.scrollTop,
+      );
     });
 
     test(`should have proper overflow styling on ${viewport.name}`, async ({
@@ -99,7 +101,7 @@ test.describe("Casino Table Scrolling - Mobile Viewports", () => {
       await setViewport(page, key);
       await page.waitForSelector("text=Place Your Bet", { timeout: 15000 });
 
-      const container = page.locator(
+      const _container = page.locator(
         ".min-h-screen.flex.flex-col.relative.overflow-y-auto",
       );
 
@@ -215,7 +217,7 @@ test.describe("Casino Table Scrolling - Tablet Viewport", () => {
 
     // At 768px, we're at the md breakpoint
     // Check that scrolling behavior is appropriate
-    const scrollable = await isElementScrollable(
+    const _scrollable = await isElementScrollable(
       page,
       ".min-h-screen.flex.flex-col.relative.overflow-y-auto",
     );

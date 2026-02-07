@@ -1,6 +1,22 @@
 import type { Page } from "@playwright/test";
 
 /**
+ * Extended window interface for layout shift tracking
+ */
+interface WindowWithLayoutShift extends Window {
+  __cumulativeLayoutShift: number;
+  __layoutShiftObserver: PerformanceObserver;
+}
+
+/**
+ * Extended PerformanceEntry for layout shift entries
+ */
+interface LayoutShiftEntry extends PerformanceEntry {
+  hadRecentInput: boolean;
+  value: number;
+}
+
+/**
  * Viewport configurations for mobile scrolling tests
  * Covering 5 key device sizes as specified in requirements
  */
@@ -155,8 +171,7 @@ export async function isElementScrollable(
 
     return {
       vertical:
-        hasVerticalOverflow &&
-        (overflowY === "auto" || overflowY === "scroll"),
+        hasVerticalOverflow && (overflowY === "auto" || overflowY === "scroll"),
       horizontal:
         hasHorizontalOverflow &&
         (overflowX === "auto" || overflowX === "scroll"),
@@ -187,9 +202,7 @@ export async function isBodyScrollLocked(page: Page): Promise<boolean> {
   return await page.evaluate(() => {
     const bodyStyle = window.getComputedStyle(document.body);
     const htmlStyle = window.getComputedStyle(document.documentElement);
-    return (
-      bodyStyle.overflow === "hidden" || htmlStyle.overflow === "hidden"
-    );
+    return bodyStyle.overflow === "hidden" || htmlStyle.overflow === "hidden";
   });
 }
 
@@ -202,17 +215,19 @@ export async function measureLayoutShift(
 ): Promise<number> {
   // Start measuring layout shifts
   await page.evaluate(() => {
-    (window as any).__cumulativeLayoutShift = 0;
+    const win = window as unknown as WindowWithLayoutShift;
+    win.__cumulativeLayoutShift = 0;
 
     const observer = new PerformanceObserver((list) => {
       for (const entry of list.getEntries()) {
-        if ((entry as any).hadRecentInput) continue;
-        (window as any).__cumulativeLayoutShift += (entry as any).value;
+        const layoutShift = entry as LayoutShiftEntry;
+        if (layoutShift.hadRecentInput) continue;
+        win.__cumulativeLayoutShift += layoutShift.value;
       }
     });
 
     observer.observe({ type: "layout-shift", buffered: true });
-    (window as any).__layoutShiftObserver = observer;
+    win.__layoutShiftObserver = observer;
   });
 
   // Perform action
@@ -223,8 +238,9 @@ export async function measureLayoutShift(
 
   // Get final CLS score
   const cls = await page.evaluate(() => {
-    const score = (window as any).__cumulativeLayoutShift || 0;
-    const observer = (window as any).__layoutShiftObserver;
+    const win = window as unknown as WindowWithLayoutShift;
+    const score = win.__cumulativeLayoutShift || 0;
+    const observer = win.__layoutShiftObserver;
     if (observer) {
       observer.disconnect();
     }
@@ -249,7 +265,10 @@ export async function waitForElementScrollable(
 
       const hasOverflow = element.scrollHeight > element.clientHeight;
       const style = window.getComputedStyle(element);
-      return hasOverflow && (style.overflowY === "auto" || style.overflowY === "scroll");
+      return (
+        hasOverflow &&
+        (style.overflowY === "auto" || style.overflowY === "scroll")
+      );
     },
     selector,
     { timeout },
