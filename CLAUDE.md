@@ -61,6 +61,98 @@ bun run format       # Format with Biome
 - **Types**: Co-located with implementation
 - **Tests**: `test-*.ts` scripts (not Jest/Vitest)
 - **Formatting**: Biome (2 spaces, kebab-case files)
+- **Responsive**: Mobile-first with `md:` and `lg:` prefixes
+
+## Responsive Design Patterns
+
+### Breakpoint Strategy (Mobile-First)
+
+Use Tailwind's mobile-first approach with responsive prefixes:
+
+```tsx
+// Base styles target mobile (320px-640px)
+// md: targets tablet and up (641px+)
+// lg: targets desktop and up (1025px+)
+
+className={cn(
+  // Mobile base styles (no prefix)
+  "p-4 text-sm w-full",
+  // Tablet and up
+  "md:p-6 md:text-base md:w-auto",
+  // Desktop and up
+  "lg:p-8 lg:text-lg"
+)}
+```
+
+**Breakpoints:**
+- **Mobile**: 320px - 640px (base styles, no prefix)
+- **Tablet**: 641px - 1024px (`md:` prefix)
+- **Desktop**: 1025px+ (`lg:` prefix)
+
+### Mobile Drawer Pattern
+
+For sidebars/modals, use bottom drawer on mobile and preserve desktop layout:
+
+```tsx
+className={cn(
+  // Mobile: Bottom drawer
+  "fixed inset-x-0 bottom-0",
+  "md:right-0 md:left-auto md:top-0 md:bottom-auto",
+  // Heights
+  "h-[70vh] md:h-full",
+  // Widths
+  "w-full md:w-96",
+  // Borders
+  "border-t md:border-t-0 md:border-l",
+  // Rounded corners (mobile only)
+  "rounded-t-2xl md:rounded-none",
+  // Smooth animation
+  "transition-transform duration-300"
+)}
+```
+
+**Why**: Fixed sidebars block mobile screens. Drawers provide better UX.
+
+**Examples**:
+- `TrainerSidebar`: 384px sidebar → 70vh drawer
+- `SessionReplay`: Full-screen → 90vh drawer
+
+### Safe Area Handling (iPhone Notches)
+
+All fixed/sticky elements respect iPhone notch and Dynamic Island:
+
+```css
+/* In globals.css */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+```
+
+**Prevents**: Content overlap on iPhone 12, 13, 14, 15 Pro models.
+
+### Touch Target Guidelines (WCAG 2.1 AA)
+
+All interactive elements must meet 44px × 44px minimum on mobile:
+
+```tsx
+// Minimum viable touch target
+className="min-w-[44px] min-h-[44px]"
+
+// Spacing between targets (minimum 8px)
+className="gap-2" // 8px gap
+```
+
+**Current compliance:**
+- ✅ DenomChip: 60px mobile, 80px desktop
+- ✅ ActionChip: 45px mobile, 70px desktop
+- ✅ Betting circles: 64px mobile, 80px desktop
+- ✅ Chip spacing: 8px (gap-2)
+- ✅ Circle spacing: 16px (gap-4)
+
+**Reference**: See `.domain/touch-target-audit.md` for full compliance report.
 
 ## Common Tasks
 
@@ -119,12 +211,20 @@ All documentation is centralized in `docs/`:
 - **[docs/README.md](docs/README.md)**: Documentation index
 - **[README.md](README.md)**: Project overview
 
-## Recent Changes (Nov 2025)
+## Recent Changes
 
-**Phase 2**: Modularized rules, state machines, and components (50-60% size reduction)
-**Phase 3**: Added comprehensive documentation and ADRs
-**Phase 4**: Centralized all documentation in `docs/` directory
+**Nov 2025**:
+- Phase 2: Modularized rules, state machines, components (50-60% size reduction)
+- Phase 3: Added comprehensive documentation and ADRs
+- Phase 4: Centralized documentation in `docs/` directory
+
+**Feb 2026**:
+- Phase 2: Mobile-first responsive design
+  - Bottom drawer patterns for mobile (trainer sidebar, session replay)
+  - Safe-area CSS for iPhone notches/Dynamic Island
+  - WCAG 2.1 AA touch target compliance verified
+  - Responsive breakpoint strategy standardized
 
 ---
 
-*Last Updated: 2025-11-19 | Keep this guide concise for context efficiency*
+*Last Updated: 2026-02-07 | Keep this guide concise for context efficiency*
