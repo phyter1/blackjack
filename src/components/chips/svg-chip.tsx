@@ -40,7 +40,7 @@ export function SvgChip({
       disabled={disabled}
       className={cn(
         "relative transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center",
-        !disabled && "hover:scale-110 hover:shadow-md cursor-pointer",
+        !disabled && "hover:scale-110 cursor-pointer",
         selected && "scale-110 shadow-lg ring-2 ring-amber-400",
         className,
       )}
