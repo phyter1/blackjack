@@ -7,7 +7,14 @@
     "priority": "high",
     "id": "ui-viewport-meta-001",
     "dependencies": [],
-    "tags": ["ui-fix", "mobile", "configuration", "metadata", "high-priority", "quick-win"],
+    "tags": [
+      "ui-fix",
+      "mobile",
+      "configuration",
+      "metadata",
+      "high-priority",
+      "quick-win"
+    ],
     "estimated_hours": 0.5,
     "can_parallelize": true,
     "resource_conflicts": ["src/app/layout.tsx"]
@@ -16,7 +23,7 @@
     "content": "ui-casino-scroll-002.md",
     "test_criteria": "ui-casino-scroll-002-tests.md",
     "context": "ui-casino-scroll-002-context.md",
-    "status": "pending",
+    "status": "completed",
     "priority": "high",
     "id": "ui-casino-scroll-002",
     "dependencies": ["ui-viewport-meta-001"],
@@ -75,10 +82,6 @@
     ],
     "estimated_hours": 7,
     "can_parallelize": false,
-    "resource_conflicts": [
-      "playwright.config.ts",
-      "e2e/",
-      "package.json"
-    ]
+    "resource_conflicts": ["playwright.config.ts", "e2e/", "package.json"]
   }
 ]

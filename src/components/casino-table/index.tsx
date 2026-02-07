@@ -43,7 +43,9 @@ export function CasinoTable({
   const searchParams = useSearchParams();
 
   // Fullscreen functionality
-  const containerRef = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
+  const containerRef = useRef<HTMLDivElement>(
+    null as unknown as HTMLDivElement,
+  );
   const { isFullscreen, toggleFullscreen } = useFullscreen(containerRef);
 
   // UI state from store
@@ -162,7 +164,7 @@ export function CasinoTable({
   return (
     <div
       ref={containerRef}
-      className="h-screen flex flex-col relative overflow-hidden"
+      className="min-h-screen flex flex-col relative overflow-y-auto md:overflow-hidden md:h-screen"
     >
       {/* Casino table background */}
       <TableBackground />
